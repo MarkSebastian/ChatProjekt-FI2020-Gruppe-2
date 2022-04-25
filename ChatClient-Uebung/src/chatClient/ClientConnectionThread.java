@@ -13,7 +13,7 @@ public class ClientConnectionThread extends Thread
 	public ClientConnectionThread(Control control)
 	{
 		this.control = control;
-		this.gui = control.gui;
+		this.gui = control.gui; //
 	}
 	
 	protected void startStreams()

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class Nachricht implements Serializable
-{	
+{
 	private static final long serialVersionUID = 1L;
 	private String absender;
 	private int absenderId;
@@ -15,7 +15,7 @@ public class Nachricht implements Serializable
 	{
 		return absender;
 	}
-	
+
 	public void setAbsender(String absender)
 	{
 		this.absender = absender;
@@ -25,7 +25,7 @@ public class Nachricht implements Serializable
 	{
 		return absenderId;
 	}
-	
+
 	public void setAbsenderId(int id)
 	{
 		this.absenderId = id;

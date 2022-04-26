@@ -22,7 +22,8 @@ public class ClientConnectionThread extends Thread
 		{
 			control.out = new ObjectOutputStream(control.socket.getOutputStream());
 			control.ois = new ObjectInputStream(control.socket.getInputStream());
-		} catch (Exception e)
+		} 
+		catch (Exception e)
 		{
 			System.out.println(e + "\n in startStreams");
 		}
@@ -44,7 +45,8 @@ public class ClientConnectionThread extends Thread
 					if (customIP == true)
 					{
 						control.socket = new Socket(control.startGui.getIP(), control.port);
-					} else
+					} 
+					else
 					{
 						control.socket = new Socket("localhost", control.port);
 					}
@@ -55,11 +57,13 @@ public class ClientConnectionThread extends Thread
 					
 					control.read = new Thread(control);
 					control.read.start();
-				} catch (ConnectException e)
+				} 
+				catch (ConnectException e)
 				{
 					this.gui.changeStatus("Zielserver wurde nicht gefunden");
 					System.out.println(e);
-				} catch (Exception e)
+				} 
+				catch (Exception e)
 				{
 					System.out.println(e + "\n in run of ServerConnectionThread");
 				}

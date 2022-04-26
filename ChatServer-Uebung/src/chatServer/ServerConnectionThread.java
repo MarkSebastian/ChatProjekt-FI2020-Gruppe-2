@@ -21,7 +21,6 @@ public class ServerConnectionThread extends Thread
 		this.server = server;
 		this.clients = clients;
 		this.control = control;
-
 	}
 
 	@Override
@@ -37,10 +36,11 @@ public class ServerConnectionThread extends Thread
 				clientCount++;
 				control.akClientList();
 				System.out.println("Verbindung hergestellt");
-				Nachricht beitritt = new Nachricht (newClient.getName() + " ist beigetreten!", control.clientListeAbspecken());
+				Nachricht beitritt = new Nachricht(newClient.getName() + " ist beigetreten!",control.clientListeAbspecken());
 				control.broadcastMessage(beitritt);
 				Thread.sleep(1000);
-			} catch(SocketException e1)
+			}
+			catch (SocketException e1)
 			{
 				control.connect.interrupt();
 			}

@@ -33,24 +33,11 @@ public class Control
 
 	private void addListener()
 	{
-		this.gui.addBtnStartListener(l ->
-		{
-			this.gui.showStoppen();
-			starten();
-		});
-		this.gui.addBtnStoppenListener(l ->
-		{
-			stoppen();
-			this.gui.showStart();
-		});
+		this.gui.addBtnStartListener(l ->{this.gui.showStoppen();starten();});
+		this.gui.addBtnStoppenListener(l ->{stoppen();this.gui.showStart();});
 		this.gui.addPortEingabeListener(l -> this.gui.showStart());
 		this.gui.addNewNachrichtListener(l -> sendMessage());
-		gui.addListListener(new MouseMotionAdapter() {
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				setToolTip();
-			};
-		});
+		gui.addListListener(new MouseMotionAdapter() {@Override public void mouseMoved(MouseEvent e) {setToolTip();};});
 	}
 
 	private void printAddress()
@@ -60,8 +47,8 @@ public class Control
 			InetAddress adress = InetAddress.getLocalHost();
 			String lh = adress.getHostAddress();
 			this.gui.titelAendern(lh);
-
-		} catch (UnknownHostException e1)
+		} 
+		catch (UnknownHostException e1)
 		{
 			System.out.println(e1 + "\n in printAddress");
 		}
@@ -76,7 +63,8 @@ public class Control
 		try
 		{
 			server = new ServerSocket(Integer.parseInt(port));
-		} catch (Exception e)
+		} 
+		catch (Exception e)
 		{
 			System.out.println(e + "\n in starten");
 		}
@@ -99,8 +87,6 @@ public class Control
 		{
 			broadcastMessage(message);
 		}
-		
-
 	}
 
 	protected void getNewMessages(Nachricht n)
@@ -127,7 +113,7 @@ public class Control
 		
 		for (Client c : clients)
 		{
-				c.sendMessage(n);
+			c.sendMessage(n);
 		}
 		this.gui.getTextNachrichtenEingabe().setText("");
 	}
@@ -149,7 +135,8 @@ public class Control
 		try
 		{
 			server.close();
-		} catch (IOException e)
+		} 
+		catch (IOException e)
 		{
 			System.out.println(e + "\n in stoppen");
 		}
@@ -199,7 +186,6 @@ public class Control
 		{
 			clientListe.addElement(c);
 		}
-		
 		this.gui.getListUser().setModel(clientListe);
 	}
 

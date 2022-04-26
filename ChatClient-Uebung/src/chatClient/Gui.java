@@ -40,6 +40,7 @@ public class Gui
 	private JButton btnNeuerChat;
 	private JScrollPane scrollPaneUserList;
 
+	//HI 
 	public Gui()
 	{
 		initialize();

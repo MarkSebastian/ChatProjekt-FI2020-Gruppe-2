@@ -12,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import javax.swing.DefaultListModel;
+import javax.swing.text.AttributeSet.ColorAttribute;
 
 public class Control implements Runnable
 {
@@ -68,6 +69,7 @@ public class Control implements Runnable
 	{
 		this.gui.addEingabeListener(l -> sendMessage());
 		this.gui.addBtnStopListener(l -> stopClient());
+		
 
 		this.startGui.addBtnVerbindenListener(l ->
 		{
@@ -85,6 +87,21 @@ public class Control implements Runnable
 		
 		this.gui.addAddListner(l -> addUserToNewChat());
 		this.gui.addEntfListner(l -> entfUserFromNewChat());
+		this.gui.setActionListenerTextFieldGruppennamen(gui.getTextFieldGruppenName().setText(""));
+	}
+	
+	protected void gruppenNamenSetzten()
+	{
+		if(gui.getTextFieldGruppenName().getText() != null)
+		{
+			gui.getTextFieldGruppenName().setText(null);
+			gui.getTextFieldGruppenName().setForeground(Color.black);
+		}
+		else
+		{
+			gui.getTextFieldGruppenName().setForeground(Color.gray);
+			gui.getTextFieldGruppenName().setText("Gruppennamen eingeben");
+		}
 	}
 
 	protected boolean checkPort()

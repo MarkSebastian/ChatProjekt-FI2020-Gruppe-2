@@ -15,6 +15,10 @@ import java.awt.event.MouseMotionAdapter;
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.MouseInputListener;
+
+import org.w3c.dom.events.MouseEvent;
+
 import java.awt.ScrollPane;
 
 public class Gui
@@ -39,6 +43,7 @@ public class Gui
 	private JButton btnUserEntfernen;
 	private JButton btnNeuerChat;
 	private JScrollPane scrollPaneUserList;
+	private JTextField textFieldGruppenName;
 
 	public Gui()
 	{
@@ -49,7 +54,7 @@ public class Gui
 	{
 		frmClient = new JFrame();
 		frmClient.setTitle("Client");
-		frmClient.setBounds(100, 100, 360, 335);
+		frmClient.setBounds(100, 100, 377, 383);
 		frmClient.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmClient.getContentPane().setLayout(null);
 		frmClient.getContentPane().add(getTabbedPane());
@@ -67,7 +72,8 @@ public class Gui
 			{
 				showUserList();
 			}
-		} else
+		}
+		else
 		{
 			frmClient.setVisible(true);
 		}
@@ -155,7 +161,7 @@ public class Gui
 		if (btnShowUserList == null)
 		{
 			btnShowUserList = new JButton("");
-			btnShowUserList.setBounds(320, 10, 11, 73);
+			btnShowUserList.setBounds(325, 58, 11, 73);
 			btnShowUserList.setBackground(SystemColor.scrollbar);
 			btnShowUserList.addActionListener(l -> showUserList());
 		}
@@ -171,7 +177,8 @@ public class Gui
 			frmClient.setBounds(r.x, r.y, 360, 335);
 			tabbedPane.setBounds(0, 0, 346, 298);
 			userList = false;
-		} else
+		}
+		else
 		{
 			getScrollPaneUserList().setVisible(true);
 			frmClient.setBounds(r.x, r.y, 490, 335);
@@ -185,6 +192,7 @@ public class Gui
 		if (listUser == null)
 		{
 			listUser = new JList();
+			listUser.setBounds(1, 1, 87, 191);
 		}
 		return listUser;
 	}
@@ -205,7 +213,8 @@ public class Gui
 		try
 		{
 			return getList().locationToIndex(getList().getMousePosition());
-		} catch (NullPointerException e)
+		}
+		catch (NullPointerException e)
 		{
 			return -1;
 		}
@@ -218,7 +227,7 @@ public class Gui
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			tabbedPane.setBorder(null);
 			tabbedPane.setBackground(new Color(255, 255, 255));
-			tabbedPane.setBounds(0, 0, 346, 298);
+			tabbedPane.setBounds(0, 11, 346, 325);
 			tabbedPane.addTab("Global Chat", null, getPanelGlobalChat(), null);
 			tabbedPane.setBackgroundAt(0, new Color(255, 255, 255));
 			tabbedPane.addTab("neuer Chat", null, getPanelNeuerChat(), null);
@@ -240,7 +249,6 @@ public class Gui
 		{
 			panelGlobalChat = new JPanel();
 			panelGlobalChat.setBorder(null);
-			panelGlobalChat.setLayout(null);
 			panelGlobalChat.add(getListUser());
 			panelGlobalChat.add(getLblStatus());
 			panelGlobalChat.add(getTextFieldEingabe());
@@ -263,6 +271,7 @@ public class Gui
 			panelNeuerChat.add(getBtnUserHinzufügen());
 			panelNeuerChat.add(getBtnUserEntfernen());
 			panelNeuerChat.add(getBtnNeuerChat());
+			panelNeuerChat.add(getTextFieldGruppenName());
 		}
 		return panelNeuerChat;
 	}
@@ -272,7 +281,7 @@ public class Gui
 		if (listActiveUser == null)
 		{
 			listActiveUser = new JList();
-			listActiveUser.setBounds(10, 10, 124, 210);
+			listActiveUser.setBounds(10, 10, 128, 210);
 		}
 		return listActiveUser;
 	}
@@ -282,7 +291,7 @@ public class Gui
 		if (listChoosenUser == null)
 		{
 			listChoosenUser = new JList();
-			listChoosenUser.setBounds(207, 10, 124, 210);
+			listChoosenUser.setBounds(203, 10, 128, 210);
 		}
 		return listChoosenUser;
 	}
@@ -294,11 +303,11 @@ public class Gui
 			btnUserHinzufügen = new JButton("\u25BA");
 			btnUserHinzufügen.setBackground(new Color(255, 255, 255));
 			btnUserHinzufügen.setToolTipText("hinzuf\u00FCgen");
-			btnUserHinzufügen.setBounds(148, 68, 48, 21);
+			btnUserHinzufügen.setBounds(148, 69, 48, 21);
 		}
 		return btnUserHinzufügen;
 	}
-	
+
 	public void addAddListner(ActionListener l)
 	{
 		this.getBtnUserHinzufügen().addActionListener(l);
@@ -315,7 +324,7 @@ public class Gui
 		}
 		return btnUserEntfernen;
 	}
-	
+
 	public void addEntfListner(ActionListener l)
 	{
 		this.getBtnUserEntfernen().addActionListener(l);
@@ -327,7 +336,7 @@ public class Gui
 		{
 			btnNeuerChat = new JButton("neuer Chat");
 			btnNeuerChat.setBackground(new Color(102, 204, 51));
-			btnNeuerChat.setBounds(104, 230, 134, 31);
+			btnNeuerChat.setBounds(197, 246, 134, 31);
 		}
 		return btnNeuerChat;
 	}
@@ -335,14 +344,34 @@ public class Gui
 	private JScrollPane getScrollPaneUserList()
 	{
 		if (scrollPaneUserList == null)
-		{	
+		{
+			getPanelGlobalChat().setLayout(null);
 			JList listUser = getListUser();
 			scrollPaneUserList = new JScrollPane(listUser, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			scrollPaneUserList.setBounds(341, 11, 106, 193);
-			
 
 		}
 		return scrollPaneUserList;
+	}
+
+	protected JTextField getTextFieldGruppenName()
+	{
+		if (textFieldGruppenName == null)
+		{
+			textFieldGruppenName = new JTextField();
+			textFieldGruppenName.setForeground(Color.GRAY);
+			textFieldGruppenName.setHorizontalAlignment(SwingConstants.CENTER);
+			textFieldGruppenName.setText("Gruppennamen eingeben");
+			textFieldGruppenName.setToolTipText("");
+			textFieldGruppenName.setBounds(10, 246, 134, 31);
+			textFieldGruppenName.setColumns(10);
+		}
+		return textFieldGruppenName;
+	}
+	
+	public void setActionListenerTextFieldGruppennamen(FocusListener l)
+	{
+		this.textFieldGruppenName.addMouseListener(l);
 	}
 }

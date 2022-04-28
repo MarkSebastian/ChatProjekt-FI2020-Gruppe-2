@@ -15,7 +15,7 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-public class privatChatGUI extends JFrame
+public class PrivatChatGUI extends JFrame
 {
 
 	private JPanel contentPane;
@@ -27,13 +27,14 @@ public class privatChatGUI extends JFrame
 	private JLabel lblTeilnehmer;
 	private JTextField textFieldNachricht;
 	private JButton btnVerlassen;
+	
 
-	public privatChatGUI()
+	public PrivatChatGUI()
 	{
-		initialize();
+		
 	}
 
-	private void initialize()
+	public void initialize()
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 761, 427);
@@ -47,6 +48,7 @@ public class privatChatGUI extends JFrame
 		contentPane.add(getLblTeilnehmer());
 		contentPane.add(getTextFieldNachricht());
 		contentPane.add(getBtnVerlassen());
+		setVisible(true);
 	}
 	
 	protected JList getListChat()

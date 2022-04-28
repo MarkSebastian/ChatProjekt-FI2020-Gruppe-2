@@ -8,11 +8,14 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import Message.nachrichtP.Nachricht;
+import privatChat.PrivatChatGUI;
+
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import javax.swing.DefaultListModel;
 import javax.swing.text.AttributeSet.ColorAttribute;
+import java.awt.event.MouseAdapter;
 
 public class Control implements Runnable
 {
@@ -24,7 +27,7 @@ public class Control implements Runnable
 	protected DefaultListModel<Nachricht> messages = new DefaultListModel<Nachricht>();
 	protected DefaultListModel<String> clients = new DefaultListModel<String>();
 	protected DefaultListModel<String> choosenClients = new DefaultListModel<String>();
-	
+
 	protected Thread read;
 	private ClientConnectionThread start;
 
@@ -35,8 +38,10 @@ public class Control implements Runnable
 
 	private Color rot = new Color(255, 102, 102);
 	private Color weiss = new Color(255, 255, 255, 255);
-	
+
 	private boolean first = true;
+	private PrivatChatGUI guiPrivatChat;
+	private static int chatNummer = 0;
 
 	public Control()
 	{
@@ -55,7 +60,8 @@ public class Control implements Runnable
 			startGui.hide(false);
 			gui.hide(true);
 			startWindow = false;
-		} else
+		}
+		else
 		{
 			r = startGui.getFrmBounds();
 			gui.setFrmBounds(r);
@@ -69,7 +75,6 @@ public class Control implements Runnable
 	{
 		this.gui.addEingabeListener(l -> sendMessage());
 		this.gui.addBtnStopListener(l -> stopClient());
-		
 
 		this.startGui.addBtnVerbindenListener(l ->
 		{
@@ -84,25 +89,40 @@ public class Control implements Runnable
 				setToolTip();
 			};
 		});
-		
+
 		this.gui.addAddListner(l -> addUserToNewChat());
 		this.gui.addEntfListner(l -> entfUserFromNewChat());
-		this.gui.setActionListenerTextFieldGruppennamen(gui.getTextFieldGruppenName().setText(""));
-	}
-	
-	protected void gruppenNamenSetzten()
-	{
-		if(gui.getTextFieldGruppenName().getText() != null)
+		
+		this.gui.setBtnNeuerChatActionListener(l -> neuenChatStarten());
+		gui.setTextFieldGruppenNamenListener(new MouseAdapter()
 		{
-			gui.getTextFieldGruppenName().setText(null);
-			gui.getTextFieldGruppenName().setForeground(Color.black);
-		}
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				gui.getTextFieldGruppenName().setText("");
+				gui.getTextFieldGruppenName().setText(null);
+				gui.getTextFieldGruppenName().setForeground(Color.black);
+			}
+		});
+	}
+
+	private void neuenChatStarten()
+	{
+		if(gui.getTextFieldGruppenName().getText().isEmpty())
+			System.out.println("Bitte Chatraum benennen!");
 		else
 		{
-			gui.getTextFieldGruppenName().setForeground(Color.gray);
-			gui.getTextFieldGruppenName().setText("Gruppennamen eingeben");
+			chatNummer++;
+			String temp = String.valueOf(chatNummer);
+			temp = "chatRaum" + temp;
+			System.out.println(temp);
+			
+			guiPrivatChat = new PrivatChatGUI();
+			guiPrivatChat.initialize();
 		}
 	}
+
+
 
 	protected boolean checkPort()
 	{
@@ -116,13 +136,15 @@ public class Control implements Runnable
 				port = tempPort;
 				korrekt = true;
 				this.gui.changeStatus("korrekter Port");
-			} else
+			}
+			else
 			{
 				guiError("port");
 				this.gui.changeStatus("kein korrekter Port");
 			}
 
-		} catch (NumberFormatException e)
+		}
+		catch (NumberFormatException e)
 		{
 			guiError("port");
 			this.gui.changeStatus("kein korrekter Port");
@@ -135,7 +157,7 @@ public class Control implements Runnable
 		try
 		{
 			Nachricht message;
-			if(first)
+			if (first)
 			{
 				message = new Nachricht(startGui.getTextFieldUsername().getText(), false);
 				out.writeObject(message);
@@ -143,15 +165,17 @@ public class Control implements Runnable
 			}
 			else
 			{
-			 	message = new Nachricht(this.gui.getTextFieldEingabe().getText(), false);
-			 	out.writeObject(message);
+				message = new Nachricht(this.gui.getTextFieldEingabe().getText(), false);
+				out.writeObject(message);
 				messages.addElement(message);
 				akList();
 			}
-		} catch (NullPointerException e)
+		}
+		catch (NullPointerException e)
 		{
 			gui.changeStatus("Noch nicht mit Server Verbunden!");
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			System.out.println(e + "\n in sendMessage");
 		}
@@ -174,13 +198,16 @@ public class Control implements Runnable
 			}
 			getNewMessages(message);
 
-		} catch (SocketException e1)
+		}
+		catch (SocketException e1)
 		{
 			stopClient();
-		} catch (EOFException e2)
+		}
+		catch (EOFException e2)
 		{
 			stopClient();
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			System.out.println(e + "\n in readMessage");
 		}
@@ -201,7 +228,7 @@ public class Control implements Runnable
 	{
 		this.gui.getListUser().setModel(clients);
 		this.gui.getListActiveUser().setModel(clients);
-		
+
 	}
 
 	private void stopClient()
@@ -212,7 +239,8 @@ public class Control implements Runnable
 			ois.close();
 			out.close();
 			socket.close();
-		} catch (IOException e)
+		}
+		catch (IOException e)
 		{
 			System.out.println(e + "\n in stopClient");
 		}
@@ -237,10 +265,10 @@ public class Control implements Runnable
 		}
 
 	}
-	
+
 	protected boolean checkUsername()
 	{
-		if(startGui.getTextFieldUsername().getText().isBlank())
+		if (startGui.getTextFieldUsername().getText().isBlank())
 		{
 			guiError("username");
 			return false;
@@ -255,98 +283,100 @@ public class Control implements Runnable
 	{
 		switch (error)
 		{
-			case "port":
-				new Thread(new Runnable()
+		case "port":
+			new Thread(new Runnable()
+			{
+				@Override
+				public void run()
 				{
-					@Override
-					public void run()
+					for (int j = 0; j < 6; j++)
 					{
-						for (int j = 0; j < 6; j++)
+						if (j % 2 == 0)
 						{
-							if (j % 2 == 0)
-							{
-								startGui.changePortColor(rot);
-							} else
-							{
-								startGui.changePortColor(weiss);
-							}
+							startGui.changePortColor(rot);
+						}
+						else
+						{
+							startGui.changePortColor(weiss);
+						}
 
-							try
-							{
-								Thread.sleep(125);
-							} catch (InterruptedException e)
-							{
-								System.out.println(e + "\n in guiError - port");
-							}
+						try
+						{
+							Thread.sleep(125);
+						}
+						catch (InterruptedException e)
+						{
+							System.out.println(e + "\n in guiError - port");
 						}
 					}
-				}).start();
-				break;
-			
-			case "username":
-				new Thread(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						for (int j = 0; j < 6; j++)
-						{
-							if (j % 2 == 0)
-							{
-								startGui.changeUsernameColor(rot);
-							} else
-							{
-								startGui.changeUsernameColor(weiss);
-							}
+				}
+			}).start();
+			break;
 
-							try
-							{
-								Thread.sleep(125);
-							} catch (InterruptedException e)
-							{
-								System.out.println(e + "\n in guiError - username");
-							}
+		case "username":
+			new Thread(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					for (int j = 0; j < 6; j++)
+					{
+						if (j % 2 == 0)
+						{
+							startGui.changeUsernameColor(rot);
+						}
+						else
+						{
+							startGui.changeUsernameColor(weiss);
+						}
+
+						try
+						{
+							Thread.sleep(125);
+						}
+						catch (InterruptedException e)
+						{
+							System.out.println(e + "\n in guiError - username");
 						}
 					}
-				}).start();
-				break;
+				}
+			}).start();
+			break;
 		}
 	}
-	
+
 	private void addUserToNewChat()
 	{
 		try
 		{
 			int index = gui.getListActiveUser().getSelectedIndex();
-			
+
 			String selected = clients.getElementAt(index);
 			choosenClients.addElement(selected);
-			
+
 			gui.getListChoosenUser().setModel(choosenClients);
 		}
-		catch(ArrayIndexOutOfBoundsException e)
+		catch (ArrayIndexOutOfBoundsException e)
 		{
 			System.out.println("nichts ausgewählt");
 		}
 	}
-	
+
 	private void entfUserFromNewChat()
 	{
 		try
 		{
 			int index = gui.getListChoosenUser().getSelectedIndex();
-			
+
 			choosenClients.removeElementAt(index);
-			
+
 			gui.getListChoosenUser().setModel(choosenClients);
 		}
-		catch(ArrayIndexOutOfBoundsException e)
+		catch (ArrayIndexOutOfBoundsException e)
 		{
 			System.out.println("nichts ausgewählt");
 		}
 	}
-	
-	
 
 	@Override
 	public void run()
@@ -359,7 +389,8 @@ public class Control implements Runnable
 			{
 				readMessage();
 				Thread.sleep(1000);
-			} catch (InterruptedException e)
+			}
+			catch (InterruptedException e)
 			{
 				read.interrupt();
 			}

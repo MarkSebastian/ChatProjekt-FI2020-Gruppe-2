@@ -15,10 +15,10 @@ import java.awt.event.MouseMotionAdapter;
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.MouseInputListener;
-
-import org.w3c.dom.events.MouseEvent;
-
+import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonActionListener;
+import java.awt.event.MouseListener;
 import java.awt.ScrollPane;
 
 public class Gui
@@ -340,6 +340,11 @@ public class Gui
 		}
 		return btnNeuerChat;
 	}
+	
+	public void setBtnNeuerChatActionListener(ActionListener l)
+	{
+		this.getBtnNeuerChat().addActionListener(l);
+	}
 
 	private JScrollPane getScrollPaneUserList()
 	{
@@ -355,7 +360,7 @@ public class Gui
 		return scrollPaneUserList;
 	}
 
-	protected JTextField getTextFieldGruppenName()
+	protected JTextField getTextFieldGruppenName() 
 	{
 		if (textFieldGruppenName == null)
 		{
@@ -370,8 +375,7 @@ public class Gui
 		return textFieldGruppenName;
 	}
 	
-	//Test
-	public void setActionListenerTextFieldGruppennamen(FocusListener l)
+	public void setTextFieldGruppenNamenListener(MouseListener l)
 	{
 		this.textFieldGruppenName.addMouseListener(l);
 	}

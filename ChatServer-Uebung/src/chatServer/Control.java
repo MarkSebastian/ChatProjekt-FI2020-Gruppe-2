@@ -1,6 +1,5 @@
 package chatServer;
 
-
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
@@ -21,7 +20,7 @@ public class Control
 	protected DefaultListModel<Nachricht> messages = new DefaultListModel<Nachricht>();
 	private ArrayList<Client> clients = new ArrayList<Client>();
 	private DefaultListModel<Client> clientListe = new DefaultListModel<Client>();
-	
+
 	public Control()
 	{
 		gui = new Gui();
@@ -45,9 +44,11 @@ public class Control
 		});
 		this.gui.addPortEingabeListener(l -> this.gui.showStart());
 		this.gui.addNewNachrichtListener(l -> sendMessage());
-		gui.addListListener(new MouseMotionAdapter() {
+		gui.addListListener(new MouseMotionAdapter()
+		{
 			@Override
-			public void mouseMoved(MouseEvent e) {
+			public void mouseMoved(MouseEvent e)
+			{
 				setToolTip();
 			};
 		});
@@ -61,7 +62,8 @@ public class Control
 			String lh = adress.getHostAddress();
 			this.gui.titelAendern(lh);
 
-		} catch (UnknownHostException e1)
+		}
+		catch (UnknownHostException e1)
 		{
 			System.out.println(e1 + "\n in printAddress");
 		}
@@ -76,7 +78,8 @@ public class Control
 		try
 		{
 			server = new ServerSocket(Integer.parseInt(port));
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			System.out.println(e + "\n in starten");
 		}
@@ -95,11 +98,10 @@ public class Control
 	private void sendMessage()
 	{
 		Nachricht message = new Nachricht(this.gui.getTextNachrichtenEingabe().getText(), true);
-		if(clients.isEmpty()==false)
+		if (clients.isEmpty() == false)
 		{
 			broadcastMessage(message);
 		}
-		
 
 	}
 
@@ -119,25 +121,24 @@ public class Control
 			}
 		}
 	}
-	
+
 	protected void broadcastMessage(Nachricht n)
 	{
 		messages.addElement(n);
 		akList();
-		
+
 		for (Client c : clients)
 		{
-				c.sendMessage(n);
+			c.sendMessage(n);
 		}
 		this.gui.getTextNachrichtenEingabe().setText("");
 	}
-	
+
 	protected void closeClient(Client c)
 	{
 		clients.remove(c);
 		akClientList();
 	}
-	
 
 	private void stoppen()
 	{
@@ -149,7 +150,8 @@ public class Control
 		try
 		{
 			server.close();
-		} catch (IOException e)
+		}
+		catch (IOException e)
 		{
 			System.out.println(e + "\n in stoppen");
 		}
@@ -162,44 +164,44 @@ public class Control
 	{
 		this.gui.getList().setModel(messages);
 	}
-	
+
 	private void setToolTip()
 	{
 		int index = gui.hoveredItem();
-		if(index != -1)
+		if (index != -1)
 		{
 			Nachricht n = messages.getElementAt(index);
-			String time = n.getTimestamp().getDayOfMonth() + "." + n.getTimestamp().getMonthValue() + "." + n.getTimestamp().getYear() + " | " +
-							n.getTimestamp().getHour() + ":" + n.getTimestamp().getMinute() + " Uhr";
-			gui.getList().setToolTipText("<html> Absender-ID: " + n.getAbsenderId() +
-										"<br> Absender: " + n.getAbsender() +
-										"<br> Versandt: " + time + "</html>");
+			String time = n.getTimestamp().getDayOfMonth() + "." + n.getTimestamp().getMonthValue() + "."
+					+ n.getTimestamp().getYear() + " | " + n.getTimestamp().getHour() + ":"
+					+ n.getTimestamp().getMinute() + " Uhr";
+			gui.getList().setToolTipText("<html> Absender-ID: " + n.getAbsenderId() + "<br> Absender: "
+					+ n.getAbsender() + "<br> Versandt: " + time + "</html>");
 		}
-		
+
 	}
-	
+
 	protected DefaultListModel<String> clientListeAbspecken()
 	{
 		DefaultListModel<String> nl = new DefaultListModel<String>();
-		
-		for(Client c : clients)
+
+		for (Client c : clients)
 		{
 			String s = c.getId() + " " + c.getName();
 			nl.addElement(s);
 		}
-		
+
 		return nl;
 	}
-	
+
 	protected void akClientList()
 	{
 		clientListe.clear();
-		
-		for(Client c : clients)
+
+		for (Client c : clients)
 		{
 			clientListe.addElement(c);
 		}
-		
+
 		this.gui.getListUser().setModel(clientListe);
 	}
 

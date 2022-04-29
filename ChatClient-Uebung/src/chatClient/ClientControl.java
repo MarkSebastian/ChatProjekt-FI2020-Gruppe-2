@@ -17,7 +17,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.text.AttributeSet.ColorAttribute;
 import java.awt.event.MouseAdapter;
 
-public class Control implements Runnable
+public class ClientControl implements Runnable
 {
 
 	protected Gui gui;
@@ -43,7 +43,7 @@ public class Control implements Runnable
 	private PrivatChatGUI guiPrivatChat;
 	private static int chatNummer = 0;
 
-	public Control()
+	public ClientControl()
 	{
 		startGui = new VerbindungsGUI();
 		gui = new Gui();

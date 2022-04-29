@@ -2,6 +2,7 @@ package nachrichtP;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Nachricht implements Serializable
 {	
@@ -10,7 +11,19 @@ public class Nachricht implements Serializable
 	private int absenderId;
 	final private LocalDateTime timestamp = LocalDateTime.now();
 	private String nachricht;
+	private int flag;
+	private ArrayList<String> empfaenger;
 
+	public int getFlag()
+	{
+		return flag;
+	}
+
+	public ArrayList<String> getEmpfaenger()
+	{
+		return empfaenger;
+	}
+	
 	public String getAbsender()
 	{
 		return absender;

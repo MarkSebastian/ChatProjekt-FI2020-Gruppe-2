@@ -10,13 +10,13 @@ import Message.nachrichtP.Nachricht;
 public class ServerConnectionThread extends Thread
 {
 
-	private Control control;
+	private ServerControl control;
 	private ServerSocket server;
 	private Socket socket;
 	private ArrayList<Client> clients;
 	private int clientCount = 1;
 
-	public ServerConnectionThread(ServerSocket server, ArrayList<Client> clients, Control control)
+	public ServerConnectionThread(ServerSocket server, ArrayList<Client> clients, ServerControl control)
 	{
 		this.server = server;
 		this.clients = clients;

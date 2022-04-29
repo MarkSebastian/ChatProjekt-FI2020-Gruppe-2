@@ -4,11 +4,14 @@ import java.util.ArrayList;
 
 public class PrivatChat
 {
-	//private ArrayList<Client> teilnehmer;
-	// Client hat GUI Klasse?!
 	private int flag;
-	private privatChatController controller;
+	private PrivatChatController controller;
 	private String chatName;
+	private ArrayList<String> empfaenger;
 	
-
+	public PrivatChat(ArrayList<String> empfaenger)
+	{
+		this.empfaenger = empfaenger;
+		controller = new PrivatChatController();
+	}
 }

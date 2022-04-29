@@ -3,6 +3,7 @@ package Message.nachrichtP;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
 
@@ -17,7 +18,19 @@ public class Nachricht implements Serializable
 	final private LocalDateTime timestamp = LocalDateTime.now();
 	private String nachricht;
 	private DefaultListModel<String> activeClients = null;
+	private int flag;
+	private ArrayList<String> empfaenger;
 
+	public int getFlag()
+	{
+		return flag;
+	}
+
+	public ArrayList<String> getEmpfaenger()
+	{
+		return empfaenger;
+	}
+	
 	public String getAbsender()
 	{
 		return absender;

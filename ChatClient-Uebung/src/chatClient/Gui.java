@@ -54,7 +54,7 @@ public class Gui
 	{
 		frmClient = new JFrame();
 		frmClient.setTitle("Client");
-		frmClient.setBounds(100, 100, 377, 383);
+		frmClient.setBounds(100, 100, 366, 383);
 		frmClient.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmClient.getContentPane().setLayout(null);
 		frmClient.getContentPane().add(getTabbedPane());

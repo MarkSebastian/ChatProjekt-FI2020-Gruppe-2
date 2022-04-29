@@ -8,11 +8,15 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import Message.nachrichtP.Nachricht;
-import privatChat.PrivatChatGUI;
+import privatChat.PrivatChat;
+
 
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import javax.swing.DefaultListModel;
 import javax.swing.text.AttributeSet.ColorAttribute;
 import java.awt.event.MouseAdapter;
@@ -27,6 +31,8 @@ public class Control implements Runnable
 	protected DefaultListModel<Nachricht> messages = new DefaultListModel<Nachricht>();
 	protected DefaultListModel<String> clients = new DefaultListModel<String>();
 	protected DefaultListModel<String> choosenClients = new DefaultListModel<String>();
+	protected ArrayList<String> teilnehmerPrivatChat = new ArrayList<String>();
+
 
 	protected Thread read;
 	private ClientConnectionThread start;
@@ -40,8 +46,8 @@ public class Control implements Runnable
 	private Color weiss = new Color(255, 255, 255, 255);
 
 	private boolean first = true;
-	private PrivatChatGUI guiPrivatChat;
-	private static int chatNummer = 0;
+	private PrivatChat privatChat;
+
 
 	public Control()
 	{
@@ -112,13 +118,11 @@ public class Control implements Runnable
 			System.out.println("Bitte Chatraum benennen!");
 		else
 		{
-			chatNummer++;
-			String temp = String.valueOf(chatNummer);
-			temp = "chatRaum" + temp;
-			System.out.println(temp);
 			
-			guiPrivatChat = new PrivatChatGUI();
-			guiPrivatChat.initialize();
+			teilnehmerPrivatChat.forEach(e -> System.out.println(e));
+			
+			privatChat = new PrivatChat();
+	
 		}
 	}
 
@@ -352,7 +356,9 @@ public class Control implements Runnable
 			int index = gui.getListActiveUser().getSelectedIndex();
 
 			String selected = clients.getElementAt(index);
+			selected = selected.substring(2);
 			choosenClients.addElement(selected);
+			teilnehmerPrivatChat.add(selected);
 
 			gui.getListChoosenUser().setModel(choosenClients);
 		}
@@ -371,6 +377,7 @@ public class Control implements Runnable
 			choosenClients.removeElementAt(index);
 
 			gui.getListChoosenUser().setModel(choosenClients);
+			teilnehmerPrivatChat.remove(index);
 		}
 		catch (ArrayIndexOutOfBoundsException e)
 		{

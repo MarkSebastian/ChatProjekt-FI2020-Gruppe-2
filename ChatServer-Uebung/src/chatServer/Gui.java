@@ -42,7 +42,7 @@ public class Gui
 	{
 		frmServer = new JFrame();
 		frmServer.setTitle("Server");
-		frmServer.setBounds(100, 450, 342, 350);
+		frmServer.setBounds(100, 450, 477, 363);
 		frmServer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmServer.getContentPane().setLayout(null);
 		frmServer.getContentPane().add(getList());

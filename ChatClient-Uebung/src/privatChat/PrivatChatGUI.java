@@ -31,7 +31,7 @@ public class PrivatChatGUI extends JFrame
 
 	public PrivatChatGUI()
 	{
-		
+		initialize();
 	}
 
 	public void initialize()

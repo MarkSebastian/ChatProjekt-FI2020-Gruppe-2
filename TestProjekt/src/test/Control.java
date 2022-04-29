@@ -12,8 +12,8 @@ public class Control
 	
 	public Control()
 	{
-		verbindungslink="jdbc:odbc:Testdatenbank";
-		sqlBefehl="Select * from Test;";
+		verbindungslink="jdbc:ucanaccess:Testdatenbank";
+		sqlBefehl="Select * from Test;"; 
 		
 		try (Connection verbindung = DriverManager.getConnection(verbindungslink) )
 		{

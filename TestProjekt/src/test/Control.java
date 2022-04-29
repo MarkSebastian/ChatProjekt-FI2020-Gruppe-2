@@ -10,7 +10,6 @@ public class Control
 	private String sqlBefehl;
 	//Bitte
 	
-	
 	public Control()
 	{
 		verbindungslink="jdbc:ucanaccess:Testdatenbank";

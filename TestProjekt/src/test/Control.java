@@ -7,6 +7,7 @@ public class Control
 	private String verbindungslink;
 	private Connection verbindung;
 	private String sqlBefehl;
+	//Bitte
 	
 	public Control()
 	{

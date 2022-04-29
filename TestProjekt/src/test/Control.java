@@ -8,15 +8,15 @@ public class Control
 {
 	private String verbindungslink;
 	private String sqlBefehl;
-	//Bitte
 	
 	public Control()
 	{
-		verbindungslink="jdbc:ucanaccess:Testdatenbank";
+		verbindungslink="jdbc:ucanaccess://src/Testdatenbank.accdb";
 		sqlBefehl="Select * from Test;"; 
 		
-		try (Connection verbindung = DriverManager.getConnection(verbindungslink) )
+		try (Connection verbindung = DriverManager.getConnection(verbindungslink,"","") )
 		{
+			System.out.println("verbindungaufgebaut");
 			System.out.println(verbindung.prepareStatement(sqlBefehl));
 		}
 		catch (SQLException e)

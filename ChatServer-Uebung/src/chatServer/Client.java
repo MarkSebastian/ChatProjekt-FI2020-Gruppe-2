@@ -12,7 +12,7 @@ import Message.nachrichtP.Nachricht;
 public class Client implements Runnable
 {
 
-	private Control control;
+	private ServerControl control;
 
 	private String name = "unbekannt";
 	private int id = 0;
@@ -25,7 +25,7 @@ public class Client implements Runnable
 	
 	private boolean first = true;
 
-	public Client(int id, Socket socket, Control control)
+	public Client(int id, Socket socket, ServerControl control)
 	{
 		this.id = id;
 		this.socket = socket;
@@ -74,11 +74,23 @@ public class Client implements Runnable
 			else
 			{
 				message.setAbsender(name);
-				message.setAbsenderId(id);
-			
+				message.setAbsenderId(id);			
 				System.out.println(message);
-				control.getNewMessages(message);
-				control.broadcastMessage(message, this);
+				
+				// Wenn ArrayList empfaenger von message leer ist, wird die Nachricht an den Globalen Chat versendet
+				if(message.getEmpfaenger().isEmpty())
+				{
+					control.getNewMessages(message);
+					control.broadcastMessage(message, this);
+					
+				}
+				
+				// Ansonsten wird die Nachricht nur an die Teilnehmer des privaten Chats verschickt
+				else
+				{
+					control.broadcastPrivatMessage(message);
+				}
+				
 			}
 		} catch (SocketException | EOFException e1)
 		{

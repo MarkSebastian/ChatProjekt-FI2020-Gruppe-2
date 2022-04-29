@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
 
-public class Control
+public class ServerControl
 {
 
 	private Gui gui;
@@ -21,7 +21,7 @@ public class Control
 	private ArrayList<Client> clients = new ArrayList<Client>();
 	private DefaultListModel<Client> clientListe = new DefaultListModel<Client>();
 
-	public Control()
+	public ServerControl()
 	{
 		gui = new Gui();
 		messages.clear();
@@ -118,6 +118,21 @@ public class Control
 			if (c != from)
 			{
 				c.sendMessage(n);
+			}
+		}
+	}
+	
+	// Nachricht hat eine ArrayList mit den empfaengern des privatChats, die Nachricht wird auch nur an diese Clients weitergeleitet
+	protected void broadcastPrivatMessage(Nachricht n)
+	{
+		for (Client c : clients)
+		{
+			for (String s : n.getEmpfaenger())
+			{
+				if(c.getName().equals(s))
+				{
+					c.sendMessage(n);
+				}
 			}
 		}
 	}

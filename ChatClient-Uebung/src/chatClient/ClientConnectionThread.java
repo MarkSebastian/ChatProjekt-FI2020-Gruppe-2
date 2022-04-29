@@ -7,10 +7,10 @@ import java.net.Socket;
 
 public class ClientConnectionThread extends Thread
 {
-	private Control control;
+	private ClientControl control;
 	private Gui gui;
 
-	public ClientConnectionThread(Control control)
+	public ClientConnectionThread(ClientControl control)
 	{
 		this.control = control;
 		this.gui = control.gui;

@@ -1,5 +1,5 @@
 package chatServer;
-//this was done by tobi
+//this was done by tobi und überarbeitet von robin
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;

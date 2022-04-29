@@ -32,7 +32,7 @@ public class Control implements Runnable
 	protected ObjectOutputStream out;
 
 	private boolean startWindow = false;
-	//Farben zum schnerllen abruf
+	//Farben zum schnelleren abruf
 	private Color rot = new Color(255, 102, 102);
 	private Color weiss = new Color(255, 255, 255, 255);
 	

@@ -23,6 +23,6 @@ public class Control
 		{
 			e.printStackTrace();
 		}
-		connectionThread = new ServerConnectionThread();
+		connectionThread = new ServerConnectionThread(this.serverSocket, this);
 	}
 }

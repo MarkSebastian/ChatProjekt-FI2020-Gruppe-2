@@ -12,6 +12,16 @@ public class PrivatChat
 	public PrivatChat(ArrayList<String> empfaenger)
 	{
 		this.empfaenger = empfaenger;
+		starten();
+	}
+	
+	public PrivatChat()
+	{
+		starten();
+	}
+	
+	public void starten()
+	{
 		controller = new PrivatChatController();
 	}
 }

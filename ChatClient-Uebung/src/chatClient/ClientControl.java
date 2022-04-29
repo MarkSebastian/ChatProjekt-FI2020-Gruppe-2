@@ -192,15 +192,27 @@ public class ClientControl implements Runnable
 		try
 		{
 
-			Nachricht message = (Nachricht) ois.readObject();
-
-			System.out.println(message.toString());
-			if (message.getListClients() != null)
+			// Wenn PrivatChat als Objekt verschickt wird -> neuen PrivatChatGUI starten
+			PrivatChat pc = null;
+			if((PrivatChat)ois.readObject() != null)
 			{
-				this.clients = message.getListClients();
-				akClientList();
+				pc.starten();
 			}
-			getNewMessages(message);
+			
+			// Ansonsten wird Message gelesen
+			else
+			{
+				Nachricht message = (Nachricht) ois.readObject();
+				
+				System.out.println(message.toString());
+				if (message.getListClients() != null)
+				{
+					this.clients = message.getListClients();
+					akClientList();
+				}
+				getNewMessages(message);
+			}
+
 
 		}
 		catch (SocketException e1)

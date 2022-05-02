@@ -10,8 +10,9 @@ public class PrivatChat
 	private String chatName;
 	private ArrayList<String> empfaenger;
 	
-	public PrivatChat(ArrayList<String> empfaenger)
+	public PrivatChat(ArrayList<String> empfaenger, String chatName)
 	{
+		this.chatName = chatName;
 		this.empfaenger = empfaenger;
 		starten();
 	}

@@ -113,39 +113,42 @@ public class ServerControl
 
 	protected void broadcastMessage(Nachricht n, Client from)
 	{
-		for (Client c : clients)
+		clients.forEach(e ->
 		{
-			if (c != from)
-			{
-				c.sendMessage(n);
-			}
-		}
+			if (e != from)
+				e.sendMessage(n);
+		});
+
+		/*
+		 * for (Client c : clients) { if (c != from) { c.sendMessage(n); } }
+		 */
 	}
-	
-	// Nachricht hat eine ArrayList mit den empfaengern des privatChats, die Nachricht wird auch nur an diese Clients weitergeleitet
+
+	// Nachricht hat eine ArrayList mit den empfaengern des privatChats, die
+	// Nachricht wird auch nur an diese Clients weitergeleitet
 	protected void broadcastPrivatMessage(Nachricht n)
 	{
-		for (Client c : clients)
+		clients.forEach(e -> n.getEmpfaenger().forEach(s ->
 		{
-			for (String s : n.getEmpfaenger())
-			{
-				if(c.getName().equals(s))
-				{
-					c.sendMessage(n);
-				}
-			}
-		}
+			if (e.getName().equals(s))
+				e.sendMessage(n);
+		}));
 	}
+	/*
+	 * for (Client c : clients) { for (String s : n.getEmpfaenger()) {
+	 * if(c.getName().equals(s)) { c.sendMessage(n); } } } }
+	 */
 
 	protected void broadcastMessage(Nachricht n)
 	{
 		messages.addElement(n);
 		akList();
 
-		for (Client c : clients)
-		{
-			c.sendMessage(n);
-		}
+		clients.forEach(e -> e.sendMessage(n));
+
+		/*
+		 * for (Client c : clients) { c.sendMessage(n); }
+		 */
 		this.gui.getTextNachrichtenEingabe().setText("");
 	}
 

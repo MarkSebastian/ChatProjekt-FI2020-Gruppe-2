@@ -37,6 +37,7 @@ public class Nachricht implements Serializable
 	public void setAbsender(String absender)
 	{
 		this.absender = absender;
+
 	}
 
 	public int getAbsenderId()

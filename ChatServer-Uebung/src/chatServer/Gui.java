@@ -26,7 +26,7 @@ public class Gui
 	private JScrollPane scrollPane;
 	private JButton btnShowUserList;
 	private JList listUser;
-	
+
 	private boolean userList = false;
 	private JScrollPane scrollPaneListUser;
 
@@ -55,7 +55,7 @@ public class Gui
 		frmServer.getContentPane().add(getScrollPane());
 		frmServer.getContentPane().add(getListUser());
 		frmServer.getContentPane().add(getScrollPaneListUser());
-		
+
 		frmServer.setAlwaysOnTop(true);
 		frmServer.setVisible(true);
 	}
@@ -74,7 +74,7 @@ public class Gui
 		}
 		return list;
 	}
-	
+
 	protected void addListListener(MouseMotionAdapter l)
 	{
 		getList().addMouseMotionListener(l);
@@ -115,14 +115,15 @@ public class Gui
 	{
 		try
 		{
-		if (Integer.parseInt(textFieldPortNr.getText()) >= 1024 && Integer.parseInt(textFieldPortNr.getText()) <= 49151)
-		{
-			this.btnStartServer.setVisible(true);
-			this.btnStoppen.setVisible(false);
-			this.textFieldPortNr.setEditable(true);
+			if (Integer.parseInt(textFieldPortNr.getText()) >= 1024
+					&& Integer.parseInt(textFieldPortNr.getText()) <= 49151)
+			{
+				this.btnStartServer.setVisible(true);
+				this.btnStoppen.setVisible(false);
+				this.textFieldPortNr.setEditable(true);
+			}
 		}
-		}
-		catch(NumberFormatException e)
+		catch (NumberFormatException e)
 		{
 			System.out.println("keine Zahl als Port");
 		}
@@ -189,14 +190,17 @@ public class Gui
 			scrollPane = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			scrollPane.setBounds(10, 60, 287, 214);
-			scrollPane.getVerticalScrollBar().addAdjustmentListener(al ->
-			al.getAdjustable().setValue(al.getAdjustable().getMaximum()));
+			scrollPane.getVerticalScrollBar()
+					.addAdjustmentListener(al -> al.getAdjustable().setValue(al.getAdjustable().getMaximum()));
 
 		}
 		return scrollPane;
 	}
-	private JButton getBtnShowUserList() {
-		if (btnShowUserList == null) {
+
+	private JButton getBtnShowUserList()
+	{
+		if (btnShowUserList == null)
+		{
 			btnShowUserList = new JButton("");
 			btnShowUserList.setBackground(SystemColor.scrollbar);
 			btnShowUserList.setBounds(307, 60, 11, 73);
@@ -204,11 +208,11 @@ public class Gui
 		}
 		return btnShowUserList;
 	}
-	
+
 	private void showUserList()
 	{
 		Rectangle r = frmServer.getBounds();
-		if(userList)
+		if (userList)
 		{
 			getScrollPaneListUser().setVisible(true);
 			frmServer.setBounds(r.x, r.y, 342, 350);
@@ -221,27 +225,32 @@ public class Gui
 			userList = true;
 		}
 	}
-	
-	protected JList getListUser() {
-		if (listUser == null) {
+
+	protected JList getListUser()
+	{
+		if (listUser == null)
+		{
 			listUser = new JList();
 		}
 		return listUser;
 	}
-	
+
 	protected int hoveredItem()
 	{
 		try
 		{
-		return getList().locationToIndex(getList().getMousePosition()); 
+			return getList().locationToIndex(getList().getMousePosition());
 		}
-		catch(NullPointerException e)
+		catch (NullPointerException e)
 		{
 			return -1;
 		}
 	}
-	private JScrollPane getScrollPaneListUser() {
-		if (scrollPaneListUser == null) {
+
+	private JScrollPane getScrollPaneListUser()
+	{
+		if (scrollPaneListUser == null)
+		{
 			JList userList = getListUser();
 			scrollPaneListUser = new JScrollPane(userList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);

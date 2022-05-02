@@ -15,7 +15,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import javax.swing.DefaultListModel;
 import javax.swing.text.AttributeSet.ColorAttribute;
@@ -46,7 +48,8 @@ public class ClientControl implements Runnable
 	private Color weiss = new Color(255, 255, 255, 255);
 
 	private boolean first = true;
-	private PrivatChat privatChat;
+	private Set<PrivatChat> privatChats;
+	
 
 
 	public ClientControl()
@@ -54,6 +57,7 @@ public class ClientControl implements Runnable
 		startGui = new VerbindungsGUI();
 		gui = new Gui();
 		setListener();
+		privatChats = new HashSet<PrivatChat>();
 	}
 
 	public void switchGui()
@@ -191,19 +195,19 @@ public class ClientControl implements Runnable
 	{
 		try
 		{
-
+			Object o = ois.readObject();
 			// Wenn PrivatChat als Objekt verschickt wird -> neuen PrivatChatGUI starten
-			PrivatChat pc = null;
-			if((PrivatChat)ois.readObject() != null)
+			try
 			{
+				PrivatChat pc = null;
+				pc = (PrivatChat)o;
+				privatChats.add(pc);
 				pc.starten();
 			}
-			
-			// Ansonsten wird Message gelesen
-			else
+			catch(ClassCastException e)
 			{
-				Nachricht message = (Nachricht) ois.readObject();
-				
+				// Ansonsten wird Message gelesen
+				Nachricht message = (Nachricht) o;				
 				System.out.println(message.toString());
 				if (message.getListClients() != null)
 				{
@@ -212,8 +216,6 @@ public class ClientControl implements Runnable
 				}
 				getNewMessages(message);
 			}
-
-
 		}
 		catch (SocketException e1)
 		{

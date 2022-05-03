@@ -39,7 +39,7 @@ public class ClientProxy implements Runnable
 		while(!thread.isInterrupted())
 		{
 			try
-			{ 
+			{
 				readMessage();
 			}
 			catch(Exception e)

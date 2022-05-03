@@ -25,15 +25,17 @@ public class Control
 		sqlBefehl="Select * from Test;"; //Auslesen
 		sqlAnweisung="Insert into Test (ID, Feld1) values (?,?)";//Insert into
 		sqlHochDatum="Update Test set Feld1=? where Feld1=?";//Update
-		sqlLochen="Delete from Test where Feld1=?";
+		sqlLochen="Delete from Test where Feld1=?";//Daten Löschen
 		
 		
 		try (Connection verbindung = DriverManager.getConnection(verbindungslink,"","") )
 		{
 			System.out.println("verbindungaufgebaut");
+			//=======================================================================================Löschen
 			PreparedStatement vorbereiteteAussage3 = verbindung.prepareStatement(sqlLochen);
 			vorbereiteteAussage3.setString(1, stringTest);
 			vorbereiteteAussage3.execute();
+			//=======================================================================================Löschenende
 			//=======================================================================================Update
 			PreparedStatement vorbereiteteAussage2 = verbindung.prepareStatement(sqlHochDatum);
 			vorbereiteteAussage2.setString(1,stringTest);

@@ -120,30 +120,19 @@ public class ClientControl implements Runnable
 	private void neuenChatStarten()
 	{
 		String temp = gui.getTextFieldGruppenName().getText();
-<<<<<<< HEAD
-		if(temp.isEmpty())
-=======
 		if(temp.isEmpty() || gui.getTextFieldGruppenName().getText().equals("Gruppennamen eingeben"))
->>>>>>> branch 'FabiAlex' of https://github.com/MarkSebastian/ChatProjekt-FI2020-Gruppe-2.git
 		{
 			System.out.println("Bitte Chatraum benennen!");
 		}
-<<<<<<< HEAD
-		else
-		{	
-//			teilnehmerPrivatChat.forEach(e -> System.out.println(e));
-			privatChats.add(new PrivatChat(teilnehmerPrivatChat, temp, user));	
-=======
-		else if(privatChats.size() < 2)
+		else if(privatChats.size() < 1)
 		{		
-			System.out.println("Bitte mindestens 2 User hinzufügen");
+			System.out.println("Bitte mindestens einen User hinzufügen");
 		}
 		else
 		{
 			System.out.println(gui.getTextFieldGruppenName().getText());
 			teilnehmerPrivatChat.forEach(e -> System.out.println(e));
-			privatChats.add(new PrivatChat(teilnehmerPrivatChat, temp));	
->>>>>>> branch 'FabiAlex' of https://github.com/MarkSebastian/ChatProjekt-FI2020-Gruppe-2.git
+			privatChats.add(new PrivatChat(teilnehmerPrivatChat, temp, user));	
 		}
 	}
 

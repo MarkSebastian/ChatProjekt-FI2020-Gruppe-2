@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
 public class Control
 {
 	private ServerSocket serverSocket;
@@ -13,6 +17,24 @@ public class Control
 	public Control()
 	{
 		anmeldeServerStarten();
+		guiStarten();
+	}
+	
+	private void guiStarten()
+	{
+		try
+		{
+			FXMLLoader fxmlLoader = new FXMLLoader();
+			Scene scene = new Scene(fxmlLoader.load());
+			Stage stage = new Stage();
+			stage.setTitle("Anmelde Server");
+			stage.setScene(scene);
+			stage.show();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	private void anmeldeServerStarten()

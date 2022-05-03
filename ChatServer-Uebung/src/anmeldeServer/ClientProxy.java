@@ -1,8 +1,11 @@
 package anmeldeServer;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.net.SocketException;
+
 import Message.nachrichtP.LogInNachricht;
 
 public class ClientProxy implements Runnable
@@ -42,6 +45,7 @@ public class ClientProxy implements Runnable
 			try
 			{ 
 				readMessage();
+				Thread.sleep(500);
 			}
 			catch(InterruptedException e)
 			{
@@ -53,8 +57,37 @@ public class ClientProxy implements Runnable
 
 	private void readMessage()
 	{
-		LogInNachricht message = null;
-		message = (LogInNachricht)ois.readObject();
-		
+		try
+		{
+			LogInNachricht message = null;
+			message = (LogInNachricht)ois.readObject();
+			
+		}
+		catch (SocketException | EOFException e1)
+		{
+			stopClient();
+		}
+		catch (ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public void stopClient()
+	{
+		try
+		{
+			socket.close();
+			ois.close();
+			this.thread.interrupt();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

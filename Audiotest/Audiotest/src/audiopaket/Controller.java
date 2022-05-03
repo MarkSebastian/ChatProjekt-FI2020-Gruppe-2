@@ -12,6 +12,8 @@ public class Controller
 {
 	private Gui gui;
 	private AudioInputStream inputStream;
+	AudioFormat adFormat;
+	TargetDataLine targetDataLine;
 	
 	public Controller()
 	{
@@ -19,22 +21,18 @@ public class Controller
 		setButtons();
 	}
 	
+	//brauchen wir das oder erst bei Client
+		/*private ObjectInputStream in; //object streams to/from client
+	    private ObjectOutputStream out;*/
+	
 	private void setButtons()
 	{
-		gui.setBtnAbspielen(e -> audioPlay());
-		gui.setBtnAufnehmen(e -> {
-			try
-			{
-				audioRecord();
-			}
-			catch (LineUnavailableException e1 )
-			{
-				e1.printStackTrace();
-			}
-		});
+		gui.setBtnAbspielen(e -> playAudio());
+		gui.setBtnAufnehmen(e -> recordAudio());
+			
 	}
 	
-	public void audioRecord() throws LineUnavailableException
+	/*public void audioRecord() throws LineUnavailableException
 	{
 		AudioFormat format = new AudioFormat(16000, 8, 2, true, true);
 		DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
@@ -47,14 +45,58 @@ public class Controller
 		TargetDataLine targetDataLine = (TargetDataLine) AudioSystem.getLine(info);
 		targetDataLine.open();
 		
+	}*/
+	
+	
+	private void recordAudio()
+	{
+		 try 
+		 {
+		    	/*
+		    	 * targetdataline allows data to be read in byte streams
+		    	 */
+		        adFormat = getAudioFormat();
+		        DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, adFormat);
+		        targetDataLine = (TargetDataLine) AudioSystem.getLine(dataLineInfo);
+		        targetDataLine.open(adFormat);
+		        targetDataLine.start();
+
+		        /*Thread captureThread = new Thread(new CaptureThread());
+		        /*
+		         * Start event of the thread begins or ceases active presentation of the data
+		         */
+		        //captureThread.start();
+		    } catch (Exception e) {
+		    	/*
+		    	 * event handler is used in case of any byte requirements
+		    	 */
+		        StackTraceElement stackEle[] = e.getStackTrace();
+		        for (StackTraceElement val : stackEle) {
+		            System.out.println(val);
+		        }
+		        System.exit(0);
+		   }
 	}
 	
 	
-	public void audioPlay()
-	{
-		System.out.println("Test");
+	private AudioFormat getAudioFormat() 
+	{	
+		
+		float sampleRate = 16000.0F;
+	    int sampleInbits = 16;
+	    //mono
+	    int channels = 1;
+	    boolean signed = true;
+	    boolean bigEndian = false;
+	    return new AudioFormat(sampleRate, sampleInbits, channels, signed, bigEndian);
 	}
 	
 
-	//bei Buttonklick einfügen
+	public void playAudio()
+	{
+		System.out.println("Test");
+	
+	}
+
+	
 }

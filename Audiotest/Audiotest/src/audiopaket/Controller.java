@@ -7,6 +7,7 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 //test
+//hallo dominik
 public class Controller
 {
 	private Gui gui;

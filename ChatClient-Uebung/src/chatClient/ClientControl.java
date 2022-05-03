@@ -118,15 +118,13 @@ public class ClientControl implements Runnable
 
 	private void neuenChatStarten()
 	{
-		if(gui.getTextFieldGruppenName().getText().isEmpty())
+		String temp = gui.getTextFieldGruppenName().getText();
+		if(temp.isEmpty())
 			System.out.println("Bitte Chatraum benennen!");
 		else
-		{
-			
+		{		
 			teilnehmerPrivatChat.forEach(e -> System.out.println(e));
-			
-			//privatChat = new PrivatChat();
-	
+			privatChats.add(new PrivatChat(teilnehmerPrivatChat, temp));	
 		}
 	}
 

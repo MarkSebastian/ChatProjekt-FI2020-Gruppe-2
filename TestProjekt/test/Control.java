@@ -22,7 +22,7 @@ public class Control
 	
 	public Control()
 	{
-		verbindungslink="jdbc:ucanaccess://src/Testdatenbank.accdb";
+		verbindungslink="jdbc:ucanaccess://Testdatenbank.accdb";
 		sqlBefehl="Select * from Test;"; //Auslesen
 		sqlAnweisung="Insert into Test (ID, Feld1) values (?,?)";//Insert into
 		sqlHochDatum="Update Test set Feld1=? where Feld1=?";//Update

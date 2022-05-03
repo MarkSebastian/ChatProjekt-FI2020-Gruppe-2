@@ -34,6 +34,7 @@ public class ClientControl implements Runnable
 	protected DefaultListModel<String> clients = new DefaultListModel<String>();
 	protected DefaultListModel<String> choosenClients = new DefaultListModel<String>();
 	protected ArrayList<String> teilnehmerPrivatChat = new ArrayList<String>();
+	
 
 
 	protected Thread read;
@@ -119,14 +120,30 @@ public class ClientControl implements Runnable
 	private void neuenChatStarten()
 	{
 		String temp = gui.getTextFieldGruppenName().getText();
+<<<<<<< HEAD
 		if(temp.isEmpty())
+=======
+		if(temp.isEmpty() || gui.getTextFieldGruppenName().getText().equals("Gruppennamen eingeben"))
+>>>>>>> branch 'FabiAlex' of https://github.com/MarkSebastian/ChatProjekt-FI2020-Gruppe-2.git
 		{
 			System.out.println("Bitte Chatraum benennen!");
 		}
+<<<<<<< HEAD
 		else
 		{	
 //			teilnehmerPrivatChat.forEach(e -> System.out.println(e));
 			privatChats.add(new PrivatChat(teilnehmerPrivatChat, temp, user));	
+=======
+		else if(privatChats.size() < 2)
+		{		
+			System.out.println("Bitte mindestens 2 User hinzufügen");
+		}
+		else
+		{
+			System.out.println(gui.getTextFieldGruppenName().getText());
+			teilnehmerPrivatChat.forEach(e -> System.out.println(e));
+			privatChats.add(new PrivatChat(teilnehmerPrivatChat, temp));	
+>>>>>>> branch 'FabiAlex' of https://github.com/MarkSebastian/ChatProjekt-FI2020-Gruppe-2.git
 		}
 	}
 
@@ -366,12 +383,24 @@ public class ClientControl implements Runnable
 	{
 		try
 		{
+			int temp = 0;
 			int index = gui.getListActiveUser().getSelectedIndex();
-
+			
 			String selected = clients.getElementAt(index);
-			selected = selected.substring(2);
-			choosenClients.addElement(selected);
-			teilnehmerPrivatChat.add(selected);
+			for (String e : teilnehmerPrivatChat)
+			{
+				if(e.equals(selected.substring(2)))
+				{
+					temp++;
+				}
+			}
+			
+			if(temp == 0)
+			{
+				selected = selected.substring(2);
+				teilnehmerPrivatChat.add(selected);
+				choosenClients.addElement(selected);
+			}
 
 			gui.getListChoosenUser().setModel(choosenClients);
 		}

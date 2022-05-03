@@ -46,7 +46,7 @@ public class Control
 			//=======================================================================================Insert into
 			PreparedStatement vorbereiteteAussage = verbindung.prepareStatement(sqlAnweisung);
 			vorbereiteteAussage.setInt(1, intTest);
-			vorbereiteteAussage.setString(2, stringTest);
+			vorbereiteteAussage.setString(2, "");
 			vorbereiteteAussage.executeUpdate();
 			//=======================================================================================insert into ende
 			//=======================================================================================Auslesen

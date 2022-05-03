@@ -54,6 +54,6 @@ public class Control
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-		}
+		} 
 	} 
 }

@@ -2,39 +2,24 @@ package anmeldeServer;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.URL;
 import java.util.ArrayList;
 
+import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Control
+public class Control extends Application
 {
 	private ServerSocket serverSocket;
 	protected ServerConnectionThread connectionThread;
 	private ArrayList<ClientProxy> clients;
 	
-	public Control()
+	public Control() 
 	{
 		anmeldeServerStarten();
-		guiStarten();
-	}
-	
-	private void guiStarten()
-	{
-		try
-		{
-			FXMLLoader fxmlLoader = new FXMLLoader();
-			Scene scene = new Scene(fxmlLoader.load());
-			Stage stage = new Stage();
-			stage.setTitle("Anmelde Server");
-			stage.setScene(scene);
-			stage.show();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		
 	}
 
 	private void anmeldeServerStarten()
@@ -67,5 +52,24 @@ public class Control
 		}
 		clients.clear();
 		System.out.println("Server gestoppt");
+	}
+
+	@Override
+	public void start(Stage stage) throws Exception
+	{
+		try
+		{
+			FXMLLoader fxmlLoader = new FXMLLoader();
+			fxmlLoader.load(getClass().getResource("AnmeldeSeverGui.fxml"));
+			Scene scene = new Scene(fxmlLoader.load());
+			stage.setTitle("Anmelde Server");
+			stage.setScene(scene);
+			stage.show();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		
 	}
 }

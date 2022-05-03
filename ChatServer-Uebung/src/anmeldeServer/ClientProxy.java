@@ -3,6 +3,7 @@ package anmeldeServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import Message.nachrichtP.LogInNachricht;
 
 public class ClientProxy implements Runnable
 {
@@ -42,16 +43,18 @@ public class ClientProxy implements Runnable
 			{ 
 				readMessage();
 			}
-			catch(Exception e)
+			catch(InterruptedException e)
 			{
-				
+				System.out.println("Verbindung mit Client getrennt");
+				thread.interrupt();
 			}
 		}
 	}
 
 	private void readMessage()
 	{
-		
+		LogInNachricht message = null;
+		message = (LogInNachricht)ois.readObject();
 		
 	}
 }

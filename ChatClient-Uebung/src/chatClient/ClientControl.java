@@ -34,6 +34,7 @@ public class ClientControl implements Runnable
 	protected DefaultListModel<String> clients = new DefaultListModel<String>();
 	protected DefaultListModel<String> choosenClients = new DefaultListModel<String>();
 	protected ArrayList<String> teilnehmerPrivatChat = new ArrayList<String>();
+	protected ArrayList<String> aktiveTeilnehmer = new ArrayList<String>();
 	
 
 
@@ -252,6 +253,16 @@ public class ClientControl implements Runnable
 		this.gui.getListUser().setModel(clients);
 		this.gui.getListActiveUser().setModel(clients);
 
+		
+		aktiveTeilnehmer.forEach(e -> clients.addElement(e));
+		
+		aktiveTeilnehmer.forEach(e ->	
+		{
+			if(e.equals(user))
+			{
+				aktiveTeilnehmer.remove(e);
+			}
+		});
 	}
 
 	private void stopClient()

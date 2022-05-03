@@ -115,7 +115,7 @@ public class Client implements Runnable
 				Thread.sleep(500);
 			} catch (InterruptedException e)
 			{
-				System.out.println(name + "verbindung getrennt");
+				System.out.println(name + " verbindung getrennt");
 				control.broadcastMessage(new Nachricht("verbindung mit " + name + " getrennt!", control.clientListeAbspecken()));
 				read.interrupt();
 			}

@@ -21,6 +21,7 @@ public class ServerControl
 	private ArrayList<Client> clients = new ArrayList<Client>();
 	private DefaultListModel<Client> clientListe = new DefaultListModel<Client>();
 
+	
 	public ServerControl()
 	{
 		gui = new Gui();
@@ -119,9 +120,6 @@ public class ServerControl
 				e.sendMessage(n);
 		});
 
-		/*
-		 * for (Client c : clients) { if (c != from) { c.sendMessage(n); } }
-		 */
 	}
 
 	// Nachricht hat eine ArrayList mit den empfaengern des privatChats, die
@@ -134,10 +132,7 @@ public class ServerControl
 				e.sendMessage(n);
 		}));
 	}
-	/*
-	 * for (Client c : clients) { for (String s : n.getEmpfaenger()) {
-	 * if(c.getName().equals(s)) { c.sendMessage(n); } } } }
-	 */
+
 
 	protected void broadcastMessage(Nachricht n)
 	{
@@ -146,11 +141,6 @@ public class ServerControl
 
 		clients.forEach(e -> e.sendMessage(n));
 
-/*		for (Client c : clients)
-		{
-			c.sendMessage(n);
-		}
-*/
 		this.gui.getTextNachrichtenEingabe().setText("");
 	}
 

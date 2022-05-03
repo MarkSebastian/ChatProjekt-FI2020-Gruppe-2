@@ -1,5 +1,5 @@
 package Message.nachrichtP;
-
+//SERVER
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -18,6 +18,7 @@ public class Nachricht implements Serializable
 	private DefaultListModel<String> activeClients = null;
 	private int flag;
 	private ArrayList<String> empfaenger;
+	private ArrayList<String> clientListeArray = new ArrayList<String>();
 	
 	public int getFlag()
 	{
@@ -77,6 +78,15 @@ public class Nachricht implements Serializable
 		}
 		this.absenderId = 0;
 		this.nachricht = nachricht;
+	}
+	
+	//TEST
+	public Nachricht(String nachricht, ArrayList<String> clientListeArray)
+	{
+		this.absender = "";
+		this.absenderId = 0;
+		this.nachricht = nachricht;
+		this.clientListeArray = clientListeArray;
 	}
 	
 	public Nachricht(String nachricht, DefaultListModel<String> clientListe)

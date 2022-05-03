@@ -123,10 +123,8 @@ public class ClientControl implements Runnable
 		else
 		{
 			
-			teilnehmerPrivatChat.forEach(e -> System.out.println(e));
-			
-			//privatChat = new PrivatChat();
-	
+			teilnehmerPrivatChat.forEach(e -> System.out.println(e));			
+			privatChats.add(new PrivatChat());	
 		}
 	}
 

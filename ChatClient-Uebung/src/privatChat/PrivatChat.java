@@ -14,6 +14,7 @@ public class PrivatChat
 	{
 		this.chatName = chatName;
 		this.empfaenger = empfaenger;
+		hashcode = hashCode();
 		starten();
 	}
 	
@@ -25,8 +26,7 @@ public class PrivatChat
 	
 	public void starten()
 	{
-		controller = new PrivatChatController();
-		hashcode = hashCode();
+		controller = new PrivatChatController();		
 	}
 
 	@Override

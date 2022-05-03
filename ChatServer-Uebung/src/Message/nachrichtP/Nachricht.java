@@ -3,7 +3,7 @@ package Message.nachrichtP;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
+import javax.sound.sampled.*;
 import javax.swing.DefaultListModel;
 
 public class Nachricht implements Serializable

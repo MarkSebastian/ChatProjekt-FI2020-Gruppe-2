@@ -1,6 +1,5 @@
 package chatClient;
 
-
 import javax.swing.JFrame;
 import javax.swing.JSeparator;
 import javax.swing.JToggleButton;
@@ -33,7 +32,7 @@ public class VerbindungsGUI
 	private JLabel lblLogin;
 
 	private boolean customIP = false;
-	
+
 	public VerbindungsGUI()
 	{
 		initialize();
@@ -67,7 +66,8 @@ public class VerbindungsGUI
 		if (hide)
 		{
 			frame.setVisible(false);
-		} else
+		}
+		else
 		{
 			frame.setVisible(true);
 		}
@@ -98,7 +98,8 @@ public class VerbindungsGUI
 		{
 			getTextFieldIP().setEditable(true);
 			customIP = true;
-		} else
+		}
+		else
 		{
 			getTextFieldIP().setEditable(false);
 			customIP = false;
@@ -203,12 +204,12 @@ public class VerbindungsGUI
 		}
 		return textFieldPort;
 	}
-	
+
 	protected void changePortColor(Color c)
 	{
 		getTextFieldPort().setBackground(c);
 	}
-	
+
 	protected void changeUsernameColor(Color c)
 	{
 		getTextFieldUsername().setBackground(c);
@@ -264,12 +265,12 @@ public class VerbindungsGUI
 		}
 		return lblLogin;
 	}
-	
+
 	protected Rectangle getFrmBounds()
 	{
 		return frame.getBounds();
 	}
-	
+
 	protected void setFrmBounds(Rectangle r)
 	{
 		frame.setBounds(r.x, r.y, 450, 258);

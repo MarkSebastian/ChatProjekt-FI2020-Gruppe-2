@@ -8,7 +8,7 @@ public class Control
 {
 	private String verbindungslink;
 	private String sqlBefehl;
-	//Bitte
+	
 	
 	public Control()
 	{

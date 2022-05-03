@@ -8,14 +8,16 @@ public class PrivatChat
 	private long hashcode;
 	private PrivatChatController controller;
 	private String chatName;
+	private String user;
 	private ArrayList<String> empfaenger;
 	
-	public PrivatChat(ArrayList<String> empfaenger, String chatName)
+	public PrivatChat(ArrayList<String> empfaenger, String chatName, String user)
 	{
 		this.chatName = chatName;
 		this.empfaenger = empfaenger;
-		hashcode = hashCode();
+		this.user = user;
 		starten();
+		hashcode = hashCode();
 	}
 	
 	// Leerer Konstruktor oder abfangen, dass kein PrivChat ohne Empfänger gestartet werden kann?
@@ -24,10 +26,25 @@ public class PrivatChat
 		starten();
 	}
 	
+	public String getChatName()
+	{
+		return chatName;
+	}
+	
+	public ArrayList<String> getEmpfaenger()
+	{
+		return empfaenger;
+	}
+	
+	public String getUser()
+	{
+		return user;
+	}
+
 	public void starten()
 	{
-		controller = new PrivatChatController();		
-	}
+		controller = new PrivatChatController(this);		
+	}	
 
 	@Override
 	public int hashCode()

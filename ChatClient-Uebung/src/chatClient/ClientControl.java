@@ -49,7 +49,7 @@ public class ClientControl implements Runnable
 
 	private boolean first = true;
 	private Set<PrivatChat> privatChats;
-	
+	private String user;
 
 
 	public ClientControl()
@@ -118,17 +118,17 @@ public class ClientControl implements Runnable
 
 	private void neuenChatStarten()
 	{
-		if(gui.getTextFieldGruppenName().getText().isEmpty())
-			System.out.println("Bitte Chatraum benennen!");
-		else
+		String temp = gui.getTextFieldGruppenName().getText();
+		if(temp.isEmpty())
 		{
-			
-			teilnehmerPrivatChat.forEach(e -> System.out.println(e));			
-			privatChats.add(new PrivatChat());	
+			System.out.println("Bitte Chatraum benennen!");
+		}
+		else
+		{	
+//			teilnehmerPrivatChat.forEach(e -> System.out.println(e));
+			privatChats.add(new PrivatChat(teilnehmerPrivatChat, temp, user));	
 		}
 	}
-
-
 
 	protected boolean checkPort()
 	{
@@ -165,7 +165,8 @@ public class ClientControl implements Runnable
 			Nachricht message;
 			if (first)
 			{
-				message = new Nachricht(startGui.getTextFieldUsername().getText(), false);
+				user = startGui.getTextFieldUsername().getText();
+				message = new Nachricht(user, false);
 				out.writeObject(message);
 				first = false;
 			}

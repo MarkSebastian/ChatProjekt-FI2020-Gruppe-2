@@ -146,9 +146,11 @@ public class ServerControl
 
 		clients.forEach(e -> e.sendMessage(n));
 
-		/*
-		 * for (Client c : clients) { c.sendMessage(n); }
-		 */
+/*		for (Client c : clients)
+		{
+			c.sendMessage(n);
+		}
+*/
 		this.gui.getTextNachrichtenEingabe().setText("");
 	}
 

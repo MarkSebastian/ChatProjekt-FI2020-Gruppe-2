@@ -23,10 +23,10 @@ public class PrivatChatGUI extends JFrame
 	private JList listUser;
 	private JScrollPane scrollPaneChat;
 	private JScrollPane scrollPaneUser;
-	private Label labelChatName;
 	private JLabel lblTeilnehmer;
 	private JTextField textFieldNachricht;
 	private JButton btnVerlassen;
+	private JLabel lblChatName;
 	
 
 	public PrivatChatGUI()
@@ -44,11 +44,11 @@ public class PrivatChatGUI extends JFrame
 		contentPane.setLayout(null);
 		contentPane.add(getScrollPaneChat());
 		contentPane.add(getScrollPaneUser());
-		contentPane.add(getLabelChatName());
 		contentPane.add(getLblTeilnehmer());
 		contentPane.add(getTextFieldNachricht());
 		contentPane.add(getBtnVerlassen());
 		setVisible(true);
+		contentPane.add(getLblChatName());
 	}
 	
 	protected JList getListChat()
@@ -92,14 +92,6 @@ public class PrivatChatGUI extends JFrame
 		}
 		return scrollPaneUser;
 	}
-	private Label getLabelChatName() {
-		if (labelChatName == null) {
-			labelChatName = new Label("New label");
-			labelChatName.setFont(new Font("Tahoma", Font.BOLD, 20));
-			labelChatName.setBounds(25, 10, 530, 35);
-		}
-		return labelChatName;
-	}
 	private JLabel getLblTeilnehmer() {
 		if (lblTeilnehmer == null) {
 			lblTeilnehmer = new JLabel("Teilnehmer");
@@ -122,5 +114,13 @@ public class PrivatChatGUI extends JFrame
 			btnVerlassen.setBounds(585, 353, 138, 23);
 		}
 		return btnVerlassen;
+	}
+	protected JLabel getLblChatName() {
+		if (lblChatName == null) {
+			lblChatName = new JLabel("New label");
+			lblChatName.setFont(new Font("Tahoma", Font.BOLD, 20));
+			lblChatName.setBounds(25, 10, 530, 28);
+		}
+		return lblChatName;
 	}
 }

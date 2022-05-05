@@ -17,9 +17,14 @@ public class Nachricht implements Serializable
 	private String nachricht;
 	private DefaultListModel<String> activeClients = null;
 	private int flag;
-	private ArrayList<String> empfaenger;
-	private ArrayList<String> clientListeArray = new ArrayList<String>();
+	private ArrayList<String> empfaenger = new ArrayList<String>();
+	private ArrayList<String> aktiveClientsArrayList = new ArrayList<String>();
 	
+	public ArrayList<String> getAktiveClientsArrayList()
+	{
+		return aktiveClientsArrayList;
+	}
+
 	public int getFlag()
 	{
 		return flag;
@@ -79,17 +84,9 @@ public class Nachricht implements Serializable
 		this.absenderId = 0;
 		this.nachricht = nachricht;
 	}
-	
-	//TEST
-	public Nachricht(String nachricht, ArrayList<String> clientListeArray)
-	{
-		this.absender = "";
-		this.absenderId = 0;
-		this.nachricht = nachricht;
-		this.clientListeArray = clientListeArray;
-	}
-	
-	public Nachricht(String nachricht, DefaultListModel<String> clientListe)
+
+
+	public Nachricht(String nachricht, DefaultListModel<String> clientListe, ArrayList<String> aktiveClientsArrayList)
 	{
 		this.absender = "";
 		this.absenderId = 0;

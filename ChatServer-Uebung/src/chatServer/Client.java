@@ -116,7 +116,7 @@ public class Client implements Runnable
 			} catch (InterruptedException e)
 			{
 				System.out.println(name + " verbindung getrennt");
-				control.broadcastMessage(new Nachricht("verbindung mit " + name + " getrennt!", control.clientListeAbspecken()));
+				control.broadcastMessage(new Nachricht("verbindung mit " + name + " getrennt!", control.clientListeAbspecken(), control.listeFuellen()));
 				read.interrupt();
 			}
 		}

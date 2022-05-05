@@ -80,12 +80,13 @@ public class Nachricht implements Serializable
 		this.nachricht = nachricht;
 	}
 	
-	public Nachricht(String nachricht, DefaultListModel<String> clientListe)
+	public Nachricht(String nachricht, DefaultListModel<String> clientListe ,ArrayList<String> empfaenger)
 	{
 		this.absender = "";
 		this.absenderId = 0;
 		this.nachricht = nachricht;
 		this.activeClients = clientListe;
+		this.empfaenger = empfaenger;
 	}
 
 	@Override

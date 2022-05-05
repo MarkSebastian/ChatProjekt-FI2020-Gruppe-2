@@ -1,5 +1,10 @@
 package privatChat;
 
+
+//AUf button chatstarten wird neues Object Privatchaterzeugt --- ArrayList mit den Teilnehmern und der gui -> gui wird über die klasse gestartet
+//PrivatChat priv = new PrivatChat(PrivatChatGui gui, ArrayList<String> teilnehmer);
+
+
 import javax.swing.DefaultComboBoxModel;
 
 public class PrivatChatController
@@ -8,6 +13,7 @@ public class PrivatChatController
 	private PrivatChatGUI pgui;
 	private PrivatChat privatChat;
 	private DefaultComboBoxModel<String> teilnehmer;
+//	private ArrayList<String>teilnehmer = new ArrayList<String>();
 	
 	public PrivatChatController(PrivatChat privatChat)
 	{
@@ -17,7 +23,9 @@ public class PrivatChatController
 	// Client empfängt PrivatChat Objekt und startet eine neue GUI
 	public void eingeladenenChatStarten(PrivatChat privatChat)
 	{
-		starten(privatChat);
+		//PrivatChat privatChat = new PrivatChat(pgui, teilnehmer);
+		
+		starten(privatChat);   //du musst mehr schlafen fabi, das tut ja weh! aber richtig
 	}
 	
 	private void starten(PrivatChat privatChat)
@@ -30,6 +38,8 @@ public class PrivatChatController
 		pgui.getListUser().setModel(teilnehmer);
 	}
 
+	
+	//Combobox?
 	private void comboBoxAktualisieren()
 	{
 		teilnehmer.removeAllElements();

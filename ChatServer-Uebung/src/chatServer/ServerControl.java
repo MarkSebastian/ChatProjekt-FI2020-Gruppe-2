@@ -20,13 +20,14 @@ public class ServerControl
 	protected DefaultListModel<Nachricht> messages = new DefaultListModel<Nachricht>();
 	private ArrayList<Client> clients = new ArrayList<Client>();
 	private DefaultListModel<Client> clientListe = new DefaultListModel<Client>();
+	private ArrayList<String>empfaenger = new ArrayList<String>();
 
 	
 	public ServerControl()
 	{
 		gui = new Gui();
 		messages.clear();
-		akList();
+		this.gui.getList().setModel(messages);
 		addListener();
 		printAddress();
 	}
@@ -93,13 +94,12 @@ public class ServerControl
 	{
 		clients.clear();
 		messages.clear();
-		akList();
 	}
 
 	private void sendMessage()
 	{
 		Nachricht message = new Nachricht(this.gui.getTextNachrichtenEingabe().getText(), true);
-		if (clients.isEmpty() == false)
+		if (!clients.isEmpty())
 		{
 			broadcastMessage(message);
 		}
@@ -109,7 +109,6 @@ public class ServerControl
 	protected void getNewMessages(Nachricht n)
 	{
 		messages.addElement(n);
-		akList();
 	}
 
 	protected void broadcastMessage(Nachricht n, Client from)
@@ -137,7 +136,6 @@ public class ServerControl
 	protected void broadcastMessage(Nachricht n)
 	{
 		messages.addElement(n);
-		akList();
 
 		clients.forEach(e -> e.sendMessage(n));
 
@@ -170,10 +168,6 @@ public class ServerControl
 		System.out.println("Server gestoppt.");
 	}
 
-	protected void akList()
-	{
-		this.gui.getList().setModel(messages);
-	}
 
 	private void setToolTip()
 	{
@@ -193,7 +187,7 @@ public class ServerControl
 	protected DefaultListModel<String> clientListeAbspecken()
 	{
 		DefaultListModel<String> nl = new DefaultListModel<String>();
-
+		//empfaenger.forEach(e -> );
 		for (Client c : clients)
 		{
 			String s = c.getId() + " " + c.getName();
@@ -202,9 +196,19 @@ public class ServerControl
 
 		return nl;
 	}
+	
+	
+	protected ArrayList<String> listeFuellen()
+	{
+		ArrayList<String> temp = new ArrayList<String>();
+		
+		return temp;
+	}
 
 	protected void akClientList()
 	{
+		empfaenger.clear();
+		clients.forEach(e -> empfaenger.add(e.getName()));
 		clientListe.clear();
 
 		for (Client c : clients)

@@ -125,7 +125,7 @@ public class ClientControl implements Runnable
 		{
 			System.out.println("Bitte Chatraum benennen!");
 		}
-		else if(privatChats.size() < 1)
+		else if(teilnehmerPrivatChat.size() < 1)
 		{		
 			System.out.println("Bitte mindestens einen User hinzufügen");
 		}
@@ -205,6 +205,7 @@ public class ClientControl implements Runnable
 			// Wenn PrivatChat als Objekt verschickt wird -> neuen PrivatChatGUI starten
 			try
 			{
+				System.out.println("test");
 				PrivatChat pc = null;
 				pc = (PrivatChat)o;
 				privatChats.add(pc);
@@ -218,6 +219,7 @@ public class ClientControl implements Runnable
 				if (message.getListClients() != null)
 				{
 					this.clients = message.getListClients();
+					//this.aktiveTeilnehmer = message.getEmpfaenger(); 
 					akClientList();
 				}
 				getNewMessages(message);
@@ -254,7 +256,7 @@ public class ClientControl implements Runnable
 		this.gui.getListActiveUser().setModel(clients);
 
 		
-		aktiveTeilnehmer.forEach(e -> clients.addElement(e));
+		//aktiveTeilnehmer.forEach(e -> clients.addElement(e));
 		
 		aktiveTeilnehmer.forEach(e ->	
 		{
@@ -297,7 +299,6 @@ public class ClientControl implements Runnable
 			gui.getList().setToolTipText("<html> Absender-ID: " + n.getAbsenderId() + "<br> Absender: "
 					+ n.getAbsender() + "<br> Versandt: " + time + "</html>");
 		}
-
 	}
 
 	protected boolean checkUsername()
@@ -333,7 +334,6 @@ public class ClientControl implements Runnable
 						{
 							startGui.changePortColor(weiss);
 						}
-
 						try
 						{
 							Thread.sleep(125);
@@ -363,7 +363,6 @@ public class ClientControl implements Runnable
 						{
 							startGui.changeUsernameColor(weiss);
 						}
-
 						try
 						{
 							Thread.sleep(125);
@@ -385,7 +384,6 @@ public class ClientControl implements Runnable
 		{
 			int temp = 0;
 			int index = gui.getListActiveUser().getSelectedIndex();
-			
 			String selected = clients.getElementAt(index);
 			for (String e : teilnehmerPrivatChat)
 			{
@@ -415,9 +413,7 @@ public class ClientControl implements Runnable
 		try
 		{
 			int index = gui.getListChoosenUser().getSelectedIndex();
-
 			choosenClients.removeElementAt(index);
-
 			gui.getListChoosenUser().setModel(choosenClients);
 			teilnehmerPrivatChat.remove(index);
 		}
@@ -433,7 +429,6 @@ public class ClientControl implements Runnable
 		switchGui();
 		while (!read.isInterrupted())
 		{
-
 			try
 			{
 				readMessage();

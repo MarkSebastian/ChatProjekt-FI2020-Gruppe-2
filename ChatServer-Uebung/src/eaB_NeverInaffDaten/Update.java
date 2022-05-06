@@ -46,5 +46,10 @@ public class Update
 		{
 			
 		}
+		catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

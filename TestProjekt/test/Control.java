@@ -14,10 +14,21 @@ public class Control
 	private String sqlAnweisung;
 	private String sqlHochDatum;
 	private String sqlLochen;
+	private String sqlTestbefehl;
 	private Statement stellungsnahme;
-	private int intTest;
 	private String stringTest="Wah";
 	private String stringTest2="Guh";
+	
+	private int intTest;
+	private String a="Insert ";
+	private String b="into ";
+	private String c="Test ";
+	private String d="(Id,Feld1) ";
+	private String e="Values ";
+	private String f="( ";
+	private String g="?,?";
+	private String h=")";
+	
 
 	
 	public Control()
@@ -25,6 +36,7 @@ public class Control
 		verbindungslink="jdbc:ucanaccess://Testdatenbank.accdb";
 		sqlBefehl="Select * from Test;"; //Auslesen
 		sqlAnweisung="Insert into Test (ID, Feld1) values (?,?)";//Insert into
+		sqlTestbefehl=a+b+c+d+e+f+g+h; 
 		sqlHochDatum="Update Test set Feld1=? where Feld1=?";//Update
 		sqlLochen="Delete from Test where Feld1=?";//Daten Löschen
 		
@@ -32,6 +44,10 @@ public class Control
 		try (Connection verbindung = DriverManager.getConnection(verbindungslink,"","") )
 		{
 			System.out.println("verbindungaufgebaut");
+			PreparedStatement vorbereiteteAussage4 = verbindung.prepareStatement(sqlTestbefehl);
+			vorbereiteteAussage4.setInt(1, intTest);
+			vorbereiteteAussage4.setString(2, "KlapptDas?");
+			vorbereiteteAussage4.executeUpdate();
 			//=======================================================================================Löschen
 			PreparedStatement vorbereiteteAussage3 = verbindung.prepareStatement(sqlLochen);
 			vorbereiteteAussage3.setString(1, stringTest);
@@ -54,8 +70,8 @@ public class Control
 			ResultSet ergebnis = stellungsnahme.executeQuery(sqlBefehl);
 			while (ergebnis.next())
 			{
-				System.out.println(ergebnis.getInt("ID"));	
-				System.out.println(ergebnis.getString("Feld1"));
+				System.out.println(ergebnis.getInt("ID")+" "+ergebnis.getString("Feld1"));	
+				//System.out.println(ergebnis.getString("Feld1"));
 			}
 			//=======================================================================================Ende Auslesen
 		}

@@ -2,7 +2,9 @@ package audiopaket;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -14,12 +16,16 @@ import java.util.Base64.Encoder;
 import java.util.Calendar;
 import java.util.HashSet;
 
+import javax.sound.sampled.TargetDataLine;
+
 public class CaptureThread extends Thread
 {
-	byte[] tempBuffer = new byte[10240];
-	boolean bool = false;
-	boolean stopaudioCapture = false;
-	ByteArrayOutputStream bos;
+	protected byte[] tempBuffer = new byte[10240];
+	protected boolean bool = false;
+	protected boolean stopaudioCapture = false;
+	protected File file = new File("test.txt");
+	protected TargetDataLine tdl;
+	protected ByteArrayOutputStream bos;
 	
 	public void run()
 	{
@@ -30,6 +36,28 @@ public class CaptureThread extends Thread
 		//Buffer ist eine öffentliche abstrakte Klasse und dient als Container für Daten eines bestimmten Datentyps
 		Buffer[] free;
 		
+		
+		try
+		{
+			file.createNewFile();
+			fileWriter = new FileWriter(file.getName(), true);
+			bufferedWriter = new BufferedWriter(fileWriter);
+			while(!stopaudioCapture)
+			{
+				int cnt = tdl.read(tempBuffer, 0, tempBuffer.length);
+				
+				if (cnt > 0)
+				{
+					System.out.println("Klasse Capture Thread, Run");
+					Byte n = 0;
+				}
+			}
+		}
+		catch (IOException e )
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 }

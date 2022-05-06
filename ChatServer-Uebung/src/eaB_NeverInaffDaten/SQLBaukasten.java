@@ -24,6 +24,8 @@ public class SQLBaukasten
 	private String ist;
 	private String like;
 	private String delete;
+	private String and;
+	private String or;
 	
 	public SQLBaukasten()
 	{
@@ -49,5 +51,7 @@ public class SQLBaukasten
 		ist = "= ";
 		like = "like ";
 		delete = "Delete ";
+		and="and ";
+		or="or ";
 	}
 }

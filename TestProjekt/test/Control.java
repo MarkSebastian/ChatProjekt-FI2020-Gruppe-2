@@ -46,7 +46,7 @@ public class Control
 			System.out.println("verbindungaufgebaut");
 			PreparedStatement vorbereiteteAussage4 = verbindung.prepareStatement(sqlTestbefehl);
 			vorbereiteteAussage4.setInt(1, intTest);
-			vorbereiteteAussage4.setString(2, "KlapptDas?");
+			vorbereiteteAussage4.setString(2, ";Drop table Test from Testdatenbank;");
 			vorbereiteteAussage4.executeUpdate();
 			//=======================================================================================Löschen
 			PreparedStatement vorbereiteteAussage3 = verbindung.prepareStatement(sqlLochen);

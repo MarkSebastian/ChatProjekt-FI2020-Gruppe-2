@@ -16,7 +16,7 @@ public class Nachricht implements Serializable
 	private String nachricht;
 	private DefaultListModel<String> activeClients = null;
 	private int flag;
-	private ArrayList<String> empfaenger;
+	private ArrayList<String> empfaenger = new ArrayList<String>();
 
 	public int getFlag()
 	{

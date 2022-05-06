@@ -88,6 +88,7 @@ public class Client implements Runnable
 				}
 				else
 				{
+					message = (Nachricht)o;
 					if(first)
 					{
 						name = message.getNachricht();

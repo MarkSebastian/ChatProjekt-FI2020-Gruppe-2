@@ -127,9 +127,10 @@ public class ServerControl
 	{
 		clients.forEach(e -> pc.getEmpfaenger().forEach(s ->
 		{
-			if (e.getName().equals(s))
-				e.sendMessage(pc);
-		}));
+			if(!pc.getUser().equals(e)) 
+				if (e.getName().equals(s))
+					e.sendMessage(pc);
+			}));
 	}
 
 	// Nachricht hat eine ArrayList mit den empfaengern des privatChats, die

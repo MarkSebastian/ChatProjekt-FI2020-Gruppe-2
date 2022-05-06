@@ -10,7 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Control extends Application
+public class Control
 {
 	private ServerSocket serverSocket;
 	protected ServerConnectionThread connectionThread;
@@ -54,22 +54,5 @@ public class Control extends Application
 		System.out.println("Server gestoppt");
 	}
 
-	@Override
-	public void start(Stage stage) throws Exception
-	{
-		try
-		{
-			FXMLLoader fxmlLoader = new FXMLLoader();
-			fxmlLoader.load(getClass().getResource("AnmeldeSeverGui.fxml"));
-			Scene scene = new Scene(fxmlLoader.load());
-			stage.setTitle("Anmelde Server");
-			stage.setScene(scene);
-			stage.show();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		
-	}
+	
 }

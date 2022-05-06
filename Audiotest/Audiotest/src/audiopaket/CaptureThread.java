@@ -50,6 +50,7 @@ public class CaptureThread extends Thread
 				{
 					System.out.println("Klasse Capture Thread, Run");
 					Byte n = 0;
+					
 				}
 			}
 		}

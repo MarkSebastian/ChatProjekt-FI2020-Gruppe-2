@@ -4,18 +4,16 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
-//test
-//hallo dominik
-public class Controller
+
+public class ControllerM
 {
 	private Gui gui;
 	private AudioInputStream inputStream;
-	AudioFormat adFormat;
-	TargetDataLine targetDataLine;
+	AudioFormat audioFormat;
+	TargetDataLine tdl;
 	
-	public Controller()
+	public ControllerM()
 	{
 		gui=new Gui();
 		setButtons();
@@ -55,11 +53,16 @@ public class Controller
 		    	/*
 		    	 * targetdataline allows data to be read in byte streams
 		    	 */
-		        adFormat = getAudioFormat();
-		        DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, adFormat);
-		        targetDataLine = (TargetDataLine) AudioSystem.getLine(dataLineInfo);
-		        targetDataLine.open(adFormat);
-		        targetDataLine.start();
+		        audioFormat = getAudioFormat();
+		        //enthält audioformate und Puffergröße, TargetDataLine liest audio data
+		        //siehe Constructor Detail
+		        DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
+		        tdl = (TargetDataLine) dataLineInfo;
+		        
+		        
+		        tdl = (TargetDataLine) AudioSystem.getLine(dataLineInfo);
+		        tdl.open(audioFormat);
+		        tdl.start();
 
 		        /*Thread captureThread = new Thread(new CaptureThread());
 		        /*
@@ -77,8 +80,17 @@ public class Controller
 		        System.exit(0);
 		   }
 	}
+	//kocharshaivi19
+
+	public void playAudio()
+	{
+		System.out.println("Test");
+	
+	}
 	
 	
+	
+	//legit
 	private AudioFormat getAudioFormat() 
 	{	
 		
@@ -92,11 +104,7 @@ public class Controller
 	}
 	
 
-	public void playAudio()
-	{
-		System.out.println("Test");
-	
-	}
 
 	
 }
+

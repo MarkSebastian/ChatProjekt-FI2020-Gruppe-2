@@ -31,7 +31,6 @@ public class ControllerD
 	public void audioRecord()
 	{
 		try {
-		
 		//In der Methode Audio Format werden die Parameter bestimmt
 		audioFormat = getAudioFormatSettings();
 		DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);

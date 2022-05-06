@@ -4,6 +4,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
 import Message.nachrichtP.Nachricht;
+import privatChat.PrivatChat;
+
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
@@ -118,7 +120,16 @@ public class ServerControl
 			if (e != from)
 				e.sendMessage(n);
 		});
-
+	}
+	
+	// PrivatChatObjekt hat ArrayList mit Empfängern, nur an diese Liste wird der PrivatChat geschickt
+	protected void broadcastPrivatChat(PrivatChat pc)
+	{
+		clients.forEach(e -> pc.getEmpfaenger().forEach(s ->
+		{
+			if (e.getName().equals(s))
+				e.sendMessage(pc);
+		}));
 	}
 
 	// Nachricht hat eine ArrayList mit den empfaengern des privatChats, die

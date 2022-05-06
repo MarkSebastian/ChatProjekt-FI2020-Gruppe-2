@@ -50,7 +50,7 @@ public class ClientControl implements Runnable
 	private Color weiss = new Color(255, 255, 255, 255);
 
 	private boolean first = true;
-	private Set<PrivatChat> privatChats;
+	private Set<PrivatChat> privatChats;	// Funktion ob Chat doppelt muss noch geschrieben werden
 	private String user;
 
 
@@ -125,6 +125,7 @@ public class ClientControl implements Runnable
 		{
 			System.out.println("Bitte Chatraum benennen!");
 		}
+		// REMINDER: Hashset?
 		else if(teilnehmerPrivatChat.size() < 1)
 		{		
 			System.out.println("Bitte mindestens einen User hinzufügen");
@@ -132,8 +133,9 @@ public class ClientControl implements Runnable
 		else
 		{
 			System.out.println(gui.getTextFieldGruppenName().getText());
-			teilnehmerPrivatChat.forEach(e -> System.out.println(e));
-			privatChats.add(new PrivatChat(teilnehmerPrivatChat, temp, user));	
+			PrivatChat pc = new PrivatChat(teilnehmerPrivatChat, temp, user);
+			privatChats.add(pc);	
+			sendPrivatChat(pc);
 		}
 	}
 
@@ -194,36 +196,28 @@ public class ClientControl implements Runnable
 			System.out.println(e + "\n in sendMessage");
 		}
 		this.gui.getTextFieldEingabe().setText("");
-
+	}
+	
+	private void sendPrivatChat(PrivatChat pc)
+	{
+		try
+		{
+			out.writeObject(pc);
+		}
+		catch(Exception e)
+		{
+			System.out.println(e + "\n in sendPrivatChat");
+		}
 	}
 
 	private void readMessage()
 	{
+		boolean privatChatObjekt = false;
+		Object o = null;
+
 		try
 		{
-			Object o = ois.readObject();
-			// Wenn PrivatChat als Objekt verschickt wird -> neuen PrivatChatGUI starten
-			try
-			{
-				System.out.println("test");
-				PrivatChat pc = null;
-				pc = (PrivatChat)o;
-				privatChats.add(pc);
-				pc.starten();
-			}
-			catch(ClassCastException e)
-			{
-				// Ansonsten wird Message gelesen
-				Nachricht message = (Nachricht) o;				
-				System.out.println(message.toString());
-				if (message.getListClients() != null)
-				{
-					this.clients = message.getListClients();
-					//this.aktiveTeilnehmer = message.getEmpfaenger(); 
-					akClientList();
-				}
-				getNewMessages(message);
-			}
+			o = ois.readObject();
 		}
 		catch (SocketException e1)
 		{
@@ -235,8 +229,42 @@ public class ClientControl implements Runnable
 		}
 		catch (Exception e)
 		{
-			System.out.println(e + "\n in readMessage");
+			System.out.println(e + "\n Test in readMessage");
 		}
+
+		if(o != null) 
+		{
+			try
+			{
+				// Wenn PrivatChat als Objekt verschickt wird -> neuen PrivatChatGUI starten
+				PrivatChat pc = (PrivatChat)o;
+				privatChatObjekt = true;
+				privatChats.add(pc);
+				pc.starten();
+			}
+			catch(ClassCastException e)
+			{
+			}
+			
+			if(privatChatObjekt == false)
+			{
+				try
+				{
+					// Ansonsten wird Message gelesen
+					Nachricht message = (Nachricht) o;		
+					System.out.println(message.toString());
+					if (message.getListClients() != null)
+					{
+						this.clients = message.getListClients();
+						akClientList();
+					}
+					getNewMessages(message);
+				}
+				catch (Exception e)
+				{
+				}
+			}
+		}		
 	}
 
 	protected void getNewMessages(Nachricht n)
@@ -255,8 +283,8 @@ public class ClientControl implements Runnable
 		this.gui.getListUser().setModel(clients);
 		this.gui.getListActiveUser().setModel(clients);
 
-		
-		//aktiveTeilnehmer.forEach(e -> clients.addElement(e));
+		// REMINDER: Passiert hier was?
+		aktiveTeilnehmer.forEach(e -> clients.addElement(e));
 		
 		aktiveTeilnehmer.forEach(e ->	
 		{

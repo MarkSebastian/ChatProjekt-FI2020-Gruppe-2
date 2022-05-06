@@ -8,12 +8,14 @@ import java.net.Socket;
 import java.net.SocketException;
 
 import Message.nachrichtP.Nachricht;
+import privatChat.PrivatChat;
 
 public class Client implements Runnable
 {
 
 	private ServerControl control;
 
+	// REMINDER: unbekannt tritt dem Chat bei
 	private String name = "unbekannt";
 	private int id = 0;
 
@@ -48,11 +50,11 @@ public class Client implements Runnable
 		}
 	}
 
-	protected void sendMessage(Nachricht message)
+	protected void sendMessage(Object o)
 	{
 		try
 		{
-			out.writeObject(message);
+			out.writeObject(o);
 		} catch (Exception e)
 		{
 			System.out.println(e + "\n in sendMessage function");
@@ -64,34 +66,53 @@ public class Client implements Runnable
 	{
 		try
 		{
+			boolean privatChatObjekt = false;
 			Nachricht message = null;
-			message = (Nachricht)ois.readObject();
-			if(first)
+			PrivatChat pc = null;			
+			Object o = ois.readObject();			
+			
+			if(o != null)
 			{
-				name = message.getNachricht();
-				first = false;
-			}
-			else
-			{
-				message.setAbsender(name);
-				message.setAbsenderId(id);			
-				System.out.println(message);
-				
-				// Wenn ArrayList empfaenger von message leer ist, wird die Nachricht an den Globalen Chat versendet
-				if(message.getEmpfaenger().isEmpty())
+				try
 				{
-					control.getNewMessages(message);
-					control.broadcastMessage(message, this);
-					
+					pc = (PrivatChat)o;
+					privatChatObjekt = true;					
+				}
+				catch(ClassCastException e)
+				{	
 				}
 				
-				// Ansonsten wird die Nachricht nur an die Teilnehmer des privaten Chats verschickt
+				if(privatChatObjekt == true)
+				{
+					control.broadcastPrivatChat(pc);
+				}
 				else
 				{
-					control.broadcastPrivatMessage(message);
-				}
-				
-			}
+					if(first)
+					{
+						name = message.getNachricht();
+						first = false;
+					}
+					else
+					{
+						message.setAbsender(name);
+						message.setAbsenderId(id);			
+						System.out.println(message);						
+						// Wenn ArrayList empfaenger von message leer ist, wird die Nachricht an den Globalen Chat versendet
+						if(message.getEmpfaenger().isEmpty())
+						{
+							control.getNewMessages(message);
+							control.broadcastMessage(message, this);
+							
+						}						
+						// Ansonsten wird die Nachricht nur an die Teilnehmer des privaten Chats verschickt
+						else
+						{
+							control.broadcastPrivatMessage(message);
+						}						
+					}
+				}				
+			}			
 		} catch (SocketException | EOFException e1)
 		{
 			control.closeClient(this);

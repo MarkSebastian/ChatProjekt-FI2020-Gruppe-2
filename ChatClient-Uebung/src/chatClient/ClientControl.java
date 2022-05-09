@@ -26,7 +26,6 @@ import java.awt.event.MouseAdapter;
 
 public class ClientControl implements Runnable, Serializable
 {
-
 	protected Gui gui;
 	protected VerbindungsGUI startGui;
 	protected int port;
@@ -118,8 +117,6 @@ public class ClientControl implements Runnable, Serializable
 		});
 	}
 	
-	
-
 	public String getUser()
 	{
 		return user;
@@ -244,16 +241,16 @@ public class ClientControl implements Runnable, Serializable
 		try
 		{			
 			Nachricht n = (Nachricht) o;
+			// Liste mit PrivatChats wird durchlaufen, wenn PrivatChat mit richtigem Hashcode vorhanden, wird die Nachricht im PrivatChat angezeigt
 			privatChats.forEach(pc ->
 			{
-/*				System.out.println("Nachricht Hashcode: " + n.getHashcode());
-				System.out.println("PrivatChat Haschcode: " + pc.getPcs().getHashcode());
-*/				if (n.getHashcode() == pc.getPcs().getHashcode())
+				if (n.getHashcode() == pc.getPcs().getHashcode())
 				{
 					pc.getController().receiveMessage(n);
 					nachrichtPrivat = true;
 				}
 			});
+			// Ansonsten wird die Nachricht im GlobalenChat angezeigt
 			if(nachrichtPrivat == false)
 			{
 				if (n.getListClients() != null)

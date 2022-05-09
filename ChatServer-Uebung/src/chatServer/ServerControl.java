@@ -138,12 +138,8 @@ public class ServerControl
 	{
 		clients.forEach(e -> n.getEmpfaenger().forEach(s ->
 		{
-			System.out.println(e);
 			if (e.getName().equals(s))
-			{
 				e.sendMessage(n);				
-				System.out.println("Broadcast message: " + n + "\nan " + e);
-			}
 		}));
 	}
 

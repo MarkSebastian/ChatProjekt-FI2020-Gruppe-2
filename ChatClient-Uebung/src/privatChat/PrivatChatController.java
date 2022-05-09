@@ -57,7 +57,6 @@ public class PrivatChatController implements Serializable
 	private void sendMessage()
 	{
 		String s = pgui.getTextFieldNachricht().getText();
-//		Nachricht n = new Nachricht(s, privatChat.getPcs().getEmpfaenger(), privatChat.getPcs().getHashcode());
 		Nachricht n = new Nachricht(privatChat.getCc().getUser(), s, privatChat.getPcs().getEmpfaenger(), privatChat.getPcs().getHashcode());
 		privatChat.getCc().sendMessagePrivatChat(n);
 		nachrichten.addElement(n);

@@ -31,6 +31,7 @@ public class SQLBaukasten
 	private String hochkomma;
 	private String values;
 	
+	
 	public SQLBaukasten()
 	{
 		chatroom = "Chatroom ";

@@ -87,14 +87,31 @@ public class SQLBaukasten
 		passwort="passwort ";
 	}
 	 
-	protected String Delete_1(String Bname, String Passwort)
+	protected String Delete_1()
 	{
 		return delete+from+login_Daten+where+"Benutzername"+ist+fragezeichen;
 	}
 	
-	protected String Insert_(String Bname, String Passwort)
+	protected String Insert_LoginDB()
 	{
-		return insert+into+login_Daten+klammerAuf+benutzername+komma+values;
+		return insert+into+login_Daten+klammerAuf+benutzername+komma+passwort+klammerZu+values+klammerAuf+fragezeichen+komma+fragezeichen+klammerZu;
 	}
 	
+	protected String Insert_Client()
+	{
+		return insert+into+client+klammerAuf+benutzername+klammerZu+values+klammerAuf+fragezeichen+klammerZu; 
+	}
+	
+	protected String Insert_Loginliste()
+	{
+		return insert+into+loginliste+klammerAuf+timestamp_beginn+komma+timestamp_ende+komma+ip+klammerZu+values+klammerAuf+fragezeichen+komma+fragezeichen+komma+fragezeichen+klammerZu; 
+	}
+	
+	protected String Insert_LoginClientZT() 
+	{
+		return insert+into+loginClient_ZT+klammerAuf+loginliste_id+komma+client_id+klammerZu+values+klammerAuf+
+				klammerAuf+select+id+from+client+where//fertigmachen+klammerZu+komma+
+				klammerAuf+klammerZu+klammerZu; 
+		
+	}
 }

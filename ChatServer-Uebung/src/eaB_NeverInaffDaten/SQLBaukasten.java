@@ -42,6 +42,7 @@ public class SQLBaukasten
 	private String benutzername;
 	private String chatroomname;
 	private String istPrivat;
+	private String passwort;
 	
 	public SQLBaukasten()
 	{
@@ -83,6 +84,7 @@ public class SQLBaukasten
 		benutzername="benutzername ";
 		chatroomname="chatroomname ";
 		istPrivat="istPrivat ";
+		passwort="passwort ";
 	}
 	 
 	protected String Delete_1(String Bname, String Passwort)

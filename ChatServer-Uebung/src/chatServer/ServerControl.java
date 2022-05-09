@@ -23,7 +23,6 @@ public class ServerControl
 	private ArrayList<Client> clients = new ArrayList<Client>();
 	private DefaultListModel<Client> clientListe = new DefaultListModel<Client>();
 	private ArrayList<String>empfaenger = new ArrayList<String>();
-
 	
 	public ServerControl()
 	{

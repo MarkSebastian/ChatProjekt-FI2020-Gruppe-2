@@ -239,7 +239,9 @@ public class ClientControl implements Runnable, Serializable
 			Nachricht n = (Nachricht) o;
 			privatChats.forEach(pc ->
 			{
-				if (n.getHashcode() == pc.getPcs().getHashcode())
+/*				System.out.println("Nachricht Hashcode: " + n.getHashcode());
+				System.out.println("PrivatChat Haschcode: " + pc.getPcs().getHashcode());
+*/				if (n.getHashcode() == pc.getPcs().getHashcode())
 				{
 					pc.getController().receiveMessage(n);
 					nachrichtPrivat = true;

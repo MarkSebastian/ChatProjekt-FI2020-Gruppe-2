@@ -2,6 +2,8 @@ package eaB_NeverInaffDaten;
 
 public class SQLBaukasten
 {
+	// Über diese Klasse werden dynamisch die Strings für die einzelnen SQL-Befehle zusammengebaut
+	
 	private String chatroom;
 	private String client;
 	private String clientChatroom_ZT;
@@ -27,6 +29,7 @@ public class SQLBaukasten
 	private String and;
 	private String or;
 	private String hochkomma;
+	private String values;
 	
 	public SQLBaukasten()
 	{
@@ -55,5 +58,17 @@ public class SQLBaukasten
 		and="and ";
 		or="or ";
 		hochkomma="' "; 
+		values="values ";
 	}
+	
+	protected String Delete_1(String Bname, String Passwort)
+	{
+		return delete+from+login_Daten+where+"Benutzername"+ist+fragezeichen;
+	}
+	
+	protected String Insert_(String Bname, String Passwort)
+	{
+		return insert+into+login_Daten+klammerAuf+values;
+	}
+	
 }

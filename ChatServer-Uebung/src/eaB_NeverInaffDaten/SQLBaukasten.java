@@ -92,7 +92,7 @@ public class SQLBaukasten
 	
 	protected String Insert_(String Bname, String Passwort)
 	{
-		return insert+into+login_Daten+klammerAuf+values;
+		return insert+into+login_Daten+klammerAuf+benutzername+komma+values;
 	}
 	
 }

@@ -117,6 +117,13 @@ public class ClientControl implements Runnable, Serializable
 			}
 		});
 	}
+	
+	
+
+	public String getUser()
+	{
+		return user;
+	}
 
 	private void neuenChatStarten()
 	{
@@ -223,7 +230,7 @@ public class ClientControl implements Runnable, Serializable
 			// Wenn empfangenes Objekt PrivatChat ist, wird ein neuer PrivatChat erstellt
 			privatChatObjekt = privatChatStarten(o);
 
-			// Ansonsten wird eine Nachricht erstellt
+			// Ansonsten wird nachrichtEmpfangen() aufgerufen
 			if (privatChatObjekt == false)
 			{
 				nachrichtEmpfangen(o);

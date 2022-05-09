@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.net.SocketException;
 
 import Message.nachrichtP.Nachricht;
-import privatChat.PrivatChat;
+import privatChat.PrivatChatSenden;
 
 public class Client implements Runnable
 {
@@ -64,63 +64,64 @@ public class Client implements Runnable
 
 	protected void readMessage()
 	{
+		boolean privatChatObjekt = false;
+		Nachricht message = null;
+		PrivatChatSenden pcs = null;	
+		Object o = null;
+		
 		try
-		{
-			boolean privatChatObjekt = false;
-			Nachricht message = null;
-			PrivatChat pc = null;			
-			Object o = ois.readObject();			
-			
-			if(o != null)
-			{
-				try
-				{
-					pc = (PrivatChat)o;
-					privatChatObjekt = true;					
-				}
-				catch(ClassCastException e)
-				{	
-				}
-				
-				if(privatChatObjekt == true)
-				{
-					control.broadcastPrivatChat(pc);
-				}
-				else
-				{
-					message = (Nachricht)o;
-					if(first)
-					{
-						name = message.getNachricht();
-						first = false;
-					}
-					else
-					{
-						message.setAbsender(name);
-						message.setAbsenderId(id);			
-						System.out.println(message);						
-						// Wenn ArrayList empfaenger von message leer ist, wird die Nachricht an den Globalen Chat versendet
-						if(message.getEmpfaenger().isEmpty())
-						{
-							control.getNewMessages(message);
-							control.broadcastMessage(message, this);
-							
-						}						
-						// Ansonsten wird die Nachricht nur an die Teilnehmer des privaten Chats verschickt
-						else
-						{
-							control.broadcastPrivatMessage(message);
-						}						
-					}
-				}				
-			}			
-		} catch (SocketException | EOFException e1)
+		{		
+			o = ois.readObject();			
+		}			
+		catch (SocketException | EOFException e1)
 		{
 			control.closeClient(this);
 			stopClient();
 		} catch (Exception e)
 		{
 			System.out.println(e + "\n in readMessage function");
+		}
+		if(o != null)
+		{
+			try
+			{
+				pcs = (PrivatChatSenden)o;
+				privatChatObjekt = true;					
+			}
+			catch(ClassCastException e)
+			{	
+			}
+			
+			if(privatChatObjekt == true)
+			{
+				control.broadcastPrivatChat(pcs);
+			}
+			else
+			{
+				message = (Nachricht)o;
+				if(first)
+				{
+					name = message.getNachricht();
+					first = false;
+				}
+				else
+				{
+					message.setAbsender(name);
+					message.setAbsenderId(id);			
+					System.out.println(message);						
+					// Wenn ArrayList empfaenger von message leer ist, wird die Nachricht an den Globalen Chat versendet
+					if(message.getEmpfaenger().isEmpty())
+					{
+						control.getNewMessages(message);
+						control.broadcastMessage(message, this);						
+					}						
+					// Ansonsten wird die Nachricht nur an die Teilnehmer des privaten Chats verschickt
+					else
+					{
+						control.broadcastPrivatMessage(message);
+					}						
+				}
+			}				
 		}
 	}
 

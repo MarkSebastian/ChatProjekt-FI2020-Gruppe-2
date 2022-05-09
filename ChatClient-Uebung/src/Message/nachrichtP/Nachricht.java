@@ -10,6 +10,7 @@ import javax.swing.DefaultListModel;
 public class Nachricht implements Serializable
 {	
 	private static final long serialVersionUID = 1L;
+	private long hashcode;
 	private String absender;
 	private int absenderId;
 	final private LocalDateTime timestamp = LocalDateTime.now();
@@ -18,6 +19,37 @@ public class Nachricht implements Serializable
 	private int flag;
 	private ArrayList<String> empfaenger = new ArrayList<String>();
 
+	public Nachricht(String nachricht, boolean isServer)
+	{
+		if(isServer == true)
+		{
+		this.absender = "Server";
+		}
+		else
+		{
+			this.absender = "Ich";
+		}
+		this.absenderId = 0;
+		this.nachricht = nachricht;
+	}
+	
+	public Nachricht(String nachricht, ArrayList<String> empfaenger, long hashcode)
+	{
+		this.absender="";
+		this.empfaenger = empfaenger;
+		this.nachricht = nachricht;
+		this.hashcode = hashcode;
+	}
+	
+	public Nachricht(String nachricht, DefaultListModel<String> clientListe ,ArrayList<String> empfaenger)
+	{
+		this.absender = "";
+		this.absenderId = 0;
+		this.nachricht = nachricht;
+		this.activeClients = clientListe;
+		this.empfaenger = empfaenger;
+	}
+	
 	public int getFlag()
 	{
 		return flag;
@@ -63,27 +95,9 @@ public class Nachricht implements Serializable
 		return activeClients;
 	}
 
-	public Nachricht(String nachricht, boolean isServer)
+	public long getHashcode()
 	{
-		if(isServer == true)
-		{
-		this.absender = "Server";
-		}
-		else
-		{
-			this.absender = "Ich";
-		}
-		this.absenderId = 0;
-		this.nachricht = nachricht;
-	}
-	
-	public Nachricht(String nachricht, DefaultListModel<String> clientListe ,ArrayList<String> empfaenger)
-	{
-		this.absender = "";
-		this.absenderId = 0;
-		this.nachricht = nachricht;
-		this.activeClients = clientListe;
-		this.empfaenger = empfaenger;
+		return hashcode;
 	}
 
 	@Override

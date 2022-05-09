@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import chatClient.ClientControl;
+
 public class PrivatChat implements Serializable
 {
 	private static final long serialVersionUID = 1L;
@@ -12,19 +14,26 @@ public class PrivatChat implements Serializable
 	private String chatName;
 	private String user;
 	private ArrayList<String> empfaenger;
-	
-	public PrivatChat(ArrayList<String> empfaenger, String chatName, String user)
+	private ClientControl cc;
+	private PrivatChatSenden pcs;
+
+	public PrivatChat(ArrayList<String> empfaenger, String chatName, String user, ClientControl cc)
 	{
+		// Umschreiben
 		this.chatName = chatName;
 		this.empfaenger = empfaenger;
 		this.user = user;
+		
+		this.cc = cc;
+		this.pcs = new PrivatChatSenden(chatName, user, empfaenger);
 		starten();
 		hashcode = hashCode();
 	}
 	
 	// Leerer Konstruktor oder abfangen, dass kein PrivChat ohne Empfänger gestartet werden kann?
-	public PrivatChat()
+	public PrivatChat(ClientControl cc)
 	{
+		this.cc = cc;
 		starten();
 	}
 	
@@ -38,14 +47,39 @@ public class PrivatChat implements Serializable
 		return chatName;
 	}
 	
+	public PrivatChatController getController()
+	{
+		return controller;
+	}
+
 	public ArrayList<String> getEmpfaenger()
 	{
 		return empfaenger;
 	}
 	
+	public long getHashcode()
+	{
+		return hashcode;
+	}
+
+	public ClientControl getCc()
+	{
+		return cc;
+	}
+	
+	public PrivatChatSenden getPcs()
+	{
+		return pcs;
+	}
+
 	public String getUser()
 	{
 		return user;
+	}
+	
+	public void setCc(ClientControl cc)
+	{
+		this.cc = cc;
 	}
 
 	@Override

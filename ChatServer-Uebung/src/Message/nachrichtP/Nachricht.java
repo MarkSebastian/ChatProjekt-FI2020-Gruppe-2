@@ -1,5 +1,5 @@
 package Message.nachrichtP;
-//SERVER
+//CLIENT
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -9,8 +9,8 @@ import javax.swing.DefaultListModel;
 
 public class Nachricht implements Serializable
 {	
-	
 	private static final long serialVersionUID = 1L;
+	private long hashcode;
 	private String absender;
 	private int absenderId;
 	final private LocalDateTime timestamp = LocalDateTime.now();
@@ -18,13 +18,38 @@ public class Nachricht implements Serializable
 	private DefaultListModel<String> activeClients = null;
 	private int flag;
 	private ArrayList<String> empfaenger = new ArrayList<String>();
-	private ArrayList<String> aktiveClientsArrayList = new ArrayList<String>();
-	
-	public ArrayList<String> getAktiveClientsArrayList()
-	{
-		return aktiveClientsArrayList;
-	}
 
+	public Nachricht(String nachricht, boolean isServer)
+	{
+		if(isServer == true)
+		{
+		this.absender = "Server";
+		}
+		else
+		{
+			this.absender = "Ich";
+		}
+		this.absenderId = 0;
+		this.nachricht = nachricht;
+	}
+	
+	public Nachricht(String nachricht, ArrayList<String> empfaenger, long hashcode)
+	{
+		this.absender="";
+		this.empfaenger = empfaenger;
+		this.nachricht = nachricht;
+		this.hashcode = hashcode;
+	}
+	
+	public Nachricht(String nachricht, DefaultListModel<String> clientListe ,ArrayList<String> empfaenger)
+	{
+		this.absender = "";
+		this.absenderId = 0;
+		this.nachricht = nachricht;
+		this.activeClients = clientListe;
+		this.empfaenger = empfaenger;
+	}
+	
 	public int getFlag()
 	{
 		return flag;
@@ -43,7 +68,6 @@ public class Nachricht implements Serializable
 	public void setAbsender(String absender)
 	{
 		this.absender = absender;
-
 	}
 
 	public int getAbsenderId()
@@ -71,27 +95,9 @@ public class Nachricht implements Serializable
 		return activeClients;
 	}
 
-	public Nachricht(String nachricht, boolean isServer)
+	public long getHashcode()
 	{
-		if(isServer == true)
-		{
-		this.absender = "Server";
-		}
-		else
-		{
-			this.absender = "Ich";
-		}
-		this.absenderId = 0;
-		this.nachricht = nachricht;
-	}
-
-
-	public Nachricht(String nachricht, DefaultListModel<String> clientListe, ArrayList<String> aktiveClientsArrayList)
-	{
-		this.absender = "";
-		this.absenderId = 0;
-		this.nachricht = nachricht;
-		this.activeClients = clientListe;
+		return hashcode;
 	}
 
 	@Override

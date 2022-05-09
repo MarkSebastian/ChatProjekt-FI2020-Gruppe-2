@@ -12,6 +12,8 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import java.awt.SystemColor;
 import java.awt.event.MouseMotionAdapter;
+import java.io.Serializable;
+
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;

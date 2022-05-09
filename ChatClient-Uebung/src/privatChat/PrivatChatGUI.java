@@ -1,5 +1,6 @@
 package privatChat;
 
+import java.awt.event.ActionListener;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -100,7 +101,13 @@ public class PrivatChatGUI extends JFrame
 		}
 		return lblTeilnehmer;
 	}
-	private JTextField getTextFieldNachricht() {
+	
+	public void setTextFieldNachrichtListener(ActionListener al)
+	{
+		this.textFieldNachricht.addActionListener(al);
+	}
+	
+	protected JTextField getTextFieldNachricht() {
 		if (textFieldNachricht == null) {
 			textFieldNachricht = new JTextField();
 			textFieldNachricht.setBounds(25, 354, 530, 20);

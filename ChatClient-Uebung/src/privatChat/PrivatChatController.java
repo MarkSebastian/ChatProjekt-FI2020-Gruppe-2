@@ -8,25 +8,28 @@ import java.io.Serializable;
 
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+
+import Message.nachrichtP.Nachricht;
+import chatClient.ClientControl;
 
 public class PrivatChatController implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	private PrivatChatGUI pgui;
 	private PrivatChat privatChat;
-	private DefaultComboBoxModel<String> teilnehmer;
-//	private ArrayList<String>teilnehmer = new ArrayList<String>();
+	private DefaultComboBoxModel<String> teilnehmer = new DefaultComboBoxModel<String>();
+	private DefaultListModel<Nachricht> nachrichten = new DefaultListModel<Nachricht>();
+	
 	
 	public PrivatChatController(PrivatChat privatChat)
 	{
 		starten(privatChat);
 	}
 
-	// Client empfängt PrivatChat Objekt und startet eine neue GUI
+	// Empfangenen PrivatChat starten
 	public void eingeladenenChatStarten(PrivatChat privatChat)
-	{
-		//PrivatChat privatChat = new PrivatChat(pgui, teilnehmer);
-		
+	{	
 		starten(privatChat);   
 	}
 	
@@ -35,12 +38,22 @@ public class PrivatChatController implements Serializable
 		this.privatChat = privatChat;
 		pgui = new PrivatChatGUI();
 		pgui.getLblChatName().setText(privatChat.getChatName());
-		teilnehmer = new DefaultComboBoxModel<String>();
+		addListener();
+		setModel();
 		comboBoxAktualisieren();
-		pgui.getListUser().setModel(teilnehmer);
 	}
 
+	private void addListener()
+	{
+		this.pgui.setTextFieldNachrichtListener(l -> sendMessage());		
+	}
 	
+	private void setModel()
+	{
+		pgui.getListChat().setModel(nachrichten);
+		pgui.getListUser().setModel(teilnehmer);
+	}	
+
 	private void comboBoxAktualisieren()
 	{
 		teilnehmer.removeAllElements();
@@ -51,5 +64,18 @@ public class PrivatChatController implements Serializable
 			teilnehmer.addElement(s);	
 		}		
 	}
+
+	private void sendMessage()
+	{
+		String s = pgui.getTextFieldNachricht().getText();
+		Nachricht n = new Nachricht(s, privatChat.getEmpfaenger(), privatChat.getPcs().getHashcode());
+		privatChat.getCc().sendMessagePrivatChat(n);
+		nachrichten.addElement(n);
+		this.pgui.getTextFieldNachricht().setText("");
+	}	
 	
+	public void receiveMessage(Nachricht n)
+	{
+		nachrichten.addElement(n);
+	}
 }

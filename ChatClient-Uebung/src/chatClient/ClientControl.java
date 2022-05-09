@@ -9,9 +9,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import Message.nachrichtP.Nachricht;
 import privatChat.PrivatChat;
-
+import privatChat.PrivatChatSenden;
 
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.text.AttributeSet.ColorAttribute;
 import java.awt.event.MouseAdapter;
 
-public class ClientControl implements Runnable
+public class ClientControl implements Runnable, Serializable
 {
 
 	protected Gui gui;
@@ -35,8 +36,6 @@ public class ClientControl implements Runnable
 	protected DefaultListModel<String> choosenClients = new DefaultListModel<String>();
 	protected ArrayList<String> teilnehmerPrivatChat = new ArrayList<String>();
 	protected ArrayList<String> aktiveTeilnehmer = new ArrayList<String>();
-	
-
 
 	protected Thread read;
 	private ClientConnectionThread start;
@@ -50,9 +49,10 @@ public class ClientControl implements Runnable
 	private Color weiss = new Color(255, 255, 255, 255);
 
 	private boolean first = true;
-	private Set<PrivatChat> privatChats;	// Funktion ob Chat doppelt muss noch geschrieben werden
+	private Set<PrivatChat> privatChats; 
 	private String user;
-
+	
+	boolean nachrichtPrivat = false;
 
 	public ClientControl()
 	{
@@ -104,7 +104,7 @@ public class ClientControl implements Runnable
 
 		this.gui.addAddListner(l -> addUserToNewChat());
 		this.gui.addEntfListner(l -> entfUserFromNewChat());
-		
+
 		this.gui.setBtnNeuerChatActionListener(l -> neuenChatStarten());
 		gui.setTextFieldGruppenNamenListener(new MouseAdapter()
 		{
@@ -121,20 +121,18 @@ public class ClientControl implements Runnable
 	private void neuenChatStarten()
 	{
 		String temp = gui.getTextFieldGruppenName().getText();
-		if(temp.isEmpty() || gui.getTextFieldGruppenName().getText().equals("Gruppennamen eingeben"))
+		if (temp.isEmpty() || gui.getTextFieldGruppenName().getText().equals("Gruppennamen eingeben"))
 		{
 			System.out.println("Bitte Chatraum benennen!");
 		}
-		// REMINDER: Hashset?
-		else if(teilnehmerPrivatChat.size() < 1)
-		{		
+		else if (teilnehmerPrivatChat.size() < 1)
+		{
 			System.out.println("Bitte mindestens einen User hinzufügen");
 		}
 		else
 		{
-			System.out.println(gui.getTextFieldGruppenName().getText());
-			PrivatChat pc = new PrivatChat(teilnehmerPrivatChat, temp, user);
-			privatChats.add(pc);	
+			PrivatChat pc = new PrivatChat(teilnehmerPrivatChat, temp, user, this);
+			privatChats.add(pc);
 			sendPrivatChat(pc);
 		}
 	}
@@ -197,18 +195,6 @@ public class ClientControl implements Runnable
 		}
 		this.gui.getTextFieldEingabe().setText("");
 	}
-	
-	private void sendPrivatChat(PrivatChat pc)
-	{
-		try
-		{
-			out.writeObject(pc);
-		}
-		catch(Exception e)
-		{
-			System.out.println(e + "\n in sendPrivatChat");
-		}
-	}
 
 	private void readMessage()
 	{
@@ -232,39 +218,89 @@ public class ClientControl implements Runnable
 			System.out.println(e + "\n Test in readMessage");
 		}
 
-		if(o != null) 
+		if (o != null)
 		{
-			try
+			// Wenn empfangenes Objekt PrivatChat ist, wird ein neuer PrivatChat erstellt
+			privatChatObjekt = privatChatStarten(o);
+
+			// Ansonsten wird eine Nachricht erstellt
+			if (privatChatObjekt == false)
 			{
-				// Wenn PrivatChat als Objekt verschickt wird -> neuen PrivatChatGUI starten
-				PrivatChat pc = (PrivatChat)o;
-				privatChatObjekt = true;
-				privatChats.add(pc);
-				pc.starten();
+				nachrichtEmpfangen(o);
 			}
-			catch(ClassCastException e)
+		}
+	}
+
+	private void nachrichtEmpfangen(Object o)
+	{
+		nachrichtPrivat = false;
+		try
+		{			
+			Nachricht n = (Nachricht) o;
+			privatChats.forEach(pc ->
 			{
-			}
-			
-			if(privatChatObjekt == false)
-			{
-				try
+				if (n.getHashcode() == pc.getPcs().getHashcode())
 				{
-					// Ansonsten wird Message gelesen
-					Nachricht message = (Nachricht) o;		
-					System.out.println(message.toString());
-					if (message.getListClients() != null)
-					{
-						this.clients = message.getListClients();
-						akClientList();
-					}
-					getNewMessages(message);
+					pc.getController().receiveMessage(n);
+					nachrichtPrivat = true;
 				}
-				catch (Exception e)
+			});
+			if(nachrichtPrivat == false)
+			{
+				if (n.getListClients() != null)
 				{
+					this.clients = n.getListClients();
+					akClientList();
 				}
+				getNewMessages(n);
 			}
-		}		
+		}
+		catch (ClassCastException e)
+		{
+			System.out.println(e + "\n in nachrichtEmpfangen");
+		}
+
+	}
+
+	private boolean privatChatStarten(Object o)
+	{
+		boolean objektIstPrivatChat = false;
+		try
+		{
+			PrivatChatSenden pcs = (PrivatChatSenden) o;
+			PrivatChat pc = new PrivatChat(pcs.getEmpfaenger(), pcs.getChatName(), pcs.getUser(), this);
+			objektIstPrivatChat = true;
+			privatChats.add(pc);
+		}
+		catch (ClassCastException e)
+		{
+		}
+		return objektIstPrivatChat;
+	}
+
+	private void sendPrivatChat(PrivatChat pc)
+	{
+		try
+		{
+			out.writeObject(pc.getPcs());
+		}
+		catch (Exception e)
+		{
+			System.out.println(e + "\n in sendPrivatChat");
+		}
+	}
+
+	public void sendMessagePrivatChat(Nachricht n)
+	{
+		try
+		{
+			out.writeObject(n);
+		}
+		catch(IOException e)
+		{
+			System.out.println(e + "\nin sendMessagePrivatChat");
+		}
+		
 	}
 
 	protected void getNewMessages(Nachricht n)
@@ -285,10 +321,10 @@ public class ClientControl implements Runnable
 
 		// REMINDER: Passiert hier was?
 		aktiveTeilnehmer.forEach(e -> clients.addElement(e));
-		
-		aktiveTeilnehmer.forEach(e ->	
+
+		aktiveTeilnehmer.forEach(e ->
 		{
-			if(e.equals(user))
+			if (e.equals(user))
 			{
 				aktiveTeilnehmer.remove(e);
 			}
@@ -415,13 +451,13 @@ public class ClientControl implements Runnable
 			String selected = clients.getElementAt(index);
 			for (String e : teilnehmerPrivatChat)
 			{
-				if(e.equals(selected.substring(2)))
+				if (e.equals(selected.substring(2)))
 				{
 					temp++;
 				}
 			}
-			
-			if(temp == 0)
+
+			if (temp == 0)
 			{
 				selected = selected.substring(2);
 				teilnehmerPrivatChat.add(selected);

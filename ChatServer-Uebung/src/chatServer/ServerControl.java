@@ -4,7 +4,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
 import Message.nachrichtP.Nachricht;
-import privatChat.PrivatChat;
+import privatChat.PrivatChatSenden;
 
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -123,13 +123,13 @@ public class ServerControl
 	}
 	
 	// PrivatChatObjekt hat ArrayList mit Empfängern, nur an diese Liste wird der PrivatChat geschickt
-	protected void broadcastPrivatChat(PrivatChat pc)
+	protected void broadcastPrivatChat(PrivatChatSenden pcs)
 	{
-		clients.forEach(e -> pc.getEmpfaenger().forEach(s ->
+		clients.forEach(e -> pcs.getEmpfaenger().forEach(s ->
 		{
-			if(!pc.getUser().equals(e)) 
+			if(!pcs.getUser().equals(e)) 
 				if (e.getName().equals(s))
-					e.sendMessage(pc);
+					e.sendMessage(pcs);
 			}));
 	}
 
@@ -139,8 +139,12 @@ public class ServerControl
 	{
 		clients.forEach(e -> n.getEmpfaenger().forEach(s ->
 		{
+			System.out.println(e);
 			if (e.getName().equals(s))
-				e.sendMessage(n);
+			{
+				e.sendMessage(n);				
+				System.out.println("Boradcast message: " + n + "\nan " + e);
+			}
 		}));
 	}
 

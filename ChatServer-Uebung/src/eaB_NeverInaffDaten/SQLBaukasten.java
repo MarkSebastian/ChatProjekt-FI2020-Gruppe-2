@@ -30,7 +30,18 @@ public class SQLBaukasten
 	private String or;
 	private String hochkomma;
 	private String values;
-	
+	private String id;
+	private String inhalt;
+	private String timestamp;
+	private String client_id;
+	private String chatroom_id;
+	private String timestamp_beginn;
+	private String timestamp_ende;
+	private String ip;
+	private String loginliste_id;
+	private String benutzername;
+	private String chatroomname;
+	private String istPrivat;
 	
 	public SQLBaukasten()
 	{
@@ -60,6 +71,18 @@ public class SQLBaukasten
 		or="or ";
 		hochkomma="' "; 
 		values="values ";
+		id="ID ";
+		inhalt="inhalt ";
+		timestamp="timestamp ";
+		client_id="client_ID ";
+		chatroom_id="chatroom_ID ";
+		timestamp_beginn="timestamp_beginn ";
+		timestamp_ende="timestamp_ende ";
+		ip="ID ";
+		loginliste_id="loginliste_ID ";
+		benutzername="benutzername ";
+		chatroomname="chatroomname ";
+		istPrivat="istPrivat ";
 	}
 	
 	protected String Delete_1(String Bname, String Passwort)

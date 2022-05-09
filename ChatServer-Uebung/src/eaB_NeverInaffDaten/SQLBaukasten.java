@@ -26,6 +26,7 @@ public class SQLBaukasten
 	private String delete;
 	private String and;
 	private String or;
+	private String hochkomma;
 	
 	public SQLBaukasten()
 	{
@@ -53,5 +54,6 @@ public class SQLBaukasten
 		delete = "Delete ";
 		and="and ";
 		or="or ";
+		hochkomma="' ";
 	}
 }

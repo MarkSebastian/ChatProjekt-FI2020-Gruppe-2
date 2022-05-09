@@ -19,25 +19,18 @@ public class PrivatChatController implements Serializable
 	private PrivatChatGUI pgui;
 	private PrivatChat privatChat;
 	private DefaultComboBoxModel<String> teilnehmer = new DefaultComboBoxModel<String>();
-	private DefaultListModel<Nachricht> nachrichten = new DefaultListModel<Nachricht>();
-	
+	private DefaultListModel<Nachricht> nachrichten = new DefaultListModel<Nachricht>();	
 	
 	public PrivatChatController(PrivatChat privatChat)
 	{
 		starten(privatChat);
-	}
-
-	// Empfangenen PrivatChat starten
-	public void eingeladenenChatStarten(PrivatChat privatChat)
-	{	
-		starten(privatChat);   
 	}
 	
 	private void starten(PrivatChat privatChat)
 	{
 		this.privatChat = privatChat;
 		pgui = new PrivatChatGUI();
-		pgui.getLblChatName().setText(privatChat.getChatName());
+		pgui.getLblChatName().setText(privatChat.getPcs().getChatName());
 		addListener();
 		setModel();
 		comboBoxAktualisieren();
@@ -57,18 +50,14 @@ public class PrivatChatController implements Serializable
 	private void comboBoxAktualisieren()
 	{
 		teilnehmer.removeAllElements();
-		teilnehmer.addElement(privatChat.getUser());
-		for (String s : privatChat.getEmpfaenger())
-		{
-			System.out.println(s);
-			teilnehmer.addElement(s);	
-		}		
+		teilnehmer.addElement(privatChat.getPcs().getUser());
+		privatChat.getPcs().getEmpfaenger().forEach(s -> teilnehmer.addElement(s));
 	}
 
 	private void sendMessage()
 	{
 		String s = pgui.getTextFieldNachricht().getText();
-		Nachricht n = new Nachricht(s, privatChat.getEmpfaenger(), privatChat.getPcs().getHashcode());
+		Nachricht n = new Nachricht(s, privatChat.getPcs().getEmpfaenger(), privatChat.getPcs().getHashcode());
 		privatChat.getCc().sendMessagePrivatChat(n);
 		nachrichten.addElement(n);
 		this.pgui.getTextFieldNachricht().setText("");

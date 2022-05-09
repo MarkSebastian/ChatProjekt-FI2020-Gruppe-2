@@ -17,24 +17,22 @@ public class PrivatChat implements Serializable
 	private ClientControl cc;
 	private PrivatChatSenden pcs;
 
-	public PrivatChat(ArrayList<String> empfaenger, String chatName, String user, ClientControl cc)
+	public PrivatChat()
 	{
-		// Umschreiben
-		this.chatName = chatName;
-		this.empfaenger = empfaenger;
-		this.user = user;
-		
-		this.cc = cc;
-		this.pcs = new PrivatChatSenden(chatName, user, empfaenger);
-		starten();
-		hashcode = hashCode();
 	}
 	
-	// Leerer Konstruktor oder abfangen, dass kein PrivChat ohne Empfänger gestartet werden kann?
 	public PrivatChat(ClientControl cc)
 	{
 		this.cc = cc;
 		starten();
+	}
+
+	public PrivatChat(ArrayList<String> empfaenger, String chatName, String user, ClientControl cc)
+	{
+		this.cc = cc;
+		this.pcs = new PrivatChatSenden(chatName, user, empfaenger);
+		starten();
+		hashcode = hashCode();
 	}
 	
 	public void starten()
@@ -100,7 +98,5 @@ public class PrivatChat implements Serializable
 		PrivatChat other = (PrivatChat) obj;
 		return Objects.equals(chatName, other.chatName) && Objects.equals(controller, other.controller)
 				&& Objects.equals(empfaenger, other.empfaenger);
-	}
-	
-	
+	}	
 }

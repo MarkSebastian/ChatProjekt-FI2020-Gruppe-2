@@ -12,19 +12,13 @@ import privatChat.PrivatChatSenden;
 
 public class Client implements Runnable
 {
-
 	private ServerControl control;
-
-	// REMINDER: unbekannt tritt dem Chat bei
 	private String name = "unbekannt";
 	private int id = 0;
-
 	private Thread read;
-
 	private Socket socket;
 	private ObjectInputStream ois;
-	private ObjectOutputStream out;
-	
+	private ObjectOutputStream out;	
 	private boolean first = true;
 
 	public Client(int id, Socket socket, ServerControl control)
@@ -59,7 +53,6 @@ public class Client implements Runnable
 		{
 			System.out.println(e + "\n in sendMessage function");
 		}
-
 	}
 
 	protected void readMessage()
@@ -69,6 +62,7 @@ public class Client implements Runnable
 		PrivatChatSenden pcs = null;	
 		Object o = null;
 		
+		// Versuch Objekt einzulesen
 		try
 		{		
 			o = ois.readObject();			
@@ -81,8 +75,10 @@ public class Client implements Runnable
 		{
 			System.out.println(e + "\n in readMessage function");
 		}
+		
 		if(o != null)
 		{
+			// Wenn eingelesen, Test ob Objekt PrivatChat ist
 			try
 			{
 				pcs = (PrivatChatSenden)o;
@@ -92,10 +88,13 @@ public class Client implements Runnable
 			{	
 			}
 			
+			// Wenn Objekt PrivatChat ist, PrivatChat an Teilnehmer des PrivatChats schicken
 			if(privatChatObjekt == true)
 			{
 				control.broadcastPrivatChat(pcs);
 			}
+			
+			// Ansonsten wird Objekt als Nachricht eingelesen
 			else
 			{
 				message = (Nachricht)o;
@@ -107,8 +106,7 @@ public class Client implements Runnable
 				else
 				{
 					message.setAbsender(name);
-					message.setAbsenderId(id);			
-					System.out.println(message);						
+					message.setAbsenderId(id);								
 					// Wenn ArrayList empfaenger von message leer ist, wird die Nachricht an den Globalen Chat versendet
 					if(message.getEmpfaenger().isEmpty())
 					{

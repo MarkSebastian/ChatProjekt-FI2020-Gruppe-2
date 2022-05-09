@@ -143,7 +143,7 @@ public class ServerControl
 			if (e.getName().equals(s))
 			{
 				e.sendMessage(n);				
-				System.out.println("Boradcast message: " + n + "\nan " + e);
+				System.out.println("Broadcast message: " + n + "\nan " + e);
 			}
 		}));
 	}

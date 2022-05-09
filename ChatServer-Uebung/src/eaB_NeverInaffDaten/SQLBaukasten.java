@@ -84,7 +84,7 @@ public class SQLBaukasten
 		chatroomname="chatroomname ";
 		istPrivat="istPrivat ";
 	}
-	
+	 
 	protected String Delete_1(String Bname, String Passwort)
 	{
 		return delete+from+login_Daten+where+"Benutzername"+ist+fragezeichen;

@@ -8,8 +8,8 @@ public class Control
 	
 	public Control()
 	{
-		verbindungslinkLoginserver="\"jdbc:ucanaccess://Login_DB.accdb\"";
-		verbindungslinkDatenbank="\"jdbc:ucanaccess://Datenkrake.accdb\"";
+		verbindungslinkLoginserver="\"jdbc:ucanaccess://src/Login_DB.accdb\"";
+		verbindungslinkDatenbank="\"jdbc:ucanaccess://src/Datenkrake.accdb\"";
 		
 	}
 }

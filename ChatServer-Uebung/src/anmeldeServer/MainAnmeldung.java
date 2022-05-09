@@ -24,7 +24,7 @@ public class MainAnmeldung extends Application
 		try
 		{
 			//FXMLLoader fxmlLoader;
-			Parent rootContainer = FXMLLoader.load(getClass().getResource("AnmeldeSeverGui.fxml"));
+			Parent rootContainer = FXMLLoader.load(getClass().getResource("TestGui.fxml"));
 			Scene scene = new Scene(rootContainer);
 			stage.setTitle("Anmelde Server");
 			stage.setScene(scene);

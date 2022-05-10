@@ -43,6 +43,7 @@ public class SQLBaukasten
 	private String chatroomname;
 	private String istPrivat;
 	private String passwort;
+	private String accountname;
 	
 	public SQLBaukasten()
 	{
@@ -85,33 +86,45 @@ public class SQLBaukasten
 		chatroomname="chatroomname ";
 		istPrivat="istPrivat ";
 		passwort="passwort ";
+		accountname="accountname ";
 	}
 	 
-	protected String Delete_1()
+	protected String delete_1()
 	{
 		return delete+from+login_Daten+where+"Benutzername"+ist+fragezeichen;
 	}
 	
-	protected String Insert_LoginDB()
+	protected String insert_LoginDB()
 	{
 		return insert+into+login_Daten+klammerAuf+benutzername+komma+passwort+klammerZu+values+klammerAuf+fragezeichen+komma+fragezeichen+klammerZu;
 	}
 	
-	protected String Insert_Client()
+	protected String insert_Client()
 	{
 		return insert+into+client+klammerAuf+benutzername+klammerZu+values+klammerAuf+fragezeichen+klammerZu; 
 	}
 	
-	protected String Insert_Loginliste()
+	protected String insert_Loginliste()
 	{
 		return insert+into+loginliste+klammerAuf+timestamp_beginn+komma+timestamp_ende+komma+ip+klammerZu+values+klammerAuf+fragezeichen+komma+fragezeichen+komma+fragezeichen+klammerZu; 
 	}
 	
-	protected String Insert_LoginClientZT() 
+	protected String insert_LoginClientZT() 
 	{
 		return insert+into+loginClient_ZT+klammerAuf+loginliste_id+komma+client_id+klammerZu+values+klammerAuf+
-				klammerAuf+select+id+from+client+where//fertigmachen+klammerZu+komma+
-				klammerAuf+klammerZu+klammerZu; 
+				klammerAuf+select_Client_id()+klammerZu+komma+
+				klammerAuf+select_Login_id()+klammerZu+klammerZu; 
 		
 	}
+	
+	protected String select_Client_id()
+	{
+		return select+id+from+client+where+accountname+ist+fragezeichen;
+	}
+	
+	protected String select_Login_id()
+	{
+		return select+id+from+loginliste+where+timestamp_beginn+ist+fragezeichen+and+ip+ist+fragezeichen ;
+	}
+	
 }

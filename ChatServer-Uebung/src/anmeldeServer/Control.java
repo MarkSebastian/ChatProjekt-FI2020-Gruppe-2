@@ -18,11 +18,16 @@ public class Control
 	
 	public Control() 
 	{
-		anmeldeServerStarten();
+		
 		
 	}
+	
+	protected void Test()
+	{
+		System.out.println("A");
+	}
 
-	private void anmeldeServerStarten()
+	protected void anmeldeServerStarten()
 	{
 		try
 		{
@@ -32,6 +37,7 @@ public class Control
 		{
 			e.printStackTrace();
 		}
+		System.out.println("Erfolgreicher Start");
 		connectionThread = new ServerConnectionThread(this.serverSocket, this);
 	}
 	

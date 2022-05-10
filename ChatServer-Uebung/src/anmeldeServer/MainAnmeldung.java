@@ -14,8 +14,10 @@ public class MainAnmeldung extends Application
 	public static void main(String[] args)
 	{
 		System.out.println("A");
-		launch(args);
 		new Control();
+		launch(args);
+		
+		
 	}
 
 	@Override

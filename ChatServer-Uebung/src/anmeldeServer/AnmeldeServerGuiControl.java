@@ -1,10 +1,13 @@
 package anmeldeServer;
 
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
-public class AnmeldeServerGuiControl
+public class AnmeldeServerGuiControl extends Control
 {
+	
+	
 	@FXML
 	private Button startButton;
 	private Button stopButton;
@@ -12,7 +15,8 @@ public class AnmeldeServerGuiControl
 	@FXML
 	protected void startenOnClick()
 	{
-		
+		System.out.println("A");
+		super.anmeldeServerStarten();
 	}
 	
 	@FXML

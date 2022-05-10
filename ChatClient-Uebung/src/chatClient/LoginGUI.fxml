@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane fx:id="LoginGUI" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chatClient.LoginGUIController">
+<GridPane fx:id="LoginGUI" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="anmeldeServer.AnmeldeServerGuiControl">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="100.0" />
@@ -37,8 +37,8 @@
             <Insets left="20.0" right="20.0" />
          </GridPane.margin>
       </TextField>
-      <Button fx:id="anmeldenButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" style="-fx-text-fill: black; -fx-background-radius: 40;" text="Anmelden" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" onAction="#buttonOnClick"/>
-      <Label fx:id="regestrierenLabel" text="Regestrieren?" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="BOTTOM" onAction="#labelOnClick">
+      <Button fx:id="anmeldenButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" style="-fx-text-fill: black; -fx-background-radius: 40;" text="Anmelden" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+      <Label fx:id="regestrierenLabel" text="Regestrieren?" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="BOTTOM" >
          <GridPane.margin>
             <Insets bottom="5.0" right="5.0" />
          </GridPane.margin></Label>

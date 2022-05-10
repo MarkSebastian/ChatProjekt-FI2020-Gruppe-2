@@ -128,4 +128,4 @@ public class Control
 		
 		return erfolg;
 	}
-}
+} 

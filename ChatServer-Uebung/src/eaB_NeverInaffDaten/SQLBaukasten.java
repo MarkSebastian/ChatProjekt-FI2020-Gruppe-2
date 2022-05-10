@@ -147,5 +147,5 @@ public class SQLBaukasten
 	{
 		return select+max+klammerAuf+id+klammerZu+from+chatroom;
 	}
-	  
+	   
 }

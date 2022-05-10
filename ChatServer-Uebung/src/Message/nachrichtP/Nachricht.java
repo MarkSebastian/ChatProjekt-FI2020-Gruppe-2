@@ -33,6 +33,15 @@ public class Nachricht implements Serializable
 		this.nachricht = nachricht;
 	}
 	
+	public Nachricht(String absender, String nachricht, ArrayList<String> empfaenger, long hashcode)
+	{
+		this.absender = absender;
+		this.nachricht = nachricht;
+		this.empfaenger = empfaenger;
+		empfaenger.remove(absender);
+		this.hashcode = hashcode;
+	}
+	
 	public Nachricht(String nachricht, ArrayList<String> empfaenger, long hashcode)
 	{
 		this.absender="";

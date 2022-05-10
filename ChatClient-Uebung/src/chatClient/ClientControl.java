@@ -124,6 +124,7 @@ public class ClientControl implements Runnable, Serializable
 
 	private void neuenChatStarten()
 	{
+		boolean schonVorhanden = false;
 		String temp = gui.getTextFieldGruppenName().getText();
 		if (temp.isEmpty() || gui.getTextFieldGruppenName().getText().equals("Gruppennamen eingeben"))
 		{
@@ -135,9 +136,21 @@ public class ClientControl implements Runnable, Serializable
 		}
 		else
 		{
-			PrivatChat pc = new PrivatChat(teilnehmerPrivatChat, temp, user, this);
-			privatChats.add(pc);
-			sendPrivatChat(pc);
+			PrivatChatSenden pcs = new PrivatChatSenden(temp, user, teilnehmerPrivatChat);		
+			for(PrivatChat chat : privatChats)
+			{
+				if(chat.getPcs().getHashcode() == pcs.hashCode())
+				{
+					schonVorhanden = true;
+					System.out.println("PrivatChat schon vorhanden");
+				}
+				if(schonVorhanden == false)
+				{
+					PrivatChat pc = new PrivatChat(teilnehmerPrivatChat, temp, user, this);
+					privatChats.add(pc);
+					sendPrivatChat(pc);
+				}
+			}
 		}
 	}
 
@@ -271,12 +284,26 @@ public class ClientControl implements Runnable, Serializable
 	private boolean privatChatStarten(Object o)
 	{
 		boolean objektIstPrivatChat = false;
+		boolean schonVorhanden = false;
+		PrivatChatSenden pcs;
+		PrivatChat pc;
 		try
 		{
-			PrivatChatSenden pcs = (PrivatChatSenden) o;
-			PrivatChat pc = new PrivatChat(pcs.getEmpfaenger(), pcs.getChatName(), pcs.getUser(), this);
-			objektIstPrivatChat = true;
-			privatChats.add(pc);
+			pcs = (PrivatChatSenden) o;
+			for(PrivatChat chat : privatChats)
+			{
+				if(chat.getPcs().getHashcode() == pcs.getHashcode())
+				{
+					schonVorhanden = true;
+					System.out.println("PrivatChat schon vorhanden");
+				}				
+			}
+			if(schonVorhanden == false)
+			{
+				pc = new PrivatChat(pcs.getEmpfaenger(), pcs.getChatName(), pcs.getUser(), this);
+				privatChats.add(pc);
+			}			
+		objektIstPrivatChat = true;
 		}
 		catch (ClassCastException e)
 		{

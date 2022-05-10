@@ -36,7 +36,42 @@ public class Control
 	public boolean insert(String bName, String passwort)
 	{
 		boolean erfolg=true;
-		sqlBefehl=baukasten.Insert_LoginDB();
+		sqlBefehl=baukasten.insert_LoginDB();
+		try
+		{
+			PreparedStatement vorbereiteteAussage = verbindungLogin.prepareStatement(sqlBefehl);
+			vorbereiteteAussage.setString(1, bName);
+			vorbereiteteAussage.setString(2, passwort);
+			vorbereiteteAussage.executeUpdate();
+		}
+		catch (SQLException e)
+		{
+			erfolg=false;
+		}
+		
+		return erfolg;
+	}
+	public boolean insert(String bName)
+	{
+		boolean erfolg=true;
+		sqlBefehl=baukasten.insert_LoginDB();
+		try
+		{
+			PreparedStatement vorbereiteteAussage = verbindungLogin.prepareStatement(sqlBefehl);
+			vorbereiteteAussage.setString(1, bName);
+			vorbereiteteAussage.executeUpdate();
+		}
+		catch (SQLException e)
+		{
+			erfolg=false;
+		}
+		
+		return erfolg;
+	}
+	public boolean insert(String bName, String passwort,String )
+	{
+		boolean erfolg=true;
+		sqlBefehl=baukasten.insert_Loginliste();
 		try
 		{
 			PreparedStatement vorbereiteteAussage = verbindungLogin.prepareStatement(sqlBefehl);

@@ -113,8 +113,8 @@ public class SQLBaukasten
 	{
 		return insert+into+loginClient_ZT+klammerAuf+loginliste_id+komma+client_id+klammerZu+values+klammerAuf+
 
-				klammerAuf+select+id+from+client+where+//fertigmachen+klammerZu+komma+
-				klammerAuf+klammerZu+klammerZu; 
+				klammerAuf+select_Client_id()+klammerZu+komma+
+				klammerAuf+select_Loginlisten_id()+klammerZu+klammerZu; 
 		  
 	}
 	
@@ -123,7 +123,7 @@ public class SQLBaukasten
 		return select+id+from+client+where+accountname+ist+fragezeichen;
 	}
 	
-	protected String select_Login_id()
+	protected String select_Loginlisten_id()
 	{
 		return select+id+from+loginliste+where+timestamp_beginn+ist+fragezeichen+and+ip+ist+fragezeichen ;
 	}

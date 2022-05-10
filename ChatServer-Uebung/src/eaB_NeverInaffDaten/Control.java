@@ -1,6 +1,7 @@
 package eaB_NeverInaffDaten;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -33,6 +34,7 @@ public class Control
 		
 		
 	}
+	
 	public boolean insert(String bName, String passwort)
 	{
 		boolean erfolg=true;
@@ -51,10 +53,11 @@ public class Control
 		
 		return erfolg;
 	}
+	
 	public boolean insert(String bName)
 	{
 		boolean erfolg=true;
-		sqlBefehl=baukasten.insert_LoginDB();
+		sqlBefehl=baukasten.insert_Client();
 		try
 		{
 			PreparedStatement vorbereiteteAussage = verbindungLogin.prepareStatement(sqlBefehl);
@@ -68,15 +71,17 @@ public class Control
 		
 		return erfolg;
 	}
-	public boolean insert(String bName, String passwort,String )
+	
+	public boolean insert(Date tStampBeginn, Date tStampEnde,String iP)
 	{
 		boolean erfolg=true;
 		sqlBefehl=baukasten.insert_Loginliste();
 		try
 		{
 			PreparedStatement vorbereiteteAussage = verbindungLogin.prepareStatement(sqlBefehl);
-			vorbereiteteAussage.setString(1, bName);
-			vorbereiteteAussage.setString(2, passwort);
+			vorbereiteteAussage.setDate(1, tStampBeginn);
+			vorbereiteteAussage.setDate(2, tStampEnde);
+			vorbereiteteAussage.setString(3, iP);
 			vorbereiteteAussage.executeUpdate();
 		}
 		catch (SQLException e)

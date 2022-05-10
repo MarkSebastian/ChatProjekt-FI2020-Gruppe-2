@@ -44,6 +44,7 @@ public class SQLBaukasten
 	private String istPrivat;
 	private String passwort;
 	private String accountname;
+	private String max;
 	
 	public SQLBaukasten()
 	{
@@ -87,6 +88,7 @@ public class SQLBaukasten
 		istPrivat="istPrivat ";
 		passwort="passwort ";
 		accountname="accountname ";
+		max="max ";
 	}
 	 
 	protected String delete_1()
@@ -106,7 +108,7 @@ public class SQLBaukasten
 	
 	protected String insert_Loginliste()
 	{
-		return insert+into+loginliste+klammerAuf+timestamp_beginn+komma+timestamp_ende+komma+ip+klammerZu+values+klammerAuf+fragezeichen+komma+fragezeichen+komma+fragezeichen+klammerZu; 
+		return insert+into+loginliste+klammerAuf+timestamp_beginn+komma+ip+klammerZu+values+klammerAuf+fragezeichen+komma+fragezeichen+klammerZu; 
 	}
 	
 	protected String insert_LoginClientZT() 
@@ -118,6 +120,19 @@ public class SQLBaukasten
 		  
 	}
 	
+	protected String insert_Chatroom()
+	{
+		return insert+into+chatroom+klammerAuf+chatroomname+klammerZu+values+fragezeichen;
+	}
+	
+	protected String insert_ClientChatrZT()
+	{
+		return insert+into+clientChatroom_ZT+klammerAuf+client_id+komma+chatroom_id+klammerZu+values+klammerAuf+
+				klammerAuf+select_Client_id()+klammerZu+komma+
+				fragezeichen+klammerZu; 
+	}
+	
+	
 	protected String select_Client_id()
 	{
 		return select+id+from+client+where+accountname+ist+fragezeichen;
@@ -128,4 +143,9 @@ public class SQLBaukasten
 		return select+id+from+loginliste+where+timestamp_beginn+ist+fragezeichen+and+ip+ist+fragezeichen ;
 	}
 	
+	protected String select_latest_Chatroom()
+	{
+		return select+max+klammerAuf+id+klammerZu+from+chatroom;
+	}
+	  
 }

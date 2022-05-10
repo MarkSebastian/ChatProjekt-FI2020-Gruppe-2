@@ -112,9 +112,10 @@ public class SQLBaukasten
 	protected String insert_LoginClientZT() 
 	{
 		return insert+into+loginClient_ZT+klammerAuf+loginliste_id+komma+client_id+klammerZu+values+klammerAuf+
-				klammerAuf+select_Client_id()+klammerZu+komma+
-				klammerAuf+select_Login_id()+klammerZu+klammerZu; 
-		
+
+				klammerAuf+select+id+from+client+where+//fertigmachen+klammerZu+komma+
+				klammerAuf+klammerZu+klammerZu; 
+		  
 	}
 	
 	protected String select_Client_id()

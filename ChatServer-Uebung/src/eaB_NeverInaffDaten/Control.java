@@ -60,7 +60,7 @@ public class Control
 		sqlBefehl=baukasten.insert_Client();
 		try
 		{
-			PreparedStatement vorbereiteteAussage = verbindungLogin.prepareStatement(sqlBefehl);
+			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
 			vorbereiteteAussage.setString(1, bName);
 			vorbereiteteAussage.executeUpdate();
 		}
@@ -72,15 +72,35 @@ public class Control
 		return erfolg;
 	}
 	
-	public boolean insert(Date tStampBeginn, Date tStampEnde,String iP)
+	public boolean insert(Date tStampBeginn,String iP, String accountname)
 	{
 		boolean erfolg=true;
 		sqlBefehl=baukasten.insert_Loginliste();
 		try
 		{
-			PreparedStatement vorbereiteteAussage = verbindungLogin.prepareStatement(sqlBefehl);
+			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
 			vorbereiteteAussage.setDate(1, tStampBeginn);
-			vorbereiteteAussage.setDate(2, tStampEnde);
+			//vorbereiteteAussage.setDate(2, tStampEnde);
+			vorbereiteteAussage.setString(2, iP);
+			vorbereiteteAussage.executeUpdate();
+		}
+		catch (SQLException e)
+		{
+			erfolg=false;
+		}
+		insert(accountname,tStampBeginn, iP);
+		return erfolg; 
+	}
+	
+	public boolean insert(String accountname, Date tStampBeginn,String iP)
+	{
+		boolean erfolg=true;
+		sqlBefehl=baukasten.insert_LoginClientZT();
+		try
+		{
+			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
+			vorbereiteteAussage.setString(1, accountname);
+			vorbereiteteAussage.setDate(2, tStampBeginn);
 			vorbereiteteAussage.setString(3, iP);
 			vorbereiteteAussage.executeUpdate();
 		}
@@ -88,7 +108,24 @@ public class Control
 		{
 			erfolg=false;
 		}
-		
 		return erfolg; 
+	}
+	
+	public boolean insert(String bName,int i)
+	{
+		boolean erfolg=true;
+		sqlBefehl=baukasten.insert_Client();
+		try
+		{
+			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
+			vorbereiteteAussage.setString(1, bName);
+			vorbereiteteAussage.executeUpdate();
+		}
+		catch (SQLException e)
+		{
+			erfolg=false;
+		}
+		
+		return erfolg;
 	}
 }

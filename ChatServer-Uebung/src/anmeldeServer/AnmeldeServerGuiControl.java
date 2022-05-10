@@ -6,8 +6,6 @@ import javafx.scene.control.Button;
 
 public class AnmeldeServerGuiControl extends Control
 {
-	
-	
 	@FXML
 	private Button startButton;
 	private Button stopButton;
@@ -15,13 +13,12 @@ public class AnmeldeServerGuiControl extends Control
 	@FXML
 	protected void startenOnClick()
 	{
-		System.out.println("A");
 		super.anmeldeServerStarten();
 	}
 	
 	@FXML
 	protected void stoppenOnClick()
 	{
-		
+		super.stoppen();
 	}
 }

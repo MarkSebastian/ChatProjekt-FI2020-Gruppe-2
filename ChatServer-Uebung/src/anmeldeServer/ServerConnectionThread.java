@@ -38,6 +38,7 @@ public class ServerConnectionThread extends Thread
 			catch (InterruptedException e)
 			{
 				control.connectionThread.interrupt();
+				System.out.println("ConnectionThread geschlossen");
 			}
 		}
 	}

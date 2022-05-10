@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.URL;
 import java.util.ArrayList;
 
+import Message.nachrichtP.LogInNachricht;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -38,14 +39,19 @@ public class Control
 			e.printStackTrace();
 		}
 		System.out.println("Erfolgreicher Start");
+		clients = new ArrayList<ClientProxy>();
 		connectionThread = new ServerConnectionThread(this.serverSocket, this);
 	}
 	
-	private void stoppen()
+	protected void stoppen()
 	{
-		for(ClientProxy c : clients)
+		if(clients.isEmpty() == false)
 		{
+			for(ClientProxy c : clients)
+			{
 			c.stopClient();
+			}
+			clients.clear();
 		}
 		connectionThread.interrupt();
 		try
@@ -56,9 +62,14 @@ public class Control
 		{
 			e.printStackTrace();
 		}
-		clients.clear();
+		
 		System.out.println("Server gestoppt");
 	}
 
+	protected void nachrichtAnzeigen(LogInNachricht message)
+	{
+		System.out.println(message.getBenutzerName() + " " + message.getPasswort());
+		//TO-DO: Überprüfung mit Datenbank!
+	}
 	
 }

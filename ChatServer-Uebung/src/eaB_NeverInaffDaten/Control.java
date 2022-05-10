@@ -89,6 +89,6 @@ public class Control
 			erfolg=false;
 		}
 		
-		return erfolg;
+		return erfolg; 
 	}
 }

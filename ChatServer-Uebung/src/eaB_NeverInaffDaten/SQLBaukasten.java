@@ -112,6 +112,6 @@ public class SQLBaukasten
 		return insert+into+loginClient_ZT+klammerAuf+loginliste_id+komma+client_id+klammerZu+values+klammerAuf+
 				klammerAuf+select+id+from+client+where+//fertigmachen+klammerZu+komma+
 				klammerAuf+klammerZu+klammerZu; 
-		
+		 
 	}
 }

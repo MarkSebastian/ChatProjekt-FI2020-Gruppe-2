@@ -67,7 +67,8 @@ public class VerbindungsGUI
 		if (hide)
 		{
 			frame.setVisible(false);
-		} else
+		} 
+		else
 		{
 			frame.setVisible(true);
 		}
@@ -98,7 +99,8 @@ public class VerbindungsGUI
 		{
 			getTextFieldIP().setEditable(true);
 			customIP = true;
-		} else
+		} 
+		else
 		{
 			getTextFieldIP().setEditable(false);
 			customIP = false;

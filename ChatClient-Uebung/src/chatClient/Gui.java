@@ -340,8 +340,6 @@ public class Gui
 			scrollPaneUserList = new JScrollPane(listUser, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			scrollPaneUserList.setBounds(341, 11, 106, 193);
-			
-
 		}
 		return scrollPaneUserList;
 	}

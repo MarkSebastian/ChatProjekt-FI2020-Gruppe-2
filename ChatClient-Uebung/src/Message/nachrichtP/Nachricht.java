@@ -8,9 +8,6 @@ import javax.swing.DefaultListModel;
 
 public class Nachricht implements Serializable
 {	
-	
-	
-
 	private static final long serialVersionUID = 1L;
 	private String absender;
 	private int absenderId;
@@ -84,7 +81,7 @@ public class Nachricht implements Serializable
 		}
 		else
 		{
-		return absender + ": " + nachricht;
+			return absender + ": " + nachricht;
 		}
 	}
 }

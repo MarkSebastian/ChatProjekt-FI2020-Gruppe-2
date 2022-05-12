@@ -20,6 +20,7 @@ public class Control implements Runnable
 	protected VerbindungsGUI startGui;
 	protected int port;
 	protected Socket socket;
+	//List Modells
 	protected DefaultListModel<Nachricht> messages = new DefaultListModel<Nachricht>();
 	protected DefaultListModel<String> clients = new DefaultListModel<String>();
 	protected DefaultListModel<String> choosenClients = new DefaultListModel<String>();
@@ -31,7 +32,7 @@ public class Control implements Runnable
 	protected ObjectOutputStream out;
 
 	private boolean startWindow = false;
-
+	//Farben zum schnelleren abruf
 	private Color rot = new Color(255, 102, 102);
 	private Color weiss = new Color(255, 255, 255, 255);
 	
@@ -54,7 +55,8 @@ public class Control implements Runnable
 			startGui.hide(false);
 			gui.hide(true);
 			startWindow = false;
-		} else
+		}
+		else
 		{
 			r = startGui.getFrmBounds();
 			gui.setFrmBounds(r);
@@ -69,19 +71,9 @@ public class Control implements Runnable
 		this.gui.addEingabeListener(l -> sendMessage());
 		this.gui.addBtnStopListener(l -> stopClient());
 
-		this.startGui.addBtnVerbindenListener(l ->
-		{
-			start = new ClientConnectionThread(this);
-			start.start();
-		});
+		this.startGui.addBtnVerbindenListener(l ->{start = new ClientConnectionThread(this);start.start();});
 		gui.addListListener(new MouseMotionAdapter()
-		{
-			@Override
-			public void mouseMoved(MouseEvent e)
-			{
-				setToolTip();
-			};
-		});
+		{@Override public void mouseMoved(MouseEvent e){setToolTip();};});
 		
 		this.gui.addAddListner(l -> addUserToNewChat());
 		this.gui.addEntfListner(l -> entfUserFromNewChat());
@@ -99,13 +91,15 @@ public class Control implements Runnable
 				port = tempPort;
 				korrekt = true;
 				this.gui.changeStatus("korrekter Port");
-			} else
+			} 
+			else
 			{
 				guiError("port");
 				this.gui.changeStatus("kein korrekter Port");
 			}
 
-		} catch (NumberFormatException e)
+		} 
+		catch (NumberFormatException e)
 		{
 			guiError("port");
 			this.gui.changeStatus("kein korrekter Port");
@@ -131,10 +125,12 @@ public class Control implements Runnable
 				messages.addElement(message);
 				akList();
 			}
-		} catch (NullPointerException e)
+		} 
+		catch (NullPointerException e)
 		{
 			gui.changeStatus("Noch nicht mit Server Verbunden!");
-		} catch (Exception e)
+		} 
+		catch (Exception e)
 		{
 			System.out.println(e + "\n in sendMessage");
 		}
@@ -157,13 +153,16 @@ public class Control implements Runnable
 			}
 			getNewMessages(message);
 
-		} catch (SocketException e1)
+		} 
+		catch (SocketException e1)
 		{
 			stopClient();
-		} catch (EOFException e2)
+		} 
+		catch (EOFException e2)
 		{
 			stopClient();
-		} catch (Exception e)
+		} 
+		catch (Exception e)
 		{
 			System.out.println(e + "\n in readMessage");
 		}
@@ -184,7 +183,6 @@ public class Control implements Runnable
 	{
 		this.gui.getListUser().setModel(clients);
 		this.gui.getListActiveUser().setModel(clients);
-		
 	}
 
 	private void stopClient()
@@ -195,7 +193,8 @@ public class Control implements Runnable
 			ois.close();
 			out.close();
 			socket.close();
-		} catch (IOException e)
+		} 
+		catch (IOException e)
 		{
 			System.out.println(e + "\n in stopClient");
 		}
@@ -249,7 +248,8 @@ public class Control implements Runnable
 							if (j % 2 == 0)
 							{
 								startGui.changePortColor(rot);
-							} else
+							} 
+							else
 							{
 								startGui.changePortColor(weiss);
 							}
@@ -257,7 +257,8 @@ public class Control implements Runnable
 							try
 							{
 								Thread.sleep(125);
-							} catch (InterruptedException e)
+							} 
+							catch (InterruptedException e)
 							{
 								System.out.println(e + "\n in guiError - port");
 							}
@@ -277,7 +278,8 @@ public class Control implements Runnable
 							if (j % 2 == 0)
 							{
 								startGui.changeUsernameColor(rot);
-							} else
+							} 
+							else
 							{
 								startGui.changeUsernameColor(weiss);
 							}
@@ -285,7 +287,8 @@ public class Control implements Runnable
 							try
 							{
 								Thread.sleep(125);
-							} catch (InterruptedException e)
+							} 
+							catch (InterruptedException e)
 							{
 								System.out.println(e + "\n in guiError - username");
 							}
@@ -328,8 +331,6 @@ public class Control implements Runnable
 			System.out.println("nichts ausgewählt");
 		}
 	}
-	
-	
 
 	@Override
 	public void run()
@@ -342,12 +343,11 @@ public class Control implements Runnable
 			{
 				readMessage();
 				Thread.sleep(1000);
-			} catch (InterruptedException e)
+			}
+			catch (InterruptedException e)
 			{
 				read.interrupt();
 			}
 		}
-
 	}
-
 }

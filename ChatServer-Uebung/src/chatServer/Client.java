@@ -42,7 +42,8 @@ public class Client implements Runnable
 		{
 			out = new ObjectOutputStream(this.socket.getOutputStream());
 			ois = new ObjectInputStream(socket.getInputStream());
-		} catch (Exception e)
+		} 
+		catch (Exception e)
 		{
 			System.out.println(e + "\n in startStreams function");
 		}
@@ -53,7 +54,8 @@ public class Client implements Runnable
 		try
 		{
 			out.writeObject(message);
-		} catch (Exception e)
+		} 
+		catch (Exception e)
 		{
 			System.out.println(e + "\n in sendMessage function");
 		}
@@ -80,11 +82,13 @@ public class Client implements Runnable
 				control.getNewMessages(message);
 				control.broadcastMessage(message, this);
 			}
-		} catch (SocketException | EOFException e1)
+		} 
+		catch (SocketException | EOFException e1)
 		{
 			control.closeClient(this);
 			stopClient();
-		} catch (Exception e)
+		} 
+		catch (Exception e)
 		{
 			System.out.println(e + "\n in readMessage function");
 		}
@@ -101,7 +105,8 @@ public class Client implements Runnable
 				readMessage();
 
 				Thread.sleep(500);
-			} catch (InterruptedException e)
+			} 
+			catch (InterruptedException e)
 			{
 				System.out.println(name + "verbindung getrennt");
 				control.broadcastMessage(new Nachricht("verbindung mit " + name + " getrennt!", control.clientListeAbspecken()));
@@ -135,7 +140,8 @@ public class Client implements Runnable
 			out.close();
 			ois.close();
 			this.read.interrupt();
-		} catch (IOException e)
+		} 
+		catch (IOException e)
 		{
 			System.out.println(e+ "\n in stopClient function");
 		}

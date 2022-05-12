@@ -33,7 +33,7 @@ public class CaptureThread extends Thread
 	// protected boolean stopaudioCapture = false;
 	// protected ByteArrayOutputStream bos;
 
-	private ControllerD controllerD;
+	private Controller controllerD;
 	private File file;
 	private Type fileFormat;
 	protected TargetDataLine tdl;
@@ -42,9 +42,9 @@ public class CaptureThread extends Thread
 	private AudioInputStream ais;
 	private int random;
 
-	public CaptureThread(ControllerD controllerD)
+	public CaptureThread(Controller controller)
 	{
-		this.controllerD = controllerD;
+		this.controllerD = controller;
 	}
 
 	@Override
@@ -65,12 +65,37 @@ public class CaptureThread extends Thread
 			tdl.start();
 			System.out.println("TEST");
 			while (!isInterrupted())
-			{
+			{	
+				try
+				{
+					//geht rein
+					AudioSystem.write(ais, fileFormat, file);
+					System.out.println("Jetzt gehts");
+				}
+				catch (NullPointerException e) {
+					// TODO: handle exception
+					System.out.println("E");
+				}
+				catch (IllegalArgumentException ex) {
+					// TODO: handle exception
+					System.out.println("EX");
+				}
+				catch (IOException exe) {
+					// TODO: handle exception
+					System.out.println("EXE");
+				}
 				AudioSystem.write(ais, fileFormat, file);
-
+				//hier verreckt es irgendwie 
 				System.out.println("Record-Running");
+				if(isAlive())
+				{
+					//hier springt es nicht mehr rein
+					System.out.println("Record-Running");
+				}
+				//hier springt es nicht mehr rein
+				//System.out.println("Record-Running");
 
-			}
+			}//hier auch nicht
 			System.out.println("aufnahme beendet");
 			tdl.stop();
 			tdl.close();

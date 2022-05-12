@@ -13,14 +13,14 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class AudioPlay extends Thread
 {
-	private ControllerD controllerd;
+	private Controller controllerd;
 	private AudioInputStream audioStream;
 	private AudioFormat audioFormat;
 	private String temp = "Test.wav";
 
-	public AudioPlay(ControllerD controllerD)
+	public AudioPlay(Controller controller)
 	{
-		this.controllerd = controllerD;
+		this.controllerd = controller;
 	}
 
 	@Override

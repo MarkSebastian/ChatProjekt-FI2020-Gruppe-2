@@ -10,6 +10,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.JOptionPane;
 
 
 public class Controller
@@ -36,12 +37,16 @@ public class Controller
 	{
 		try
 		{
+			
 			System.out.println("Starte Aufnahme");
 			this.gui.getBtnStop().setVisible(true);
 			this.gui.getBtnAufnehmen().setVisible(false);
 			//This beim neuen CaptureThread übergeben sonst friert GUI ein
 			captureThread = new CaptureThread(this);
 			captureThread.start();
+			JOptionPane.showMessageDialog(null,"Press ok to stop recording");
+			captureThread.interrupt();
+			//JOptionPane.getDesktopPaneForComponent(gui).get
 		}
 
 		catch (Exception e )

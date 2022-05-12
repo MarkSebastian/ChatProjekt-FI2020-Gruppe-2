@@ -59,7 +59,7 @@ public class ControllerM
 		        DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
 		        tdl = (TargetDataLine) dataLineInfo;
 		        
-		        
+		        //Audiosystem needed ?
 		        tdl = (TargetDataLine) AudioSystem.getLine(dataLineInfo);
 		        tdl.open(audioFormat);
 		        tdl.start();

@@ -38,7 +38,7 @@ public class ControllerD
 		tdl.open(audioFormat);
 		tdl.start();
 		
-		Thread captureThread = new Thread(new CaptureThread());
+		//Thread captureThread = new Thread(new CaptureThread(this));
 		}
 		catch(Exception e)
 		{

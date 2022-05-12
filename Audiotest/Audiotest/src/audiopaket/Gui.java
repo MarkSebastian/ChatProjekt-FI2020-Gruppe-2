@@ -17,6 +17,7 @@ public class Gui extends JFrame
 	private JButton btnAufnehmen;
 	private JButton btnAbspielen;
 	private JLabel lblAudiotest;
+	private JButton btnStop;
 
 	public Gui()
 	{
@@ -35,6 +36,7 @@ public class Gui extends JFrame
 		contentPane.add(getBtnAbspielen());
 		contentPane.add(getLblAudiotest());
 		setVisible(true);
+		contentPane.add(getBtnStop());
 	}
 
 	public void setBtnAufnehmen(ActionListener l)
@@ -75,5 +77,20 @@ public class Gui extends JFrame
 			lblAudiotest.setBounds(47, 31, 135, 14);
 		}
 		return lblAudiotest;
+	}
+	
+	public void setBtnStop(ActionListener l)
+	{
+		this.btnStop.addActionListener(l);
+	}
+	
+	protected JButton getBtnStop()
+	{
+		if (btnStop == null)
+		{
+			btnStop = new JButton("Stoppen");
+			btnStop.setBounds(177, 177, 89, 23);
+		}
+		return btnStop;
 	}
 }

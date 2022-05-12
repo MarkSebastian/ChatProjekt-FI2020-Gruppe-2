@@ -16,6 +16,7 @@ public class Control
 	private ServerSocket serverSocket;
 	protected ServerConnectionThread connectionThread;
 	private ArrayList<ClientProxy> clients;
+	private 
 	
 	public Control() 
 	{

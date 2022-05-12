@@ -45,6 +45,7 @@ public class SQLBaukasten
 	private String passwort;
 	private String accountname;
 	private String max;
+	private String hashcode;
 	
 	public SQLBaukasten()
 	{
@@ -89,6 +90,7 @@ public class SQLBaukasten
 		passwort="passwort ";
 		accountname="accountname ";
 		max="max ";
+		hashcode="hashcode ";
 	}
 	 
 	protected String delete_1()
@@ -117,19 +119,26 @@ public class SQLBaukasten
 
 				klammerAuf+select_Client_id()+klammerZu+komma+
 				klammerAuf+select_Loginlisten_id()+klammerZu+klammerZu; 
-		  
 	}
 	
 	protected String insert_Chatroom()
 	{
-		return insert+into+chatroom+klammerAuf+chatroomname+klammerZu+values+fragezeichen;
+		return insert+into+chatroom+klammerAuf+chatroomname+komma+hashcode+klammerZu+values+fragezeichen;
 	}
 	
-	protected String insert_ClientChatrZT()
+	protected String insert_ClientChatroomZT()
 	{
 		return insert+into+clientChatroom_ZT+klammerAuf+client_id+komma+chatroom_id+klammerZu+values+klammerAuf+
 				klammerAuf+select_Client_id()+klammerZu+komma+
-				fragezeichen+klammerZu; 
+				select_Chatroom_nach_hashcode()+klammerZu; 
+	}
+	
+	protected String insert_Nachricht()
+	{
+		return insert+into+nachricht+klammerAuf+inhalt+komma+timestamp+komma+client_id+komma+chatroom_id+klammerZu+
+				values+klammerAuf+fragezeichen+komma+fragezeichen+komma+
+				select_Client_id()+komma+
+				select_Chatroom_nach_hashcode()+klammerZu;
 	}
 	
 	
@@ -143,9 +152,29 @@ public class SQLBaukasten
 		return select+id+from+loginliste+where+timestamp_beginn+ist+fragezeichen+and+ip+ist+fragezeichen ;
 	}
 	
-	protected String select_latest_Chatroom()
+	/*protected String select_latest_Chatroom()
 	{
 		return select+max+klammerAuf+id+klammerZu+from+chatroom;
+	}*/
+	
+	protected String select_Chatroom_nach_hashcode()
+	{
+		return select+id+from+chatroom+where+hashcode+ist+fragezeichen;
 	}
-	  
+	
+	protected String select_Chatroomname_nach_hashcode()
+	{
+		return select+chatroomname+from+chatroom+where+hashcode+ist+fragezeichen;
+	}
+	
+	protected String select_check_duplicate_hashcode()
+	{
+		return select+sternchen+from+chatroom+where+hashcode+ist+fragezeichen;
+	}
+	
+	protected String select_check_duplicate_Loginname()
+	{
+		return select+sternchen+from+login_Daten+where+benutzername+ist+fragezeichen;
+	}
+	
 }

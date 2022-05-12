@@ -131,7 +131,7 @@ public class SQLBaukasten
 				klammerAuf+select_Client_id()+klammerZu+komma+
 				fragezeichen+klammerZu; 
 	}
-	
+	 
 	
 	protected String select_Client_id()
 	{

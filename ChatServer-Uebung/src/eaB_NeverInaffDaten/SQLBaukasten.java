@@ -125,7 +125,7 @@ public class SQLBaukasten
 		return insert+into+chatroom+klammerAuf+chatroomname+klammerZu+values+fragezeichen;
 	}
 	
-	protected String insert_ClientChatrZT()
+	protected String insert_ClientChatroomZT()
 	{
 		return insert+into+clientChatroom_ZT+klammerAuf+client_id+komma+chatroom_id+klammerZu+values+klammerAuf+
 				klammerAuf+select_Client_id()+klammerZu+komma+

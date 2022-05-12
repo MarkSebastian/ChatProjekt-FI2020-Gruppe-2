@@ -111,14 +111,14 @@ public class Control
 		return erfolg; 
 	}
 	
-	public boolean insert(String bName,int i)
+	public boolean insert1(String chatroomName)
 	{
 		boolean erfolg=true;
-		sqlBefehl=baukasten.insert_Client();
+		sqlBefehl=baukasten.insert_Chatroom();
 		try
 		{
 			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
-			vorbereiteteAussage.setString(1, bName);
+			vorbereiteteAussage.setString(1, chatroomName);
 			vorbereiteteAussage.executeUpdate();
 		}
 		catch (SQLException e)
@@ -128,4 +128,24 @@ public class Control
 		
 		return erfolg;
 	}
+	
+	/*public boolean insert1(String chatroomName, String iP, String accountname)
+	{
+		boolean erfolg=true;
+		sqlBefehl=baukasten.insert_Loginliste();
+		try
+		{
+			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
+			vorbereiteteAussage.setDate(1, tStampBeginn);
+			//vorbereiteteAussage.setDate(2, tStampEnde);
+			vorbereiteteAussage.setString(2, iP);
+			vorbereiteteAussage.executeUpdate();
+		}
+		catch (SQLException e)
+		{
+			erfolg=false;
+		}
+		insert(accountname,tStampBeginn, iP);
+		return erfolg; 
+	}*/
 } 

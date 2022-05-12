@@ -63,11 +63,11 @@ public class ClientProxy implements Runnable
 			message = (LogInNachricht)ois.readObject();
 			if(message.getFlag() == true)
 			{
-				control.registrieren(message);
+				control.registrieren(message, socket);
 			}
 			else if(message.getFlag() == false)
 			{
-				control.anmelden(message);
+				control.anmelden(message, socket);
 			}
 			
 		}

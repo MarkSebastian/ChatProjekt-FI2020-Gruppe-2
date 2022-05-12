@@ -59,6 +59,7 @@ public class ClientControl implements Runnable, Serializable
 		startGui = new VerbindungsGUI();
 		gui = new Gui();
 		setListener();
+//		setModel();
 		privatChats = new HashSet<PrivatChat>();
 	}
 
@@ -82,7 +83,7 @@ public class ClientControl implements Runnable, Serializable
 			startWindow = true;
 		}
 	}
-
+	
 	private void setListener()
 	{
 		this.gui.addEingabeListener(l -> sendMessage());
@@ -118,6 +119,16 @@ public class ClientControl implements Runnable, Serializable
 				}
 			});
 	}
+	
+/*	private void setModel()
+	{
+		this.gui.getListUser().setModel(clients);
+		this.gui.getListActiveUser().setModel(clients);	
+		this.gui.getList().setModel(messages);
+	}
+*/	
+
+	
 	
 	public String getUser()
 	{
@@ -344,6 +355,16 @@ public class ClientControl implements Runnable, Serializable
 		akList();
 	}
 
+	private void akNachrichten()
+	{
+		
+	}
+	
+	private void akClients()
+	{
+		
+	}
+	
 	protected void akList()
 	{
 		this.gui.getList().setModel(messages);

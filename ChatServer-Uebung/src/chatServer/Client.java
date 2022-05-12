@@ -1,11 +1,16 @@
 package chatServer;
 
+import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+
+import javax.imageio.ImageIO;
 
 import Message.nachrichtP.Nachricht;
 
@@ -23,15 +28,19 @@ public class Client implements Runnable
 	private ObjectInputStream ois;
 	private ObjectOutputStream out;
 	
+	//private InputStream bildIn;
+	//private BufferedInputStream bufferedBildIn;
+	
 	private boolean first = true;
 
-	public Client(int id, Socket socket, Control control)
+	public Client(int id, Socket socket, Control control) throws IOException
 	{
 		this.id = id;
 		this.socket = socket;
 		this.control = control;
 		startStreams();
 		readMessage();
+		readBildMessage();
 		read = new Thread(this);
 		read.start();
 	}
@@ -42,6 +51,9 @@ public class Client implements Runnable
 		{
 			out = new ObjectOutputStream(this.socket.getOutputStream());
 			ois = new ObjectInputStream(socket.getInputStream());
+			
+			//bildIn = socket.getInputStream();
+			//bufferedBildIn = new BufferedInputStream(bildIn);
 		} catch (Exception e)
 		{
 			System.out.println(e + "\n in startStreams function");
@@ -89,6 +101,17 @@ public class Client implements Runnable
 			System.out.println(e + "\n in readMessage function");
 		}
 	}
+	
+	public void readBildMessage() throws IOException
+	{
+		//BufferedImage bufferedImage = ImageIO.read(bufferedBildIn);
+		BufferedImage bufferedImage = ImageIO.read(ois);
+		
+		//bufferedBildIn.close();
+		ois.close();
+		
+		control.setImage(bufferedImage);
+	}
 
 	@Override
 	public void run()
@@ -99,9 +122,10 @@ public class Client implements Runnable
 			try
 			{
 				readMessage();
+				readBildMessage();
 
 				Thread.sleep(500);
-			} catch (InterruptedException e)
+			} catch (InterruptedException | IOException e)
 			{
 				System.out.println(name + "verbindung getrennt");
 				control.broadcastMessage(new Nachricht("verbindung mit " + name + " getrennt!", control.clientListeAbspecken()));

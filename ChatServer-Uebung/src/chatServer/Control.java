@@ -2,6 +2,7 @@ package chatServer;
 
 
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
 import Message.nachrichtP.Nachricht;
@@ -11,6 +12,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 public class Control
 {
@@ -201,6 +204,12 @@ public class Control
 		}
 		
 		this.gui.getListUser().setModel(clientListe);
+	}
+	
+	public void setImage(BufferedImage img)
+	{
+		ImageIcon icon = new ImageIcon(img);
+		gui.getLblBildLabel().setIcon(icon);
 	}
 
 }

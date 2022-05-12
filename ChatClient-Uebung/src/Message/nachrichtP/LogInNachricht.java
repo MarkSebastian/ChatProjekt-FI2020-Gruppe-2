@@ -33,7 +33,7 @@ public class LogInNachricht implements Serializable
 	{
 		this.passwort = passwort;
 	}
-	public boolean isFlag()
+	public boolean getFlag()
 	{
 		return flag;
 	}

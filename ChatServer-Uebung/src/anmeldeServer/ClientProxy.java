@@ -61,6 +61,14 @@ public class ClientProxy implements Runnable
 		{
 			LogInNachricht message = null;
 			message = (LogInNachricht)ois.readObject();
+			if(message.getFlag() == true)
+			{
+				control.registrieren(message);
+			}
+			else if(message.getFlag() == false)
+			{
+				control.anmelden(message);
+			}
 			
 		}
 		catch (SocketException | EOFException e1)

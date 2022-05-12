@@ -72,4 +72,13 @@ public class Control
 		//TO-DO: Überprüfung mit Datenbank!
 	}
 	
+	protected void registrieren(LogInNachricht message)
+	{
+		
+	}
+	
+	protected void anmelden(LogInNachricht message)
+	{
+		
+	}
 }

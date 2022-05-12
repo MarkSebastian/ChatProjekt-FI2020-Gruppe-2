@@ -35,6 +35,7 @@ public class ClientControl implements Runnable, Serializable
 	protected DefaultListModel<String> choosenClients = new DefaultListModel<String>();
 	protected ArrayList<String> teilnehmerPrivatChat = new ArrayList<String>();
 	protected ArrayList<String> aktiveTeilnehmer = new ArrayList<String>();
+	private ArrayList<String> messagesArray = new ArrayList<String>();
 
 	protected Thread read;
 	private ClientConnectionThread start;
@@ -104,17 +105,18 @@ public class ClientControl implements Runnable, Serializable
 		this.gui.addAddListner(l -> addUserToNewChat());
 		this.gui.addEntfListner(l -> entfUserFromNewChat());
 
-		this.gui.setBtnNeuerChatActionListener(l -> neuenChatStarten());
-		gui.setTextFieldGruppenNamenListener(new MouseAdapter()
-		{
-			@Override
-			public void mouseClicked(MouseEvent e)
+		this.gui.setBtnNeuerChatActionListener(l -> 
+			neuenChatStarten());
+			gui.setTextFieldGruppenNamenListener(new MouseAdapter()
 			{
-				gui.getTextFieldGruppenName().setText("");
-				gui.getTextFieldGruppenName().setText(null);
-				gui.getTextFieldGruppenName().setForeground(Color.black);
-			}
-		});
+				@Override
+				public void mouseClicked(MouseEvent e)
+				{
+					gui.getTextFieldGruppenName().setText("");
+					gui.getTextFieldGruppenName().setText(null);
+					gui.getTextFieldGruppenName().setForeground(Color.black);
+				}
+			});
 	}
 	
 	public String getUser()
@@ -144,12 +146,12 @@ public class ClientControl implements Runnable, Serializable
 					schonVorhanden = true;
 					System.out.println("PrivatChat schon vorhanden");
 				}
-				if(schonVorhanden == false)
-				{
-					PrivatChat pc = new PrivatChat(teilnehmerPrivatChat, temp, user, this);
-					privatChats.add(pc);
-					sendPrivatChat(pc);
-				}
+			}
+			if(schonVorhanden == false)
+			{
+				PrivatChat pc = new PrivatChat(teilnehmerPrivatChat, temp, user, this);
+				privatChats.add(pc);
+				sendPrivatChat(pc);
 			}
 		}
 	}

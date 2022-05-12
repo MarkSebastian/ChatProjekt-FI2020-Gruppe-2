@@ -15,6 +15,8 @@ import java.awt.event.MouseMotionAdapter;
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
+import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonActionListener;
+
 import java.awt.ScrollPane;
 
 public class Gui
@@ -39,6 +41,8 @@ public class Gui
 	private JButton btnUserEntfernen;
 	private JButton btnNeuerChat;
 	private JScrollPane scrollPaneUserList;
+	private JTextField textFieldPfadEingabe;
+	private JButton btnBildSenden;
 
 	public Gui()
 	{
@@ -49,10 +53,12 @@ public class Gui
 	{
 		frmClient = new JFrame();
 		frmClient.setTitle("Client");
-		frmClient.setBounds(100, 100, 360, 335);
+		frmClient.setBounds(100, 100, 360, 373);
 		frmClient.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmClient.getContentPane().setLayout(null);
 		frmClient.getContentPane().add(getTabbedPane());
+		frmClient.getContentPane().add(getTextFieldPfadEingabe());
+		frmClient.getContentPane().add(getBtnBildSenden());
 
 		frmClient.setAlwaysOnTop(true);
 
@@ -298,7 +304,7 @@ public class Gui
 		}
 		return btnUserHinzufügen;
 	}
-	
+
 	public void addAddListner(ActionListener l)
 	{
 		this.getBtnUserHinzufügen().addActionListener(l);
@@ -315,7 +321,7 @@ public class Gui
 		}
 		return btnUserEntfernen;
 	}
-	
+
 	public void addEntfListner(ActionListener l)
 	{
 		this.getBtnUserEntfernen().addActionListener(l);
@@ -335,14 +341,39 @@ public class Gui
 	private JScrollPane getScrollPaneUserList()
 	{
 		if (scrollPaneUserList == null)
-		{	
+		{
 			JList listUser = getListUser();
 			scrollPaneUserList = new JScrollPane(listUser, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			scrollPaneUserList.setBounds(341, 11, 106, 193);
-			
 
 		}
 		return scrollPaneUserList;
+	}
+
+	protected JTextField getTextFieldPfadEingabe()
+	{
+		if (textFieldPfadEingabe == null)
+		{
+			textFieldPfadEingabe = new JTextField();
+			textFieldPfadEingabe.setBounds(10, 303, 229, 20);
+			textFieldPfadEingabe.setColumns(10);
+		}
+		return textFieldPfadEingabe;
+	}
+	
+	protected JButton getBtnBildSenden()
+	{
+		if (btnBildSenden == null)
+		{
+			btnBildSenden = new JButton("Senden");
+			btnBildSenden.setBounds(249, 302, 89, 23);
+		}
+		return btnBildSenden;
+	}
+	
+	public void addBildSendenListener(ActionListener l)
+	{
+		this.getBtnBildSenden().addActionListener(l);
 	}
 }

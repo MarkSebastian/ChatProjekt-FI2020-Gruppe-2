@@ -1,17 +1,26 @@
 package chatClient;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.io.BufferedOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import Message.nachrichtP.Nachricht;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+
+import javax.swing.*;
+import java.awt.*;
+import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import java.awt.image.BufferedImage;
 
 public class Control implements Runnable
 {
@@ -23,7 +32,7 @@ public class Control implements Runnable
 	protected DefaultListModel<Nachricht> messages = new DefaultListModel<Nachricht>();
 	protected DefaultListModel<String> clients = new DefaultListModel<String>();
 	protected DefaultListModel<String> choosenClients = new DefaultListModel<String>();
-	
+
 	protected Thread read;
 	private ClientConnectionThread start;
 
@@ -34,7 +43,7 @@ public class Control implements Runnable
 
 	private Color rot = new Color(255, 102, 102);
 	private Color weiss = new Color(255, 255, 255, 255);
-	
+
 	private boolean first = true;
 
 	public Control()
@@ -82,9 +91,21 @@ public class Control implements Runnable
 				setToolTip();
 			};
 		});
-		
+
 		this.gui.addAddListner(l -> addUserToNewChat());
 		this.gui.addEntfListner(l -> entfUserFromNewChat());
+
+		this.gui.addBildSendenListener(l ->
+		{
+			try
+			{
+				sendBild();
+			} catch (IOException e1)
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
 	}
 
 	protected boolean checkPort()
@@ -118,16 +139,15 @@ public class Control implements Runnable
 		try
 		{
 			Nachricht message;
-			if(first)
+			if (first)
 			{
 				message = new Nachricht(startGui.getTextFieldUsername().getText(), false);
 				out.writeObject(message);
 				first = false;
-			}
-			else
+			} else
 			{
-			 	message = new Nachricht(this.gui.getTextFieldEingabe().getText(), false);
-			 	out.writeObject(message);
+				message = new Nachricht(this.gui.getTextFieldEingabe().getText(), false);
+				out.writeObject(message);
 				messages.addElement(message);
 				akList();
 			}
@@ -140,6 +160,31 @@ public class Control implements Runnable
 		}
 		this.gui.getTextFieldEingabe().setText("");
 
+	}
+
+	protected void sendBild() throws IOException
+	{
+		//OutputStream bildOut = socket.getOutputStream();
+
+		//BufferedOutputStream bufferedBildOut = new BufferedOutputStream(bildOut);
+
+		ImageIcon imageIcon = new ImageIcon(gui.getTextFieldPfadEingabe().getText());
+		Image image = imageIcon.getImage();
+
+		BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null),
+				BufferedImage.TYPE_INT_RGB);
+
+		Graphics graphics = bufferedImage.createGraphics();
+		graphics.drawImage(image,0,0, image.getWidth(null), image.getHeight(null),null);
+		graphics.dispose();
+		
+		
+		//ImageIO.write(bufferedImage, "png", bufferedBildOut);
+		ImageIO.write(bufferedImage, "png", out);
+
+		//bufferedBildOut.close();
+		out.close();
+		
 	}
 
 	private void readMessage()
@@ -184,7 +229,7 @@ public class Control implements Runnable
 	{
 		this.gui.getListUser().setModel(clients);
 		this.gui.getListActiveUser().setModel(clients);
-		
+
 	}
 
 	private void stopClient()
@@ -220,15 +265,14 @@ public class Control implements Runnable
 		}
 
 	}
-	
+
 	protected boolean checkUsername()
 	{
-		if(startGui.getTextFieldUsername().getText().isBlank())
+		if (startGui.getTextFieldUsername().getText().isBlank())
 		{
 			guiError("username");
 			return false;
-		}
-		else
+		} else
 		{
 			return true;
 		}
@@ -265,7 +309,7 @@ public class Control implements Runnable
 					}
 				}).start();
 				break;
-			
+
 			case "username":
 				new Thread(new Runnable()
 				{
@@ -295,41 +339,37 @@ public class Control implements Runnable
 				break;
 		}
 	}
-	
+
 	private void addUserToNewChat()
 	{
 		try
 		{
 			int index = gui.getListActiveUser().getSelectedIndex();
-			
+
 			String selected = clients.getElementAt(index);
 			choosenClients.addElement(selected);
-			
+
 			gui.getListChoosenUser().setModel(choosenClients);
-		}
-		catch(ArrayIndexOutOfBoundsException e)
+		} catch (ArrayIndexOutOfBoundsException e)
 		{
 			System.out.println("nichts ausgewählt");
 		}
 	}
-	
+
 	private void entfUserFromNewChat()
 	{
 		try
 		{
 			int index = gui.getListChoosenUser().getSelectedIndex();
-			
+
 			choosenClients.removeElementAt(index);
-			
+
 			gui.getListChoosenUser().setModel(choosenClients);
-		}
-		catch(ArrayIndexOutOfBoundsException e)
+		} catch (ArrayIndexOutOfBoundsException e)
 		{
 			System.out.println("nichts ausgewählt");
 		}
 	}
-	
-	
 
 	@Override
 	public void run()

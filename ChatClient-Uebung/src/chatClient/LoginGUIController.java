@@ -7,21 +7,26 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import com.gluonhq.charm.glisten.control.Avatar;
 
-public class LoginGUIController
+public class LoginGUIController extends Control
 {
 	@FXML
 	private Avatar avatarIcon;
+	@FXML
 	private TextField anmeldenField;
+	@FXML
 	private PasswordField passwordField;
+	@FXML
 	private Button anmeldenButton;
+	@FXML
 	private Label regestrierenLabel;
 	
 	@FXML
 	protected void buttonOnClick()
 	{
-		
+		super.login(anmeldenField.getText(),passwordField.getText());
 	}
 	
+	@FXML
 	protected void labelOnClick()
 	{
 		

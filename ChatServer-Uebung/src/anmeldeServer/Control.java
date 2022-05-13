@@ -1,11 +1,14 @@
 package anmeldeServer;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 
 import Message.nachrichtP.LogInNachricht;
+import eaB_NeverInaffDaten.ControlDB;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,11 +18,13 @@ public class Control
 {
 	private ServerSocket serverSocket;
 	protected ServerConnectionThread connectionThread;
-	private ArrayList<ClientProxy> clients; 
+	private ArrayList<ClientProxy> clients;
+	private ControlDB controlDB;
+	private ObjectOutputStream oos;
 	
 	public Control() 
 	{
-		
+		controlDB = new ControlDB();
 		
 	}
 	
@@ -69,16 +74,31 @@ public class Control
 	protected void nachrichtAnzeigen(LogInNachricht message)
 	{
 		System.out.println(message.getBenutzerName() + " " + message.getPasswort());
-		//TO-DO: Überprüfung mit Datenbank!
+		//TO-DO: ï¿½berprï¿½fung mit Datenbank!
 	}
 	
-	protected void registrieren(LogInNachricht message)
+	protected void registrieren(LogInNachricht message, Socket socket)
 	{
-		
+		boolean flag;
+		flag = controlDB.insert(message.getBenutzerName(), message.getPasswort());
+		if(flag == false)
+		{
+			try
+			{
+				oos = new ObjectOutputStream(socket.getOutputStream());
+				LogInNachricht registerFail = new LogInNachricht(null, null, false);
+				oos.writeObject(registerFail);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			
+		}
 	}
 	
-	protected void anmelden(LogInNachricht message)
+	protected void anmelden(LogInNachricht message, Socket socket)
 	{
-		
+		//TO-DO anmeldeï¿½berprï¿½fung!
 	}
 }

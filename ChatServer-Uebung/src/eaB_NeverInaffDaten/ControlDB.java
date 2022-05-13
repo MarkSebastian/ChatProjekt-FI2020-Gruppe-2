@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class Control
+public class ControlDB
 {
 	private String verbindungslinkLoginserver;
 	private String verbindungslinkDatenbank;
@@ -15,7 +15,7 @@ public class Control
 	private Connection verbindungDatenKrake;
 	private SQLBaukasten baukasten;
 	
-	public Control()
+	public ControlDB()
 	{
 		baukasten =new SQLBaukasten();
 		verbindungslinkLoginserver="\"jdbc:ucanaccess://src/Login_DB.accdb\"";

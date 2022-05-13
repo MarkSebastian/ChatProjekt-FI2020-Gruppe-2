@@ -38,6 +38,10 @@ public class CaptureThread extends Thread
 	private Type fileFormat;
 	protected TargetDataLine tdl;
 	// protected boolean stop = true;
+	private byte[] ba;
+	private int anzahlGelBytes;
+	private boolean aufnahme;
+	private ByteArrayOutputStream baOut;
 	private AudioFormat audioFormat;
 	private AudioInputStream ais;
 	private int random;
@@ -52,6 +56,7 @@ public class CaptureThread extends Thread
 	{
 		try
 		{
+			/*
 			random = (int) (Math.random() * 10000000 + 10000000);
 			file = new File(random + ".wav");
 			fileFormat = AudioFileFormat.Type.WAVE;
@@ -59,18 +64,55 @@ public class CaptureThread extends Thread
 			DataLine.Info info = new DataLine.Info(TargetDataLine.class, audioFormat);
 			tdl = (TargetDataLine) AudioSystem.getLine(info);
 			ais = new AudioInputStream(tdl);
-			System.out.println("aufnahme gestartet");
+			System.out.println("aufnahme gestartet");*/
 
+			AudioFormat audioformat = new AudioFormat((float)11025.0,16,2,true,false);
+			byte[] ba = new byte[64];
+			anzahlGelBytes = 0;
+			aufnahme = true;
+			baOut = new ByteArrayOutputStream();
+			
+			DataLine.Info info = new DataLine.Info(TargetDataLine.class, audioformat);
+			tdl = (TargetDataLine)AudioSystem.getLine(info);
 			tdl.open(audioFormat);
+			//hier geplant mit audioFormat und BufferSize
 			tdl.start();
+			
+			while(aufnahme)
+			{
+				
+				anzahlGelBytes = tdl.read(ba, 0, ba.length);
+				baOut.write(ba, 0, anzahlGelBytes);
+				if(anzahlGelBytes == -1)
+					break;
+			}
+			tdl.drain();
+			tdl.stop();
+			//System.out.println("aufnahme beendet");
+			tdl.close();
+			/*
+			if(tdl == null)
+			{
+				System.out.println("Line is frei");
+			}*/
+			/*
 			System.out.println("TEST");
+			if (!this.isInterrupted())
 			while (!isInterrupted())
 			{	
 				try
 				{
 					//geht rein
+					//reset()?
+					//AudioInputStream, AudioFileFormat, TargetDataLine
 					AudioSystem.write(ais, fileFormat, file);
-					System.out.println("Jetzt gehts");
+					System.out.println("Record Running");
+					//hier verreckt es irgendwie 
+					//1 schritt als option
+					//kein signal jetzt ist zu ende, deswegen bleibt er ewig im thread hängen 
+					tdl.drain();
+					tdl.flush();
+					
 				}
 				catch (NullPointerException e) {
 					// TODO: handle exception
@@ -84,38 +126,30 @@ public class CaptureThread extends Thread
 					// TODO: handle exception
 					System.out.println("EXE");
 				}
-				AudioSystem.write(ais, fileFormat, file);
-				//hier verreckt es irgendwie 
-				System.out.println("Record-Running");
 				if(isAlive())
 				{
 					//hier springt es nicht mehr rein
 					System.out.println("Record-Running");
 				}
-				//hier springt es nicht mehr rein
-				//System.out.println("Record-Running");
-
-			}//hier auch nicht
-			System.out.println("aufnahme beendet");
-			tdl.stop();
-			tdl.close();
+			
+			//}
+			}*/
+			/*else
+			{
+				System.out.println("wiedergabe beendet");
+			}*/
+				
 		}
-		/*
-		 * if (!this.isInterrupted()) { tdl.open(audioFormat); tdl.start();
-		 * AudioSystem.write(ais, fileFormat, file);
-		 * System.out.println("Record Running"); } else {
-		 * System.out.println("wiedergabe beendet"); tdl.stop(); tdl.close(); } }
-		 */
 
 		catch (LineUnavailableException e )
 		{
 			System.out.println("Line not Available Exception");
 		}
 
-		catch (IOException e )
+		/*catch (IOException e )
 		{
 			System.out.println("IOException in CaptureThread run");
-		}
+		}*/
 
 	}
 

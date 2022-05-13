@@ -172,9 +172,9 @@ public class SQLBaukasten
 		return select+sternchen+from+chatroom+where+hashcode+ist+fragezeichen;
 	}
 	
-	protected String select_check_duplicate_Loginname()
+	protected String select_Loginname()
 	{
-		return select+sternchen+from+login_Daten+where+benutzername+ist+fragezeichen;
+		return select+benutzername+from+login_Daten+where+benutzername+ist+fragezeichen;
 	}
 	
 }

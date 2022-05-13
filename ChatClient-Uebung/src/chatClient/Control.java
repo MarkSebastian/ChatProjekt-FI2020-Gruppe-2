@@ -183,7 +183,7 @@ public class Control implements Runnable
 		ImageIO.write(bufferedImage, "png", out);
 
 		//bufferedBildOut.close();
-		out.close();
+		//out.close();
 		
 	}
 

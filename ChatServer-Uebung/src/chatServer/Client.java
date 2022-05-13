@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OptionalDataException;
 import java.net.Socket;
 import java.net.SocketException;
 
@@ -27,10 +28,10 @@ public class Client implements Runnable
 	private Socket socket;
 	private ObjectInputStream ois;
 	private ObjectOutputStream out;
-	
-	//private InputStream bildIn;
-	//private BufferedInputStream bufferedBildIn;
-	
+
+	// private InputStream bildIn;
+	// private BufferedInputStream bufferedBildIn;
+
 	private boolean first = true;
 
 	public Client(int id, Socket socket, Control control) throws IOException
@@ -40,7 +41,6 @@ public class Client implements Runnable
 		this.control = control;
 		startStreams();
 		readMessage();
-		readBildMessage();
 		read = new Thread(this);
 		read.start();
 	}
@@ -51,9 +51,9 @@ public class Client implements Runnable
 		{
 			out = new ObjectOutputStream(this.socket.getOutputStream());
 			ois = new ObjectInputStream(socket.getInputStream());
-			
-			//bildIn = socket.getInputStream();
-			//bufferedBildIn = new BufferedInputStream(bildIn);
+
+			// bildIn = socket.getInputStream();
+			// bufferedBildIn = new BufferedInputStream(bildIn);
 		} catch (Exception e)
 		{
 			System.out.println(e + "\n in startStreams function");
@@ -77,40 +77,48 @@ public class Client implements Runnable
 		try
 		{
 			Nachricht message = null;
-			message = (Nachricht)ois.readObject();
-			if(first)
+			
+			message = (Nachricht) ois.readObject();
+			if (first)
 			{
 				name = message.getNachricht();
 				first = false;
-			}
-			else
+			} else
 			{
 				message.setAbsender(name);
 				message.setAbsenderId(id);
-			
+
 				System.out.println(message);
 				control.getNewMessages(message);
 				control.broadcastMessage(message, this);
 			}
-		} catch (SocketException | EOFException e1)
+		}
+		catch(OptionalDataException e2)
+		{
+			e2.printStackTrace();
+			//System.out.println("");
+		}
+		catch (SocketException | EOFException e1)
 		{
 			control.closeClient(this);
 			stopClient();
 		} catch (Exception e)
 		{
-			System.out.println(e + "\n in readMessage function");
+			System.out.println(e + "\n in readMessage (Server) function");
 		}
 	}
-	
+
 	public void readBildMessage() throws IOException
 	{
-		//BufferedImage bufferedImage = ImageIO.read(bufferedBildIn);
+		// BufferedImage bufferedImage = ImageIO.read(bufferedBildIn);
 		BufferedImage bufferedImage = ImageIO.read(ois);
-		
-		//bufferedBildIn.close();
-		ois.close();
-		
-		control.setImage(bufferedImage);
+
+		// bufferedBildIn.close();
+		// ois.close();
+		if (bufferedImage != null)
+		{
+			control.setImage(bufferedImage);
+		}
 	}
 
 	@Override
@@ -128,7 +136,8 @@ public class Client implements Runnable
 			} catch (InterruptedException | IOException e)
 			{
 				System.out.println(name + "verbindung getrennt");
-				control.broadcastMessage(new Nachricht("verbindung mit " + name + " getrennt!", control.clientListeAbspecken()));
+				control.broadcastMessage(
+						new Nachricht("verbindung mit " + name + " getrennt!", control.clientListeAbspecken()));
 				read.interrupt();
 			}
 		}
@@ -161,13 +170,13 @@ public class Client implements Runnable
 			this.read.interrupt();
 		} catch (IOException e)
 		{
-			System.out.println(e+ "\n in stopClient function");
+			System.out.println(e + "\n in stopClient function");
 		}
 	}
 
 	@Override
 	public String toString()
 	{
-		return id + " " + name; 
+		return id + " " + name;
 	}
 }

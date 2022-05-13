@@ -9,8 +9,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import Message.nachrichtP.Nachricht;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.nio.channels.NonWritableChannelException;
+import Message.nachrichtP.LogInNachricht;
 import javax.swing.DefaultListModel;
 
 public class Control implements Runnable
@@ -40,9 +44,7 @@ public class Control implements Runnable
 
 	public Control()
 	{
-		startGui = new VerbindungsGUI();
-		gui = new Gui();
-		setListener();
+		startConnect();
 	}
 
 	public void switchGui()
@@ -330,6 +332,41 @@ public class Control implements Runnable
 		{
 			System.out.println("nichts ausgewählt");
 		}
+	}
+	
+	protected void login(String benutzer, String pass)
+	{
+		System.out.print(benutzer + " " + pass);
+		try
+		{
+			out = new ObjectOutputStream(socket.getOutputStream());
+			out.writeObject(new LogInNachricht(benutzer, pass, true));
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	protected void startConnect()
+	{
+		try
+		{
+			socket = new Socket("localhost",5555);
+			
+		}
+		catch (UnknownHostException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	@Override

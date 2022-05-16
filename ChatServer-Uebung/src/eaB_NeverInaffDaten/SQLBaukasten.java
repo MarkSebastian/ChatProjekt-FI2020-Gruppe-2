@@ -92,12 +92,14 @@ public class SQLBaukasten
 		max="max ";
 		hashcode="hashcode ";
 	}
-	 
-	protected String delete_1()
+	
+	//deletes
+	protected String delete_loginDaten()
 	{
 		return delete+from+login_Daten+where+"Benutzername"+ist+fragezeichen;
 	}
 	
+	//inserts
 	protected String insert_LoginDB()
 	{
 		return insert+into+login_Daten+klammerAuf+benutzername+komma+passwort+klammerZu+values+klammerAuf+fragezeichen+komma+fragezeichen+klammerZu;
@@ -141,7 +143,18 @@ public class SQLBaukasten
 				select_Chatroom_nach_hashcode()+klammerZu;
 	}
 	
+	//updates
+	protected String update_Benutzername()
+	{
+		return update+client+set+benutzername+ist+fragezeichen+where+benutzername+ist+fragezeichen;
+	}
 	
+	protected String update_timestamp()
+	{
+		return update+loginliste+set+timestamp_ende+ist+fragezeichen+where+id+ist;
+	}
+	
+	//selects
 	protected String select_Client_id()
 	{
 		return select+id+from+client+where+accountname+ist+fragezeichen;
@@ -151,11 +164,6 @@ public class SQLBaukasten
 	{
 		return select+id+from+loginliste+where+timestamp_beginn+ist+fragezeichen+and+ip+ist+fragezeichen ;
 	}
-	
-	/*protected String select_latest_Chatroom()
-	{
-		return select+max+klammerAuf+id+klammerZu+from+chatroom;
-	}*/
 	
 	protected String select_Chatroom_nach_hashcode()
 	{
@@ -167,14 +175,39 @@ public class SQLBaukasten
 		return select+chatroomname+from+chatroom+where+hashcode+ist+fragezeichen;
 	}
 	
-	protected String select_check_duplicate_hashcode()
+	protected String select_hashcode()
 	{
-		return select+sternchen+from+chatroom+where+hashcode+ist+fragezeichen;
+		return select+hashcode+from+chatroom+where+hashcode+ist+fragezeichen;
 	}
 	
-	protected String select_check_duplicate_Loginname()
+	protected String select_Loginname()
 	{
-		return select+sternchen+from+login_Daten+where+benutzername+ist+fragezeichen;
+		return select+benutzername+from+login_Daten+where+benutzername+ist+fragezeichen;
 	}
 	
+	protected String select_passwort()
+	{
+		return select+passwort+from+login_Daten+where+benutzername+ist+fragezeichen;
+	}
+	
+	protected String select_chatroomname_nach_hashcode()
+	{
+		return select+chatroomname+from+chatroom+where+hashcode+ist+fragezeichen;
+	}
+	
+	protected String select_benutzername_nach_Client_id()
+	{
+		return select+accountname+from+client+where+id+ist+fragezeichen;
+	}
+	
+	protected String select_all_chatroomnamen_by_client()
+	{
+		return select+chatroomname+from+chatroom+where+id+ist+klammerAuf+select+chatroom_id+from+clientChatroom_ZT+where+client_id+ist+klammerAuf+select_Client_id()+klammerZu+klammerZu;
+	}
+	
+	/*
+	protected String select_nachricht_in_chatroom()
+	{
+		return select+"cl."+benutzername+;
+	}*/
 }

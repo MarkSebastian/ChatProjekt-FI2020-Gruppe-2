@@ -34,7 +34,7 @@ public class Control
 	public Control()
 	{
 		verbindungslink="jdbc:ucanaccess://Testdatenbank.accdb";
-		sqlBefehl="Select * from Test;"; //Auslesen
+		sqlBefehl="Select * from Test where Feld1='Dagobert';"; //Auslesen
 		sqlAnweisung="Insert into Test (ID, Feld1) values (?,?)";//Insert into
 		sqlTestbefehl=a+b+c+d+e+f+g+h; 
 		sqlHochDatum="Update Test set Feld1=? where Feld1=?";//Update
@@ -44,10 +44,10 @@ public class Control
 		try (Connection verbindung = DriverManager.getConnection(verbindungslink,"","") )
 		{
 			System.out.println("verbindungaufgebaut");
-			PreparedStatement vorbereiteteAussage4 = verbindung.prepareStatement(sqlTestbefehl);
-			vorbereiteteAussage4.setInt(1, intTest);
+			/*PreparedStatement vorbereiteteAussage4 = verbindung.prepareStatement(sqlBefehl);
+			/*vorbereiteteAussage4.setInt(1, intTest);
 			vorbereiteteAussage4.setString(2, ";Drop table Test from Testdatenbank;");
-			vorbereiteteAussage4.executeUpdate();
+			vorbereiteteAussage4.execute();
 			//=======================================================================================Löschen
 			PreparedStatement vorbereiteteAussage3 = verbindung.prepareStatement(sqlLochen);
 			vorbereiteteAussage3.setString(1, stringTest);
@@ -65,7 +65,7 @@ public class Control
 			vorbereiteteAussage.setString(2, "");
 			vorbereiteteAussage.executeUpdate();
 			//=======================================================================================insert into ende
-			//=======================================================================================Auslesen
+			//=======================================================================================Auslesen*/
 			stellungsnahme = verbindung.createStatement();
 			ResultSet ergebnis = stellungsnahme.executeQuery(sqlBefehl);
 			while (ergebnis.next())
@@ -73,6 +73,8 @@ public class Control
 				System.out.println(ergebnis.getInt("ID")+" "+ergebnis.getString("Feld1"));	
 				//System.out.println(ergebnis.getString("Feld1"));
 			}
+			
+			System.out.println("ENDE");
 			//=======================================================================================Ende Auslesen
 		}
 		catch (SQLException e)

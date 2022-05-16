@@ -226,7 +226,6 @@ public class Control
 			{
 				return false;//Name bereits vergeben
 			} 
-			
 		}
 		catch (SQLException e)
 		{
@@ -234,6 +233,58 @@ public class Control
 		}
 		return erfolg; 
 	} 
+	
+	public ResultSet chatroomNamenVonUserSelecten(String bName)
+	{
+		boolean erfolg=true;
+		ResultSet ruckgabe = null;
+		sqlBefehl=baukasten.select_chatroomnamen_by_client();
+		try
+		{
+			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
+			vorbereiteteAussage.setString(1, bName);
+			stellungsnahme = verbindungLogin.createStatement();
+			ResultSet ergebnis = stellungsnahme.executeQuery(sqlBefehl);	
+			ruckgabe=ergebnis;
+		}
+		catch (SQLException e)
+		{
+			erfolg=false;//datenbankfehler
+		}
+		return ruckgabe; 
+	} 
+	
+	public String select_passwort(String bName)
+	{
+		boolean erfolg=true;
+		String passwort =null;
+		sqlBefehl=baukasten.select_chatroomnamen_by_client();
+		try
+		{
+			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
+			vorbereiteteAussage.setString(1, bName);
+			stellungsnahme = verbindungLogin.createStatement();
+			ResultSet ergebnis = stellungsnahme.executeQuery(sqlBefehl);	
+			passwort=ergebnis.getNString(1);
+		}
+		catch (SQLException e)
+		{
+			erfolg=false;//datenbankfehler
+		}
+		return passwort; 
+	} 
+	
+	public Boolean nutzernameExistent(String bName)//<------nutzt die frei abfrage um zu bestimmen ob der name existiert
+	{
+		if (nutzerNameFreiFragezeichen(bName))
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
 	//=================================================================================================================Select ende
-
+	
 } 

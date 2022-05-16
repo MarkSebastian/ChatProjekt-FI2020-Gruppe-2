@@ -200,7 +200,7 @@ public class SQLBaukasten
 		return select+accountname+from+client+where+id+ist+fragezeichen;
 	}
 	
-	protected String select_all_chatroomnamen_by_client()
+	protected String select_chatroomnamen_by_client()
 	{
 		return select+chatroomname+from+chatroom+where+id+ist+klammerAuf+select+chatroom_id+from+clientChatroom_ZT+where+client_id+ist+klammerAuf+select_Client_id()+klammerZu+klammerZu;
 	}

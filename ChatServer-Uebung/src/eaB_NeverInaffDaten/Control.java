@@ -233,7 +233,7 @@ public class Control
 			erfolg=false;//datenbankfehler
 		}
 		return erfolg; 
-	}
+	} 
 	//=================================================================================================================Select ende
 
 } 

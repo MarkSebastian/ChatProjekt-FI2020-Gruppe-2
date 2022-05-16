@@ -32,7 +32,7 @@ public class CaptureThread extends Thread
 	// protected boolean bool = false;
 	// protected boolean stopaudioCapture = false;
 	// protected ByteArrayOutputStream bos;
-
+	//änderung git
 	private Controller controllerD;
 	private File file;
 	private Type fileFormat;

@@ -339,13 +339,13 @@ public class Control implements Runnable
 		}
 	}
 	
-	protected void login(String benutzer, String pass)
+	protected void login(String benutzer, String pass, boolean anmeldung)
 	{
 		System.out.print(benutzer + " " + pass);
 		try
 		{
 			out = new ObjectOutputStream(socket.getOutputStream());
-			out.writeObject(new LogInNachricht(benutzer, pass, true));
+			out.writeObject(new LogInNachricht(benutzer, pass, anmeldung));
 		}
 		catch (IOException e)
 		{

@@ -38,7 +38,7 @@
             <Insets left="20.0" right="20.0" />
          </GridPane.margin>
       </TextField>
-      <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" style="-fx-text-fill: black; -fx-background-radius: 40;" text="Regestrieren" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+      <Button mnemonicParsing="false" onAction="#buttonOnClick" prefHeight="30.0" prefWidth="120.0" style="-fx-text-fill: black; -fx-background-radius: 40;" text="Regestrieren" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
       <Label fx:id="anmeldeLabel" onMouseClicked="#labelOnClick" onMouseEntered="#labelOnHover" onMouseExited="#labelOnLeave" text="Doch Anmelden?" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
          <GridPane.margin>
             <Insets bottom="5.0" right="5.0" />

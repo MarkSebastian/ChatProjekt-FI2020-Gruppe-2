@@ -33,7 +33,7 @@ public class LoginGUIController extends Control
 	@FXML
 	protected void buttonOnClick()
 	{
-		super.login(anmeldenField.getText(),passwordField.getText());
+		super.login(anmeldenField.getText(),passwordField.getText(),false);
 	}
 	
 	@FXML
@@ -43,6 +43,7 @@ public class LoginGUIController extends Control
 			try
 			{
 				stageEventChangeStage.setScene(super.changeScene(true));
+				stageEventChangeStage.setTitle("Sign Up");
 				stageEventChangeStage.show();
 			}
 			catch (IOException e)

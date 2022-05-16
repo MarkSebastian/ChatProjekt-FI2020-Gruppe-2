@@ -208,7 +208,7 @@ public class SQLBaukasten
 	protected String select_nachricht_in_chatroom()
 	{
 		return select+"cl."+benutzername+komma+"n."+timestamp+komma+"n."+inhalt+from+nachricht+"n "+komma+chatroom+"ch "+where+"n."+chatroom_id+ist+"ch."+id;
-	}
+	} 
 	
 	
 }

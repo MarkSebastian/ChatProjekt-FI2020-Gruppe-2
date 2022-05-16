@@ -24,7 +24,7 @@ public class Control
 	
 	public Control() 
 	{
-		//controlDB = new ControlDB();
+		controlDB = new ControlDB();
 		
 	}
 	
@@ -80,7 +80,7 @@ public class Control
 	protected void registrieren(LogInNachricht message, Socket socket)
 	{
 		boolean flag=true;
-		//flag = controlDB.insert(message.getBenutzerName(), message.getPasswort());
+		flag = controlDB.insert(message.getBenutzerName(), message.getPasswort());
 		if(flag == false)
 		{
 			try
@@ -93,7 +93,7 @@ public class Control
 			{
 				e.printStackTrace();
 			}
-			
+		System.out.println(flag);
 		}
 	}
 	

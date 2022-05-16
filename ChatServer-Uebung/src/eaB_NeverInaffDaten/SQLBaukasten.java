@@ -209,6 +209,6 @@ public class SQLBaukasten
 	{
 		return select+"cl."+benutzername+komma+"n."+timestamp+komma+"n."+inhalt+from+nachricht+"n "+komma+chatroom+"ch "+where+"n."+chatroom_id+ist+"ch."+id;
 	} 
-	
+	 
 	
 }

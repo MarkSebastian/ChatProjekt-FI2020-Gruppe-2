@@ -280,7 +280,7 @@ public class Control
 		{
 			return false;
 		}
-		else
+		else  
 		{
 			return true;
 		}

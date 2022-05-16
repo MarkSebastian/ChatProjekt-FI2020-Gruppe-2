@@ -39,7 +39,7 @@ public class Control
 	public boolean delete_loginDaten(String bName)
 	{
 		boolean erfolg=true;
-		sqlBefehl=baukasten.delete_1();
+		sqlBefehl=baukasten.delete_loginDaten();
 		try
 		{
 			PreparedStatement vorbereiteteAussage = verbindungLogin.prepareStatement(sqlBefehl);
@@ -225,7 +225,7 @@ public class Control
 			if (ergebnis.first())
 			{
 				return false;//Name bereits vergeben
-			}
+			} 
 			
 		}
 		catch (SQLException e)

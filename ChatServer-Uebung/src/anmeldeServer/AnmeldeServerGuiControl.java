@@ -8,6 +8,7 @@ public class AnmeldeServerGuiControl extends Control
 {
 	@FXML
 	private Button startButton;
+	@FXML
 	private Button stopButton;
 	
 	@FXML

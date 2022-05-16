@@ -74,7 +74,7 @@ public class Control
 	protected void nachrichtAnzeigen(LogInNachricht message)
 	{
 		System.out.println(message.getBenutzerName() + " " + message.getPasswort());
-		//TO-DO: �berpr�fung mit Datenbank!
+	
 	}
 	
 	protected void registrieren(LogInNachricht message, Socket socket)
@@ -99,6 +99,6 @@ public class Control
 	
 	protected void anmelden(LogInNachricht message, Socket socket)
 	{
-		//TO-DO anmelde�berpr�fung!
+	
 	}
 }

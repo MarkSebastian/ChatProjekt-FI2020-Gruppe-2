@@ -39,7 +39,7 @@
          </GridPane.margin>
       </TextField>
       <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" style="-fx-text-fill: black; -fx-background-radius: 40;" text="Regestrieren" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
-      <Label fx:id="anmeldeLabel" text="Doch Anmelden?" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="BOTTOM" onMouseClicked="#labelOnClick" onMouseExited="#labelOnLeave" onMouseEntered="#labelOnHover">
+      <Label fx:id="anmeldeLabel" onMouseClicked="#labelOnClick" onMouseEntered="#labelOnHover" onMouseExited="#labelOnLeave" text="Doch Anmelden?" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
          <GridPane.margin>
             <Insets bottom="5.0" right="5.0" />
          </GridPane.margin></Label>
@@ -48,5 +48,20 @@
             <Insets left="20.0" right="20.0" />
          </GridPane.margin>
       </PasswordField>
+      <Label text="Nutzername" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <GridPane.margin>
+            <Insets bottom="50.0" left="25.0" />
+         </GridPane.margin>
+      </Label>
+      <Label text="Passwort" GridPane.columnIndex="1" GridPane.rowIndex="2">
+         <GridPane.margin>
+            <Insets bottom="50.0" left="25.0" />
+         </GridPane.margin>
+      </Label>
+      <Label text="Passwort wiederholen" GridPane.columnIndex="1" GridPane.rowIndex="3">
+         <GridPane.margin>
+            <Insets bottom="50.0" left="25.0" />
+         </GridPane.margin>
+      </Label>
    </children>
 </GridPane>

@@ -353,8 +353,10 @@ public class Control implements Runnable
 	{
 		try
 		{
-			socket = new Socket("localhost",5555);
 			
+			socket = new Socket("localhost",5555);
+			//ois = new ObjectInputStream(socket.getInputStream());
+			out = new ObjectOutputStream(socket.getOutputStream());
 		}
 		catch (UnknownHostException e)
 		{

@@ -26,15 +26,18 @@ public class ClientProxy implements Runnable
 
 	private void startStreams()
 	{
+		
 		try
 		{
+			System.out.println("B");
 			ois = new ObjectInputStream(this.socket.getInputStream());
+			System.out.println(ois);
+			
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-		
 	}
 
 	@Override
@@ -57,10 +60,15 @@ public class ClientProxy implements Runnable
 
 	private void readMessage()
 	{
+		
 		try
 		{
+			
+			ois = new ObjectInputStream(this.socket.getInputStream());
 			LogInNachricht message = null;
 			message = (LogInNachricht)ois.readObject();
+			System.out.println(message.getBenutzerName());
+			System.out.println(message.getPasswort());
 			if(message.getFlag() == true)
 			{
 				control.registrieren(message, socket);
@@ -69,6 +77,7 @@ public class ClientProxy implements Runnable
 			{
 				control.anmelden(message, socket);
 			}
+			Thread.sleep(1000);
 			
 		}
 		catch (SocketException | EOFException e1)
@@ -81,6 +90,11 @@ public class ClientProxy implements Runnable
 		}
 		catch (IOException e)
 		{
+			e.printStackTrace();
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

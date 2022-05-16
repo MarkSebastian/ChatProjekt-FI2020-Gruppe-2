@@ -18,8 +18,9 @@ public class ControlDB
 	public ControlDB()
 	{
 		baukasten =new SQLBaukasten();
-		verbindungslinkLoginserver="\"jdbc:ucanaccess://src/Login_DB.accdb\"";
 		verbindungslinkDatenbank="\"jdbc:ucanaccess://src/Datenkrake.accdb\""; 
+		verbindungslinkLoginserver="\"jdbc:ucanaccess://src/Login_DB.accdb\"";
+		
 		
 		try 
 		{

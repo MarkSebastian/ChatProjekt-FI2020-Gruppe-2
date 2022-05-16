@@ -226,13 +226,32 @@ public class Control
 			{
 				return false;//Name bereits vergeben
 			} 
-			
 		}
 		catch (SQLException e)
 		{
 			erfolg=false;//datenbankfehler
 		}
 		return erfolg; 
+	} 
+	
+	public ResultSet chatroomNamenVonUserSelecten(String bName)
+	{
+		boolean erfolg=true;
+		ResultSet ruckgabe = null;
+		sqlBefehl=baukasten.select_chatroomnamen_by_client();
+		try
+		{
+			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
+			vorbereiteteAussage.setString(1, bName);
+			stellungsnahme = verbindungLogin.createStatement();
+			ResultSet ergebnis = stellungsnahme.executeQuery(sqlBefehl);	
+			ruckgabe=ergebnis;
+		}
+		catch (SQLException e)
+		{
+			erfolg=false;//datenbankfehler
+		}
+		return ruckgabe; 
 	} 
 	//=================================================================================================================Select ende
 

@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane fx:id="LoginGUI" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="anmeldeServer.AnmeldeServerGuiControl">
+<GridPane fx:id="LoginGUI" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chatClient.SignInGUIController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="100.0" />
@@ -33,17 +33,17 @@
          <GridPane.margin>
             <Insets left="20.0" right="20.0" />
          </GridPane.margin></PasswordField>
-      <TextField style="-fx-background-color: f5f5f5; -fx-background-radius: 40; -fx-border-color: ECF0F1;" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+      <TextField fx:id="anmeldenField" style="-fx-background-color: f5f5f5; -fx-background-radius: 40; -fx-border-color: ECF0F1;" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
          <GridPane.margin>
             <Insets left="20.0" right="20.0" />
          </GridPane.margin>
       </TextField>
       <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" style="-fx-text-fill: black; -fx-background-radius: 40;" text="Regestrieren" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
-      <Label text="Doch Anmelden?" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
+      <Label fx:id="anmeldeLabel" text="Doch Anmelden?" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="BOTTOM" onMouseClicked="#labelOnClick" onMouseExited="#labelOnLeave" onMouseEntered="#labelOnHover">
          <GridPane.margin>
             <Insets bottom="5.0" right="5.0" />
          </GridPane.margin></Label>
-      <PasswordField fx:id="passwordField1" style="-fx-background-color: f5f5f5; -fx-border-color: ECF0F1; -fx-border-radius: 40;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <PasswordField fx:id="passwordFieldBestaetigung" style="-fx-background-color: f5f5f5; -fx-border-color: ECF0F1; -fx-border-radius: 40;" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets left="20.0" right="20.0" />
          </GridPane.margin>

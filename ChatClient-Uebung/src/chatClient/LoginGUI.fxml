@@ -38,9 +38,10 @@
          </GridPane.margin>
       </TextField>
       <Button fx:id="anmeldenButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" style="-fx-text-fill: black; -fx-background-radius: 40;" text="Anmelden" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" onAction="#buttonOnClick"/>
-      <Label fx:id="regestrierenLabel" text="Regestrieren?" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="BOTTOM" >
+      <Label fx:id="regestrierenLabel" text="Regestrieren?" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="BOTTOM" onMouseClicked="#labelOnClick" onMouseExited="#labelOnLeave" onMouseEntered="#labelOnHover">
          <GridPane.margin>
             <Insets bottom="5.0" right="5.0" />
-         </GridPane.margin></Label>
+         </GridPane.margin>
+      </Label>
    </children>
 </GridPane>

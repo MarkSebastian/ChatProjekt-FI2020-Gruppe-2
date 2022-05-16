@@ -8,6 +8,11 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import Message.nachrichtP.Nachricht;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -367,6 +372,21 @@ public class Control implements Runnable
 			e.printStackTrace();
 		}
 		
+	}
+	
+	protected Scene changeScene(boolean singin) throws IOException
+	{
+		if (singin == true)
+		{
+			Parent SignUpParent = FXMLLoader.load(getClass().getResource("SignUpGUI.fxml"));
+			return new Scene(SignUpParent);
+		}
+		else 
+		{
+			Parent SignUpParent = FXMLLoader.load(getClass().getResource("LoginGUI.fxml"));
+			return new Scene(SignUpParent);
+			
+		}
 	}
 
 	@Override

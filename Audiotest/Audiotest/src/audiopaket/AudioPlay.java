@@ -13,14 +13,16 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class AudioPlay extends Thread
 {
-	private Controller controllerd;
+	private Controller controllerM;
 	private AudioInputStream audioStream;
 	private AudioFormat audioFormat;
-	private String temp = "Test.wav";
+	//private String temp = "Test.wav";
+	//hier test mit ChinGong.wav
+	private String temp = "ChinGong.wav";
 
-	public AudioPlay(Controller controller)
+	public AudioPlay(ControllerM controller)
 	{
-		this.controllerd = controller;
+		this.controllerM = controllerM;
 	}
 
 	@Override
@@ -28,6 +30,7 @@ public class AudioPlay extends Thread
 	{
 		try
 		{
+			//hier test mit ChinGong.wav
 			File file = new File(temp);
 			audioStream = AudioSystem.getAudioInputStream(file);
 			audioFormat = audioStream.getFormat();

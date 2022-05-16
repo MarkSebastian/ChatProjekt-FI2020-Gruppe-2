@@ -5,105 +5,64 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.TargetDataLine;
+import javax.swing.JOptionPane;
 
 public class ControllerM
 {
-	private Gui gui;
-	private AudioInputStream inputStream;
-	AudioFormat audioFormat;
-	TargetDataLine tdl;
-	
+	protected Gui gui;
+	protected Thread captureThread;
+	protected Thread audioPlayThread;
+
 	public ControllerM()
 	{
-		gui=new Gui();
+		gui = new Gui();
 		setButtons();
 	}
-	
-	//brauchen wir das oder erst bei Client
-		/*private ObjectInputStream in; //object streams to/from client
-	    private ObjectOutputStream out;*/
-	
+
 	private void setButtons()
 	{
-		gui.setBtnAbspielen(e -> playAudio());
-		gui.setBtnAufnehmen(e -> recordAudio());
+		this.gui.setBtnAbspielen(e -> audioPlay());
+		//kurz auskommentiert
+		this.gui.setBtnAufnehmen(e -> audioRecord());
+		this.gui.setBtnStop(e -> recordStop());
+		this.gui.getBtnStop().setVisible(false);
+	}
+
+	public void audioRecord()
+	{
+		try
+		{
 			
-	}
-	
-	/*public void audioRecord() throws LineUnavailableException
-	{
-		AudioFormat format = new AudioFormat(16000, 8, 2, true, true);
-		DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
-		
-		
-		if(! AudioSystem.isLineSupported(info)) {
-			System.out.println("Line is not supported");
+			System.out.println("Starte Aufnahme");
+			this.gui.getBtnStop().setVisible(true);
+			this.gui.getBtnAufnehmen().setVisible(false);
+			//This beim neuen CaptureThread übergeben sonst friert GUI ein
+			captureThread = new CaptureThread(this);
+			//run() wird aufgerufen
+			captureThread.start();
+			JOptionPane.showMessageDialog(null,"Press ok to stop recording");
+			captureThread.interrupt();
 		}
-		
-		TargetDataLine targetDataLine = (TargetDataLine) AudioSystem.getLine(info);
-		targetDataLine.open();
-		
-	}*/
-	
-	
-	private void recordAudio()
+
+		catch (Exception e )
+		{
+			System.out.println(e);
+		}
+	}
+
+	//funktioniert
+	public void audioPlay()
 	{
-		 try 
-		 {
-		    	/*
-		    	 * targetdataline allows data to be read in byte streams
-		    	 */
-		        audioFormat = getAudioFormat();
-		        //enthält audioformate und Puffergröße, TargetDataLine liest audio data
-		        //siehe Constructor Detail
-		        DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
-		        tdl = (TargetDataLine) dataLineInfo;
-		        
-		        //Audiosystem needed ?
-		        tdl = (TargetDataLine) AudioSystem.getLine(dataLineInfo);
-		        tdl.open(audioFormat);
-		        tdl.start();
 
-		        /*Thread captureThread = new Thread(new CaptureThread());
-		        /*
-		         * Start event of the thread begins or ceases active presentation of the data
-		         */
-		        //captureThread.start();
-		    } catch (Exception e) {
-		    	/*
-		    	 * event handler is used in case of any byte requirements
-		    	 */
-		        StackTraceElement stackEle[] = e.getStackTrace();
-		        for (StackTraceElement val : stackEle) {
-		            System.out.println(val);
-		        }
-		        System.exit(0);
-		   }
+		audioPlayThread = new AudioPlay(this);
+		audioPlayThread.start();
 	}
-	//kocharshaivi19
 
-	public void playAudio()
+	public void recordStop()
 	{
-		System.out.println("Test");
-	}
-	
-	
-	
-	//legit
-	private AudioFormat getAudioFormat() 
-	{	
-		
-		float sampleRate = 16000.0F;
-	    int sampleInbits = 16;
-	    //mono
-	    int channels = 1;
-	    boolean signed = true;
-	    boolean bigEndian = false;
-	    return new AudioFormat(sampleRate, sampleInbits, channels, signed, bigEndian);
-	}
-	
-
-
-	
+		//Beendet den Thread nicht, funktioniert noch nicht
+		captureThread.interrupt();
+		gui.getBtnAufnehmen().setVisible(true);
+		gui.getBtnStop().setVisible(false);
+	}	
 }
-

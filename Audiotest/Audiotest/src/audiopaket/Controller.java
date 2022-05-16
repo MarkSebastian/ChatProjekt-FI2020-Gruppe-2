@@ -12,7 +12,6 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JOptionPane;
 
-
 public class Controller
 {
 	protected Gui gui;
@@ -33,6 +32,7 @@ public class Controller
 		this.gui.getBtnStop().setVisible(false);
 	}
 
+	//line auskommentiert, ändern, wenn auf Controller
 	public void audioRecord()
 	{
 		try
@@ -42,11 +42,14 @@ public class Controller
 			this.gui.getBtnStop().setVisible(true);
 			this.gui.getBtnAufnehmen().setVisible(false);
 			//This beim neuen CaptureThread übergeben sonst friert GUI ein
-			captureThread = new CaptureThread(this);
+			
+			
+			
+			//musste line auskommentieren sonst läuft programm nicht
+			//captureThread = new CaptureThread(this);
 			captureThread.start();
 			JOptionPane.showMessageDialog(null,"Press ok to stop recording");
 			captureThread.interrupt();
-			//JOptionPane.getDesktopPaneForComponent(gui).get
 		}
 
 		catch (Exception e )
@@ -55,32 +58,16 @@ public class Controller
 		}
 	}
 
+	//line auskommentiert, ändern, wenn auf Controller
 	public void audioPlay()
 	{
-
-		audioPlayThread = new AudioPlay(this);
+		//musste line auskommentieren sonst läuft programm nicht
+		
+		
+		
+		//audioPlayThread = new AudioPlay(this);
 		audioPlayThread.start();
 		
-		// -->Ausgelagert in AudioPlay Klasse
-		/*
-		 * try { File file = new File(temp); audioStream =
-		 * AudioSystem.getAudioInputStream(file); audioFormat = audioStream.getFormat();
-		 * DataLine.Info info = new DataLine.Info(Clip.class, audioFormat); Clip clip =
-		 * (Clip)AudioSystem.getLine(info);
-		 * 
-		 * 
-		 * clip.open(audioStream); clip.start(); } catch (UnsupportedAudioFileException
-		 * e ) { System.out.println("AudioFormat nicht unterstützt" + e); } catch
-		 * (IOException e ) { System.out.println("IOException" + e); } catch
-		 * (LineUnavailableException e ) { System.out.println("LineUnavailableException"
-		 * + e); }
-		 * 
-		 * catch (Exception e ) { System.out.println("Exception e " + e); } finally { if
-		 * ((audioStream != null)) { try {
-		 * 
-		 * audioStream.close(); } catch (IOException e ) {
-		 * System.out.println("IOException-Close()" + e); } } }
-		 */
 	}
 
 	public void recordStop()

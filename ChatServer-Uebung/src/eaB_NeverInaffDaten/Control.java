@@ -48,7 +48,7 @@ public class Control
 		}
 		catch (SQLException e)
 		{
-			erfolg=false;
+			erfolg=false;//datenbankfehler
 		}
 		
 		return erfolg;
@@ -68,7 +68,7 @@ public class Control
 		}
 		catch (SQLException e)
 		{
-			erfolg=false;
+			erfolg=false;//datenbankfehler
 		}
 		
 		return erfolg;
@@ -86,7 +86,7 @@ public class Control
 		}
 		catch (SQLException e)
 		{
-			erfolg=false;
+			erfolg=false;//datenbankfehler
 		}
 		
 		return erfolg;
@@ -106,7 +106,7 @@ public class Control
 		}
 		catch (SQLException e)
 		{
-			erfolg=false;
+			erfolg=false;//datenbankfehler
 		}
 		insert_LoginClientZT(accountname,tStampBeginn, iP);
 		return erfolg; 
@@ -126,7 +126,7 @@ public class Control
 		}
 		catch (SQLException e)
 		{
-			erfolg=false;
+			erfolg=false;//datenbankfehler
 		}
 		return erfolg; 
 	}
@@ -144,7 +144,7 @@ public class Control
 		}
 		catch (SQLException e)
 		{
-			erfolg=false;
+			erfolg=false;//datenbankfehler
 		}
 		insert_ClientChatroomZT(clientName, hashcode);
 		return erfolg;
@@ -163,7 +163,7 @@ public class Control
 		}
 		catch (SQLException e)
 		{
-			erfolg=false;
+			erfolg=false;//datenbankfehler
 		}
 		return erfolg; 
 	}
@@ -183,13 +183,13 @@ public class Control
 		}
 		catch (SQLException e)
 		{
-			erfolg=false;
+			erfolg=false;//datenbankfehler
 		}
 		return erfolg; 
 	}
 	//=================================================================================================================Ende Insert Befehle
-	
-	public boolean booleanzuzruckgeben(String bName)
+	//=================================================================================================================Select anfang
+	public boolean nutzerNameFreiFragezeichen(String bName)
 	{
 		boolean erfolg=true;
 		sqlBefehl=baukasten.select_Loginname();
@@ -199,13 +199,41 @@ public class Control
 			vorbereiteteAussage.setString(1, bName);
 			stellungsnahme = verbindungLogin.createStatement();
 			ResultSet ergebnis = stellungsnahme.executeQuery(sqlBefehl);
-			ergebnis.first();
+			if (ergebnis.first())
+			{
+				return false;//Name bereits vergeben
+			}
+			
 		}
 		catch (SQLException e)
 		{
-			erfolg=false;
+			erfolg=false;//datenbankfehler
 		}
 		return erfolg; 
 	}
+	
+	public boolean chatroomNameFreiFragezeichen(String bName)
+	{
+		boolean erfolg=true;
+		sqlBefehl=baukasten.select_hashcode();
+		try
+		{
+			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
+			vorbereiteteAussage.setString(1, bName);
+			stellungsnahme = verbindungLogin.createStatement();
+			ResultSet ergebnis = stellungsnahme.executeQuery(sqlBefehl);
+			if (ergebnis.first())
+			{
+				return false;//Name bereits vergeben
+			}
+			
+		}
+		catch (SQLException e)
+		{
+			erfolg=false;//datenbankfehler
+		}
+		return erfolg; 
+	}
+	//=================================================================================================================Select ende
 
 } 

@@ -167,9 +167,9 @@ public class SQLBaukasten
 		return select+chatroomname+from+chatroom+where+hashcode+ist+fragezeichen;
 	}
 	
-	protected String select_check_duplicate_hashcode()
+	protected String select_hashcode()
 	{
-		return select+sternchen+from+chatroom+where+hashcode+ist+fragezeichen;
+		return select+hashcode+from+chatroom+where+hashcode+ist+fragezeichen;
 	}
 	
 	protected String select_Loginname()

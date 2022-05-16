@@ -30,12 +30,19 @@ public class ClientControl implements Runnable, Serializable
 	protected VerbindungsGUI startGui;
 	protected int port;
 	protected Socket socket;
+	
+	// Nachrichten Globaler Chat
+	private ArrayList<Nachricht> messagesArray = new ArrayList<Nachricht>();
 	protected DefaultListModel<Nachricht> messages = new DefaultListModel<Nachricht>();
-	protected DefaultListModel<String> clients = new DefaultListModel<String>();
-	protected DefaultListModel<String> choosenClients = new DefaultListModel<String>();
+	// User Globaler Chat
+	protected ArrayList<String> aktiveClients = new ArrayList<String>();
+	protected DefaultListModel<String> clients = new DefaultListModel<String>();	
+	// User möglich für PC
 	protected ArrayList<String> teilnehmerPrivatChat = new ArrayList<String>();
-	protected ArrayList<String> aktiveTeilnehmer = new ArrayList<String>();
-	private ArrayList<String> messagesArray = new ArrayList<String>();
+	private DefaultListModel<String> clientsPC = new DefaultListModel<String>();
+	// Auswahl User PC	
+	private ArrayList<String> auswahlClientsPC = new ArrayList<String>();
+	protected DefaultListModel<String> choosenClients = new DefaultListModel<String>();
 
 	protected Thread read;
 	private ClientConnectionThread start;
@@ -59,7 +66,7 @@ public class ClientControl implements Runnable, Serializable
 		startGui = new VerbindungsGUI();
 		gui = new Gui();
 		setListener();
-//		setModel();
+		setModel();
 		privatChats = new HashSet<PrivatChat>();
 	}
 
@@ -120,15 +127,13 @@ public class ClientControl implements Runnable, Serializable
 			});
 	}
 	
-/*	private void setModel()
+	private void setModel()
 	{
-		this.gui.getListUser().setModel(clients);
-		this.gui.getListActiveUser().setModel(clients);	
 		this.gui.getList().setModel(messages);
+		this.gui.getListUser().setModel(clients);		
+		this.gui.getListActiveUser().setModel(clientsPC);			
+		this.gui.getListChoosenUser().setModel(choosenClients);		
 	}
-*/	
-
-	
 	
 	public String getUser()
 	{
@@ -195,6 +200,19 @@ public class ClientControl implements Runnable, Serializable
 		return korrekt;
 	}
 
+	protected boolean checkUsername()
+	{
+		if (startGui.getTextFieldUsername().getText().isBlank())
+		{
+			guiError("username");
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
 	protected void sendMessage()
 	{
 		try
@@ -211,8 +229,8 @@ public class ClientControl implements Runnable, Serializable
 			{
 				message = new Nachricht(this.gui.getTextFieldEingabe().getText(), false);
 				out.writeObject(message);
-				messages.addElement(message);
-				akList();
+				messagesArray.add(message);
+				akNachrichtenGlobal();
 			}
 		}
 		catch (NullPointerException e)
@@ -279,10 +297,11 @@ public class ClientControl implements Runnable, Serializable
 			// Ansonsten wird die Nachricht im GlobalenChat angezeigt
 			if(nachrichtPrivat == false)
 			{
-				if (n.getListClients() != null)
+				if(n.getEmpfaenger() != null)
 				{
-					this.clients = n.getListClients();
+					this.aktiveClients = n.getEmpfaenger();
 					akClientList();
+					
 				}
 				getNewMessages(n);
 			}
@@ -303,6 +322,7 @@ public class ClientControl implements Runnable, Serializable
 		try
 		{
 			pcs = (PrivatChatSenden) o;
+			pcs.setUser(this.user);
 			for(PrivatChat chat : privatChats)
 			{
 				if(chat.getPcs().getHashcode() == pcs.getHashcode())
@@ -346,45 +366,48 @@ public class ClientControl implements Runnable, Serializable
 		{
 			System.out.println(e + "\nin sendMessagePrivatChat");
 		}
-		
 	}
 
 	protected void getNewMessages(Nachricht n)
 	{
-		messages.addElement(n);
-		akList();
-	}
-
-	private void akNachrichten()
-	{
-		
+		messagesArray.add(n);
+		akNachrichtenGlobal();
 	}
 	
-	private void akClients()
+	protected void akNachrichtenGlobal()
 	{
-		
-	}
-	
-	protected void akList()
-	{
-		this.gui.getList().setModel(messages);
+		messages.clear();
+		messagesArray.forEach(n -> messages.addElement(n));
 	}
 
 	protected void akClientList()
 	{
-		this.gui.getListUser().setModel(clients);
-		this.gui.getListActiveUser().setModel(clients);
-
-		// REMINDER: Passiert hier was?
-		aktiveTeilnehmer.forEach(e -> clients.addElement(e));
-
-		aktiveTeilnehmer.forEach(e ->
+		// Listen leeren
+		clients.removeAllElements();
+		clientsPC.removeAllElements();
+		
+		// DefaultListModel User globaler Chat füllen
+		aktiveClients.forEach(e -> clients.addElement(e));
+		
+		// DefaultListModel User PC füllen (gleiche Liste ohne einen selbst)
+		aktiveClients.forEach(e ->
 		{
-			if (e.equals(user))
+			if (!e.equals(user))
 			{
-				aktiveTeilnehmer.remove(e);
+				auswahlClientsPC.add(e);
 			}
 		});
+		auswahlClientsPC.forEach(e -> clientsPC.addElement(e));
+	}
+	
+	private void akListPC()
+	{
+		// Listen leeren
+		clientsPC.removeAllElements();
+		choosenClients.removeAllElements();
+		// Listen füllen
+		auswahlClientsPC.forEach(a -> clientsPC.addElement(a));
+		teilnehmerPrivatChat.forEach(t -> choosenClients.addElement(t));		
 	}
 
 	private void stopClient()
@@ -418,19 +441,6 @@ public class ClientControl implements Runnable, Serializable
 					+ n.getTimestamp().getMinute() + " Uhr";
 			gui.getList().setToolTipText("<html> Absender-ID: " + n.getAbsenderId() + "<br> Absender: "
 					+ n.getAbsender() + "<br> Versandt: " + time + "</html>");
-		}
-	}
-
-	protected boolean checkUsername()
-	{
-		if (startGui.getTextFieldUsername().getText().isBlank())
-		{
-			guiError("username");
-			return false;
-		}
-		else
-		{
-			return true;
 		}
 	}
 
@@ -502,25 +512,10 @@ public class ClientControl implements Runnable, Serializable
 	{
 		try
 		{
-			int temp = 0;
-			int index = gui.getListActiveUser().getSelectedIndex();
-			String selected = clients.getElementAt(index);
-			for (String e : teilnehmerPrivatChat)
-			{
-				if (e.equals(selected.substring(2)))
-				{
-					temp++;
-				}
-			}
-
-			if (temp == 0)
-			{
-				selected = selected.substring(2);
-				teilnehmerPrivatChat.add(selected);
-				choosenClients.addElement(selected);
-			}
-
-			gui.getListChoosenUser().setModel(choosenClients);
+			String selected = (String)gui.getListActiveUser().getSelectedValue();
+			teilnehmerPrivatChat.add(selected);
+			auswahlClientsPC.remove(selected);	
+			akListPC();
 		}
 		catch (ArrayIndexOutOfBoundsException e)
 		{
@@ -532,10 +527,10 @@ public class ClientControl implements Runnable, Serializable
 	{
 		try
 		{
-			int index = gui.getListChoosenUser().getSelectedIndex();
-			choosenClients.removeElementAt(index);
-			gui.getListChoosenUser().setModel(choosenClients);
-			teilnehmerPrivatChat.remove(index);
+			String selected = (String)gui.getListChoosenUser().getSelectedValue();			
+			auswahlClientsPC.add(selected);
+			teilnehmerPrivatChat.remove(selected);
+			akListPC();
 		}
 		catch (ArrayIndexOutOfBoundsException e)
 		{

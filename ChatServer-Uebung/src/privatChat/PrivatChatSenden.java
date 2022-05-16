@@ -47,7 +47,7 @@ public class PrivatChatSenden implements Serializable
 	@Override
 	public int hashCode()
 	{
-		return Objects.hash(chatName, empfaenger, user);
+		return Objects.hash(chatName, empfaenger); 
 	}
 
 	@Override

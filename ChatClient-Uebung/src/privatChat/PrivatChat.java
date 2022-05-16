@@ -12,7 +12,6 @@ public class PrivatChat implements Serializable
 	private long hashcode;
 	private PrivatChatController controller;
 	private String chatName;
-	private String user;
 	private ArrayList<String> empfaenger;
 	private ClientControl cc;
 	private PrivatChatSenden pcs;
@@ -32,7 +31,7 @@ public class PrivatChat implements Serializable
 		this.cc = cc;
 		this.pcs = new PrivatChatSenden(chatName, user, empfaenger);
 		starten();
-		hashcode = hashCode();
+		this.hashcode = pcs.getHashcode();
 	}
 	
 	public void starten()
@@ -68,11 +67,6 @@ public class PrivatChat implements Serializable
 	public PrivatChatSenden getPcs()
 	{
 		return pcs;
-	}
-
-	public String getUser()
-	{
-		return user;
 	}
 	
 	public void setCc(ClientControl cc)

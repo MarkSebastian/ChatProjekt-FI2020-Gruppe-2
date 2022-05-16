@@ -36,7 +36,7 @@ public class ClientConnectionThread extends Thread
 		if (control != null)
 		{
 			control.messages.clear();
-			control.akList();
+			control.akNachrichtenGlobal();
 			if (control.checkPort() && control.checkUsername())
 			{
 				boolean customIP = control.startGui.getCustomIp();

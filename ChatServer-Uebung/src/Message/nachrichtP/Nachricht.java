@@ -16,7 +16,6 @@ public class Nachricht implements Serializable
 	final private LocalDateTime timestamp = LocalDateTime.now();
 	private String nachricht;
 	private DefaultListModel<String> activeClients = null;
-	private int flag;
 	private ArrayList<String> empfaenger = new ArrayList<String>();
 
 	public Nachricht(String nachricht, boolean isServer)
@@ -50,6 +49,13 @@ public class Nachricht implements Serializable
 		this.hashcode = hashcode;
 	}
 	
+	public Nachricht(String nachricht, ArrayList<String> empfaenger)
+	{
+		this.absender = "";
+		this.nachricht = nachricht;
+		this.empfaenger = empfaenger;
+	}
+	
 	public Nachricht(String nachricht, DefaultListModel<String> clientListe ,ArrayList<String> empfaenger)
 	{
 		this.absender = "";
@@ -57,11 +63,6 @@ public class Nachricht implements Serializable
 		this.nachricht = nachricht;
 		this.activeClients = clientListe;
 		this.empfaenger = empfaenger;
-	}
-	
-	public int getFlag()
-	{
-		return flag;
 	}
 
 	public ArrayList<String> getEmpfaenger()

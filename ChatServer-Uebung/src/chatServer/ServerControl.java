@@ -198,9 +198,9 @@ public class ServerControl
 	protected DefaultListModel<String> clientListeAbspecken()
 	{
 		DefaultListModel<String> nl = new DefaultListModel<String>();
-		//empfaenger.forEach(e -> );
 		for (Client c : clients)
 		{
+			System.out.println(c);
 			String s = c.getId() + " " + c.getName();
 			nl.addElement(s);
 		}

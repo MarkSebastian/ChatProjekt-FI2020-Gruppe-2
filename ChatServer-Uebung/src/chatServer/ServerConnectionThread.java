@@ -35,11 +35,13 @@ public class ServerConnectionThread extends Thread
 				socket = server.accept();
 				Client newClient = new Client(clientCount, socket, control);
 				clients.add(newClient);
-				empfaenger.add(getName());
+				empfaenger.add(newClient.getName());
 				clientCount++;
-				control.akClientList();
+				control.akClientList();		
 				System.out.println("Verbindung hergestellt");
-				Nachricht beitritt = new Nachricht (newClient.getName() + " ist beigetreten!", control.clientListeAbspecken(), empfaenger);
+				Nachricht beitritt = new Nachricht (newClient.getName() + " ist beigetreten!", empfaenger);
+				System.out.println("Broadcast Server Empfänger");
+				empfaenger.forEach(e -> System.out.println(e));
 				control.broadcastMessage(beitritt);
 				Thread.sleep(1000);
 			} catch(SocketException e1)

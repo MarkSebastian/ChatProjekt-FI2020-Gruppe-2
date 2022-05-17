@@ -79,10 +79,9 @@ public class Control
 	
 	protected void registrieren(LogInNachricht message, Socket socket)
 	{
-		controlDB.nutzerNameFreiFragezeichen(null);
-		boolean flag=true;
-		flag = controlDB.insert_LoginDB(message.getBenutzerName(), message.getPasswort());
-		if(flag == false)
+		boolean nameFrei = false;
+		nameFrei = controlDB.nutzerNameFreiFragezeichen(message.getBenutzerName());
+		if(nameFrei == false)
 		{
 			try
 			{
@@ -94,7 +93,36 @@ public class Control
 			{
 				e.printStackTrace();
 			}
-		System.out.println(flag);
+		}
+		else
+		{
+			boolean flag= false;
+			flag = controlDB.insert_LoginDB(message.getBenutzerName(), message.getPasswort());
+			if(flag == false)
+			{
+				try
+				{
+					oos = new ObjectOutputStream(socket.getOutputStream());
+					LogInNachricht registerFail = new LogInNachricht(null, null, false);
+					oos.writeObject(registerFail);
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+				System.out.println(flag);
+			}
+			else if(flag == true)
+			{
+				try
+				{
+					oos = new ObjectOutputStream(socket.getOutputStream());
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	

@@ -117,6 +117,7 @@ public class Control
 				try
 				{
 					oos = new ObjectOutputStream(socket.getOutputStream());
+					LogInNachricht registerFail = new LogInNachricht(null, null, true);
 				}
 				catch (IOException e)
 				{

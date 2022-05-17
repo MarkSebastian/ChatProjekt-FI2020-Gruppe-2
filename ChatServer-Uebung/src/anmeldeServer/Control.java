@@ -129,6 +129,16 @@ public class Control
 	
 	protected void anmelden(LogInNachricht message, Socket socket)
 	{
-		controlDB.nutzernameExistent(null);
+		boolean flag = false;
+		flag = controlDB.nutzernameExistent(message.getBenutzerName());
+		if(flag == true)
+		{
+			String passwort = null;
+			passwort = controlDB.select_passwort(message.getBenutzerName());
+			if(message.getPasswort().compareTo(passwort) == 0)
+			{
+				
+			}
+		}
 	}
 }

@@ -256,7 +256,7 @@ public class ControlDB
 	
 	public String select_passwort(String bName)
 	{
-		boolean erfolg=true;
+		//boolean erfolg=true;
 		String passwort =null;
 		sqlBefehl=baukasten.select_passwort();
 		try
@@ -269,7 +269,7 @@ public class ControlDB
 		}
 		catch (SQLException e)
 		{
-			erfolg=false;//datenbankfehler
+			return null;//datenbankfehler
 		}
 		return passwort; 
 	} 

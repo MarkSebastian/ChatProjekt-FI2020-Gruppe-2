@@ -45,7 +45,7 @@ public class Control
 		}
 		System.out.println("Erfolgreicher Start");
 		clients = new ArrayList<ClientProxy>();
-		connectionThread = new ServerConnectionThread(this.serverSocket, this);
+		connectionThread = new ServerConnectionThread(this.serverSocket, this, this.clients);
 	}
 	
 	protected void stoppen()
@@ -79,7 +79,7 @@ public class Control
 	
 	protected void registrieren(LogInNachricht message, Socket socket)
 	{
-		boolean flag;
+		boolean flag=true;
 		flag = controlDB.insert(message.getBenutzerName(), message.getPasswort());
 		if(flag == false)
 		{
@@ -93,7 +93,7 @@ public class Control
 			{
 				e.printStackTrace();
 			}
-			
+		System.out.println(flag);
 		}
 	}
 	

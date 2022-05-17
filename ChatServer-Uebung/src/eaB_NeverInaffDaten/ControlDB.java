@@ -18,13 +18,16 @@ public class ControlDB
 	public ControlDB()
 	{
 		baukasten =new SQLBaukasten();
-		verbindungslinkLoginserver="\"jdbc:ucanaccess://src/Login_DB.accdb\"";
 		verbindungslinkDatenbank="\"jdbc:ucanaccess://src/Datenkrake.accdb\""; 
+		verbindungslinkLoginserver="\"jdbc:ucanaccess://src/Login_DB.accdb\"";
+		
 		
 		try 
 		{
-			verbindungLogin = DriverManager.getConnection(verbindungslinkLoginserver,"","");
-			verbindungDatenKrake = DriverManager.getConnection(verbindungslinkDatenbank,"","");
+			//verbindungLogin = DriverManager.getConnection(verbindungslinkLoginserver,"","");
+			verbindungLogin = DriverManager.getConnection("jdbc:ucanaccess://src/Login_DB.accdb","","");
+			//verbindungDatenKrake = DriverManager.getConnection(verbindungslinkDatenbank,"","");
+			verbindungDatenKrake = DriverManager.getConnection("jdbc:ucanaccess://src/Datenkrake.accdb","","");
 			
 		}
 		catch (SQLException e)

@@ -7,6 +7,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import Message.nachrichtP.Nachricht;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -22,6 +23,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -402,14 +408,17 @@ public class Control implements Runnable
 			System.out.println("nichts ausgewählt");
 		}
 	}
+<<<<<<< HEAD
 	*/
-	protected void login(String benutzer, String pass)
+
+	
+	protected void login(String benutzer, String pass, boolean anmeldung)
 	{
 		System.out.print(benutzer + " " + pass);
 		try
 		{
 			out = new ObjectOutputStream(socket.getOutputStream());
-			out.writeObject(new LogInNachricht(benutzer, pass, true));
+			out.writeObject(new LogInNachricht(benutzer, pass, anmeldung));
 		}
 		catch (IOException e)
 		{
@@ -422,8 +431,10 @@ public class Control implements Runnable
 	{
 		try
 		{
-			socket = new Socket("localhost",5555);
 			
+			socket = new Socket("localhost",5555);
+			//ois = new ObjectInputStream(socket.getInputStream());
+			out = new ObjectOutputStream(socket.getOutputStream());
 		}
 		catch (UnknownHostException e)
 		{
@@ -436,6 +447,21 @@ public class Control implements Runnable
 			e.printStackTrace();
 		}
 		
+	}
+	
+	protected Scene changeScene(boolean singin) throws IOException
+	{
+		if (singin == true)
+		{
+			Parent SignUpParent = FXMLLoader.load(getClass().getResource("SignUpGUI.fxml"));
+			return new Scene(SignUpParent);
+		}
+		else 
+		{
+			Parent SignUpParent = FXMLLoader.load(getClass().getResource("LoginGUI.fxml"));
+			return new Scene(SignUpParent);
+			
+		}
 	}
 
 	@Override

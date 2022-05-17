@@ -188,9 +188,11 @@ public class Control
 	}
 	//=================================================================================================================Ende Insert Befehle
 	//=================================================================================================================Select anfang
-	public boolean nutzerNameFreiFragezeichen(String bName)//überprüfen ob der name noch frei ist
+	public boolean[] nutzerNameFreiFragezeichen(String bName)//überprüfen ob der name noch frei ist
 	{
-		boolean erfolg=true;
+		boolean erfolg[]=new boolean[2];
+		erfolg[1]=true;
+		erfolg[0]=true;
 		sqlBefehl=baukasten.select_Loginname();
 		try
 		{
@@ -200,20 +202,22 @@ public class Control
 			ResultSet ergebnis = stellungsnahme.executeQuery(sqlBefehl);
 			if (ergebnis.first())
 			{
-				return false;//Name bereits vergeben
+				erfolg[1]=false;//Name bereits vergeben
 			}
 			
 		}
 		catch (SQLException e)
 		{
-			erfolg=false;//datenbankfehler
+			erfolg[0]=false;//datenbankfehler
 		}
 		return erfolg; 
 	}
 	
-	public boolean chatroomNameFreiFragezeichen(String bName)//überpfrüfen ob der chatroomname noch frei ist
+	public boolean[] chatroomNameFreiFragezeichen(String bName)//überpfrüfen ob der chatroomname noch frei ist
 	{
-		boolean erfolg=true;
+		boolean erfolg[]=new boolean[2];
+		erfolg[1]=true;
+		erfolg[0]=true;
 		sqlBefehl=baukasten.select_hashcode();
 		try
 		{
@@ -223,12 +227,12 @@ public class Control
 			ResultSet ergebnis = stellungsnahme.executeQuery(sqlBefehl);
 			if (ergebnis.first())
 			{
-				return false;//Name bereits vergeben
+				erfolg[1]=false;//Name bereits vergeben
 			} 
 		}
 		catch (SQLException e)
 		{
-			erfolg=false;//datenbankfehler
+			erfolg[0]=true;//datenbankfehler
 		}
 		return erfolg; 
 	} 
@@ -268,21 +272,23 @@ public class Control
 		}
 		catch (SQLException e)
 		{
-			erfolg=false;//datenbankfehler
+			return passwort;//datenbankfehler
 		}
 		return passwort; 
 	} 
 	
-	public Boolean nutzernameExistent(String bName)//<------nutzt die frei abfrage um zu bestimmen ob der name existiert
+	public boolean[] nutzernameExistent(String bName)//<------nutzt die frei abfrage um zu bestimmen ob der name existiert
 	{
-		if (nutzerNameFreiFragezeichen(bName))
+		boolean[] a=nutzerNameFreiFragezeichen(bName);
+		if (a[1])
 		{
-			return false;
+			a[1]=false;//name existiert nicht
 		}
-		else  
+		else
 		{
-			return true;
+			a[1]=true;//name existiert
 		}
+		return a;
 	}
 	
 	public ResultSet select_Nachrichten_von_Chatroom(String bName)//gibt die nachrichten eines chatrooms zurück
@@ -300,7 +306,7 @@ public class Control
 		}
 		catch (SQLException e)
 		{
-			erfolg=false;//datenbankfehler
+			return ruckgabe;//datenbankfehler
 		}
 		return ruckgabe; 
 	}

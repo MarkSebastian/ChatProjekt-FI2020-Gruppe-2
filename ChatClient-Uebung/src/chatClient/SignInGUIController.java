@@ -30,6 +30,7 @@ public class SignInGUIController extends Control
 	{
 		if(passwordField.getText().compareTo(passwordFieldBestaetigung.getText()) == 0)
 		{
+			super.startConnect();
 			super.login(anmeldenField.getText(), passwordField.getText(),true);	
 		}
 		else 

@@ -24,7 +24,7 @@ public class Control
 	
 	public Control() 
 	{
-		//controlDB = new ControlDB();
+		controlDB = new ControlDB();
 		
 	}
 	
@@ -79,8 +79,9 @@ public class Control
 	
 	protected void registrieren(LogInNachricht message, Socket socket)
 	{
+		controlDB.nutzerNameFreiFragezeichen(null);
 		boolean flag=true;
-		//flag = controlDB.insert(message.getBenutzerName(), message.getPasswort());
+		flag = controlDB.insert_LoginDB(message.getBenutzerName(), message.getPasswort());
 		if(flag == false)
 		{
 			try
@@ -99,6 +100,6 @@ public class Control
 	
 	protected void anmelden(LogInNachricht message, Socket socket)
 	{
-	
+		controlDB.nutzernameExistent(null);
 	}
 }

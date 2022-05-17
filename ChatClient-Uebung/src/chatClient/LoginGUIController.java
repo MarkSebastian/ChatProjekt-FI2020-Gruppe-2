@@ -33,6 +33,7 @@ public class LoginGUIController extends Control
 	@FXML
 	protected void buttonOnClick()
 	{
+		super.startConnect();
 		super.login(anmeldenField.getText(),passwordField.getText(),false);
 	}
 	

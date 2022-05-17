@@ -49,7 +49,7 @@ public class Control implements Runnable
 
 	public Control()
 	{
-		startConnect();
+		
 	}
 
 	public void switchGui()
@@ -358,10 +358,21 @@ public class Control implements Runnable
 	{
 		try
 		{
+			if(socket == null)
+			{
+				socket = new Socket("localhost",5555);
+			}
+			else if(socket != null)
+			{
+				if(socket.isConnected() == false)
+				{
+					socket = new Socket("localhost", 5555);
+				}
+			}
 			
-			socket = new Socket("localhost",5555);
 			//ois = new ObjectInputStream(socket.getInputStream());
 			out = new ObjectOutputStream(socket.getOutputStream());
+			Thread.sleep(2000);
 		}
 		catch (UnknownHostException e)
 		{
@@ -369,6 +380,11 @@ public class Control implements Runnable
 			e.printStackTrace();
 		}
 		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (InterruptedException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();

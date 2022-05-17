@@ -45,6 +45,7 @@ public class SQLBaukasten
 	private String passwort;
 	private String accountname;
 	private String max;
+	private String hashcode;
 	
 	public SQLBaukasten()
 	{
@@ -89,13 +90,16 @@ public class SQLBaukasten
 		passwort="passwort ";
 		accountname="accountname ";
 		max="max ";
+		hashcode="hashcode ";
 	}
-	 
-	protected String delete_1()
+	
+	//deletes
+	protected String delete_loginDaten()
 	{
 		return delete+from+login_Daten+where+"Benutzername"+ist+fragezeichen;
 	}
 	
+	//inserts
 	protected String insert_LoginDB()
 	{
 		return insert+into+login_Daten+klammerAuf+benutzername+komma+passwort+klammerZu+values+klammerAuf+fragezeichen+komma+fragezeichen+klammerZu;
@@ -117,22 +121,40 @@ public class SQLBaukasten
 
 				klammerAuf+select_Client_id()+klammerZu+komma+
 				klammerAuf+select_Loginlisten_id()+klammerZu+klammerZu; 
-		  
 	}
 	
 	protected String insert_Chatroom()
 	{
-		return insert+into+chatroom+klammerAuf+chatroomname+klammerZu+values+fragezeichen;
+		return insert+into+chatroom+klammerAuf+chatroomname+komma+hashcode+klammerZu+values+fragezeichen;
 	}
 	
-	protected String insert_ClientChatrZT()
+	protected String insert_ClientChatroomZT()
 	{
 		return insert+into+clientChatroom_ZT+klammerAuf+client_id+komma+chatroom_id+klammerZu+values+klammerAuf+
 				klammerAuf+select_Client_id()+klammerZu+komma+
-				fragezeichen+klammerZu; 
+				select_Chatroom_nach_hashcode()+klammerZu; 
 	}
 	
+	protected String insert_Nachricht()
+	{
+		return insert+into+nachricht+klammerAuf+inhalt+komma+timestamp+komma+client_id+komma+chatroom_id+klammerZu+
+				values+klammerAuf+fragezeichen+komma+fragezeichen+komma+
+				select_Client_id()+komma+
+				select_Chatroom_nach_hashcode()+klammerZu;
+	}
 	
+	//updates
+	protected String update_Benutzername()
+	{
+		return update+client+set+benutzername+ist+fragezeichen+where+benutzername+ist+fragezeichen;
+	}
+	
+	protected String update_timestamp()
+	{
+		return update+loginliste+set+timestamp_ende+ist+fragezeichen+where+id+ist;
+	}
+	
+	//selects
 	protected String select_Client_id()
 	{
 		return select+id+from+client+where+accountname+ist+fragezeichen;
@@ -143,9 +165,50 @@ public class SQLBaukasten
 		return select+id+from+loginliste+where+timestamp_beginn+ist+fragezeichen+and+ip+ist+fragezeichen ;
 	}
 	
-	protected String select_latest_Chatroom()
+	protected String select_Chatroom_nach_hashcode()
 	{
-		return select+max+klammerAuf+id+klammerZu+from+chatroom;
+		return select+id+from+chatroom+where+hashcode+ist+fragezeichen;
 	}
-	   
+	
+	protected String select_Chatroomname_nach_hashcode()
+	{
+		return select+chatroomname+from+chatroom+where+hashcode+ist+fragezeichen;
+	}
+	
+	protected String select_hashcode()
+	{
+		return select+hashcode+from+chatroom+where+hashcode+ist+fragezeichen;
+	}
+	
+	protected String select_Loginname()
+	{
+		return select+benutzername+from+login_Daten+where+benutzername+ist+fragezeichen;
+	}
+	
+	protected String select_passwort()
+	{
+		return select+passwort+from+login_Daten+where+benutzername+ist+fragezeichen;
+	}
+	
+	protected String select_chatroomname_nach_hashcode()
+	{
+		return select+chatroomname+from+chatroom+where+hashcode+ist+fragezeichen;
+	}
+	
+	protected String select_benutzername_nach_Client_id()
+	{
+		return select+accountname+from+client+where+id+ist+fragezeichen;
+	}
+	
+	protected String select_chatroomnamen_by_client()
+	{
+		return select+chatroomname+from+chatroom+where+id+ist+klammerAuf+select+chatroom_id+from+clientChatroom_ZT+where+client_id+ist+klammerAuf+select_Client_id()+klammerZu+klammerZu;
+	}
+	
+	protected String select_nachricht_in_chatroom()
+	{
+		return select+"cl."+benutzername+komma+"n."+timestamp+komma+"n."+inhalt+from+nachricht+"n "+komma+chatroom+"ch "+where+"n."+chatroom_id+ist+"ch."+id;
+	} 
+	 
+	
 }

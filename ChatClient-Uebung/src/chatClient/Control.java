@@ -475,8 +475,13 @@ public class Control implements Runnable
 		{
 			Parent SignUpParent = FXMLLoader.load(getClass().getResource("LoginGUI.fxml"));
 			return new Scene(SignUpParent);
-			
 		}
+	}
+	
+	protected Scene erfolgreicherLogin() throws IOException
+	{
+		Parent debugParent = FXMLLoader.load(getClass().getResource("Debug.fxml"));
+		return new Scene(debugParent);
 	}
 
 	@Override

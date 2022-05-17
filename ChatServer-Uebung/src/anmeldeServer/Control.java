@@ -94,7 +94,7 @@ public class Control
 			{
 				e.printStackTrace();
 			}
-			
+		System.out.println(flag);
 		}
 	}
 	

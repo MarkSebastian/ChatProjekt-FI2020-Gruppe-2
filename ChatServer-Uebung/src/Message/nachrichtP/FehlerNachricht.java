@@ -17,4 +17,24 @@ public class FehlerNachricht
 		this.nutzernameFehler = nutzernameFehler;
 		this.passwortFehler = passwortFehler;
 	}
+	
+	protected boolean isDatenbankFehler()
+	{
+		return datenbankFehler;
+	}
+
+	protected boolean isNutzernameVergebenFehler()
+	{
+		return nutzernameVergebenFehler;
+	}
+
+	protected boolean isNutzernameFehler()
+	{
+		return nutzernameFehler;
+	}
+
+	protected boolean isPasswortFehler()
+	{
+		return passwortFehler;
+	}
 }

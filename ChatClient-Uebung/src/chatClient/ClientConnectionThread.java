@@ -9,30 +9,31 @@ public class ClientConnectionThread extends Thread
 {
 	private Control control;
 	private Gui gui;
-	
+
 	public ClientConnectionThread(Control control)
 	{
 		this.control = control;
-		this.gui = control.gui; 
+		this.gui = control.gui;
 	}
-	
+
 	protected void startStreams()
 	{
 		try
 		{
 			control.out = new ObjectOutputStream(control.socket.getOutputStream());
 			control.ois = new ObjectInputStream(control.socket.getInputStream());
-		} catch (Exception e)
+		}
+		catch (Exception e )
 		{
 			System.out.println(e + "\n in startStreams");
 		}
 
 	}
-	
-	@Override 
+
+	@Override
 	public void run()
 	{
-		if(control!=null)
+		if (control != null)
 		{
 			control.messages.clear();
 			control.akList();
@@ -44,27 +45,30 @@ public class ClientConnectionThread extends Thread
 					if (customIP == true)
 					{
 						control.socket = new Socket(control.startGui.getIP(), control.port);
-					} else
+					}
+					else
 					{
 						control.socket = new Socket("localhost", control.port);
 					}
 					gui.changeStatus("socket gestartet");
 					startStreams();
-					
+
 					control.sendMessage();
-					
+
 					control.read = new Thread(control);
 					control.read.start();
-				} catch (ConnectException e)
+				}
+				catch (ConnectException e )
 				{
 					this.gui.changeStatus("Zielserver wurde nicht gefunden");
 					System.out.println(e);
-				} catch (Exception e)
+				}
+				catch (Exception e )
 				{
 					System.out.println(e + "\n in run of ServerConnectionThread");
 				}
 			}
 		}
 	}
-	
+
 }

@@ -40,6 +40,7 @@ public class Gui
 	private JButton btnNeuerChat;
 	private JScrollPane scrollPaneUserList;
 
+	// HI
 	public Gui()
 	{
 		initialize();
@@ -67,7 +68,8 @@ public class Gui
 			{
 				showUserList();
 			}
-		} else
+		}
+		else
 		{
 			frmClient.setVisible(true);
 		}
@@ -171,7 +173,8 @@ public class Gui
 			frmClient.setBounds(r.x, r.y, 360, 335);
 			tabbedPane.setBounds(0, 0, 346, 298);
 			userList = false;
-		} else
+		}
+		else
 		{
 			getScrollPaneUserList().setVisible(true);
 			frmClient.setBounds(r.x, r.y, 490, 335);
@@ -205,7 +208,8 @@ public class Gui
 		try
 		{
 			return getList().locationToIndex(getList().getMousePosition());
-		} catch (NullPointerException e)
+		}
+		catch (NullPointerException e )
 		{
 			return -1;
 		}
@@ -298,7 +302,7 @@ public class Gui
 		}
 		return btnUserHinzufügen;
 	}
-	
+
 	public void addAddListner(ActionListener l)
 	{
 		this.getBtnUserHinzufügen().addActionListener(l);
@@ -315,7 +319,7 @@ public class Gui
 		}
 		return btnUserEntfernen;
 	}
-	
+
 	public void addEntfListner(ActionListener l)
 	{
 		this.getBtnUserEntfernen().addActionListener(l);
@@ -335,12 +339,11 @@ public class Gui
 	private JScrollPane getScrollPaneUserList()
 	{
 		if (scrollPaneUserList == null)
-		{	
+		{
 			JList listUser = getListUser();
 			scrollPaneUserList = new JScrollPane(listUser, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			scrollPaneUserList.setBounds(341, 11, 106, 193);
-			
 
 		}
 		return scrollPaneUserList;

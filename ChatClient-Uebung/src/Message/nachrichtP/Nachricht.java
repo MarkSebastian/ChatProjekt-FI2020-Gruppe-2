@@ -45,11 +45,14 @@ public class Nachricht implements Serializable
 		return nachricht;
 	}
 
+	
 	public DefaultListModel<String> getListClients()
 	{
 		return activeClients;
 	}
 
+	
+	
 	public Nachricht(String nachricht, boolean isServer)
 	{
 		if (isServer == true)

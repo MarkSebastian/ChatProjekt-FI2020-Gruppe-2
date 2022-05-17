@@ -35,6 +35,8 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.channels.NonWritableChannelException;
+
+import Message.nachrichtP.FehlerNachricht;
 import Message.nachrichtP.LogInNachricht;
 import javax.swing.DefaultListModel;
 
@@ -483,22 +485,51 @@ public class Control implements Runnable
 		Parent debugParent = FXMLLoader.load(getClass().getResource("Debug.fxml"));
 		return new Scene(debugParent);
 	}
+	
+	protected void empfangeNachrichtVomAnmeldeServer() throws IOException, ClassNotFoundException
+	{
+		ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+		FehlerNachricht fehler = (FehlerNachricht) ois.readObject();
+		
+		if (fehler.isDatenbankFehler())
+		{
+			
+		}
+		else if (fehler.isNutzernameVergebenFehler()) 
+		{
+			
+		}
+		else if (fehler.isNutzernameFehler()) 
+		{
+			
+		}
+		else if (fehler.isPasswortFehler()) 
+		{
+			
+		}
+	}
 
 	@Override
 	public void run()
 	{
-		//switchGui();
 		while (!read.isInterrupted())
 		{
-
 			try
 			{
-				readMessage();
+				empfangeNachrichtVomAnmeldeServer();
 				Thread.sleep(1000);
 			}
 			catch (InterruptedException e)
 			{
 				read.interrupt();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			catch (ClassNotFoundException e)
+			{
+				e.printStackTrace();
 			}
 		}
 	}

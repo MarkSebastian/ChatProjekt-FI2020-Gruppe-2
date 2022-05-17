@@ -1,6 +1,5 @@
 package chatClient;
 
-import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -8,6 +7,23 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import Message.nachrichtP.Nachricht;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,14 +35,16 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.channels.NonWritableChannelException;
+
+import Message.nachrichtP.FehlerNachricht;
 import Message.nachrichtP.LogInNachricht;
 import javax.swing.DefaultListModel;
 
 public class Control implements Runnable
 {
 
-	protected Gui gui;
-	protected VerbindungsGUI startGui;
+	//protected Gui gui;
+	//protected VerbindungsGUI startGui;
 	protected int port;
 	protected Socket socket;
 	//List Modells
@@ -41,18 +59,46 @@ public class Control implements Runnable
 	protected ObjectOutputStream out;
 
 	private boolean startWindow = false;
-	//Farben zum schnelleren abruf
-	private Color rot = new Color(255, 102, 102);
-	private Color weiss = new Color(255, 255, 255, 255);
 	
 	private boolean first = true;
+	
+	
+	
+	//FX
+	@FXML
+	private Button button_send;
+	@FXML
+	private TextField textField_nachricht;
+	@FXML
+	private VBox vbox_messages;
+	@FXML
+	private ScrollPane scrollpane_messages;
+	
 
 	public Control()
 	{
-		startConnect();
+
+	}
+	
+	
+	private void initFX()
+	{
+		/*vbox_messages.heightProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				scrollpane_messages.setVvalue((Double) newValue);
+			}
+		});
+		
+		button_send.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				sendMessage();
+			}
+		});*/
 	}
 
-	public void switchGui()
+	/*public void switchGui()
 	{
 		Rectangle r;
 		if (startWindow)
@@ -101,47 +147,72 @@ public class Control implements Runnable
 			} 
 			else
 			{
-				guiError("port");
+				//guiError("port");
 				this.gui.changeStatus("kein korrekter Port");
 			}
 
 		} 
 		catch (NumberFormatException e)
 		{
-			guiError("port");
-			this.gui.changeStatus("kein korrekter Port");
+			//guiError("port");
+			//this.gui.changeStatus("kein korrekter Port");
 		}
 		return korrekt;
 	}
-
+	*/
+	@FXML
 	protected void sendMessage()
 	{
 		try
 		{
 			Nachricht message;
-			if(first)
+			/*if(first)
 			{
 				message = new Nachricht(startGui.getTextFieldUsername().getText(), false);
 				out.writeObject(message);
 				first = false;
 			}
 			else
-			{
-			 	message = new Nachricht(this.gui.getTextFieldEingabe().getText(), false);
+			{*/
+				String textToSend = textField_nachricht.getText();
+				if(!textToSend.isEmpty())
+				{
+			 	
+				HBox hBox = new HBox();
+				hBox.setAlignment(Pos.CENTER_RIGHT);
+				hBox.setPadding(new Insets(5, 5, 5, 10));
+				
+				Text text = new Text(textToSend);
+				TextFlow textFlow = new TextFlow(text);
+				
+				textFlow.setStyle("-fx-color: rgb(239,242,255" +
+						"-fx-background-color: rgb(15,125,242)" +
+						"-fx-background-radius: 20px");	
+				
+				textFlow.setPadding(new Insets(5,10,5,10));
+				text.setFill(Color.color(0.934, 0.945, 0.996));
+				
+				hBox.getChildren().add(textFlow);
+				vbox_messages.getChildren().add(hBox);
+				
+				/*message = new Nachricht(textToSend, false);
 			 	out.writeObject(message);
 				messages.addElement(message);
-				akList();
-			}
+				textField_nachricht.clear();*/
+				}
+				
+				//akList();
+			//}
 		} 
 		catch (NullPointerException e)
 		{
-			gui.changeStatus("Noch nicht mit Server Verbunden!");
+			//gui.changeStatus("Noch nicht mit Server Verbunden!");
 		} 
 		catch (Exception e)
 		{
 			System.out.println(e + "\n in sendMessage");
 		}
-		this.gui.getTextFieldEingabe().setText("");
+		//this.gui.getTextFieldEingabe().setText("");
 
 	}
 
@@ -156,7 +227,7 @@ public class Control implements Runnable
 			if (message.getListClients() != null)
 			{
 				this.clients = message.getListClients();
-				akClientList();
+				//akClientList();
 			}
 			getNewMessages(message);
 
@@ -178,9 +249,9 @@ public class Control implements Runnable
 	protected void getNewMessages(Nachricht n)
 	{
 		messages.addElement(n);
-		akList();
+		//akList();
 	}
-
+/*
 	protected void akList()
 	{
 		this.gui.getList().setModel(messages);
@@ -190,7 +261,7 @@ public class Control implements Runnable
 	{
 		this.gui.getListUser().setModel(clients);
 		this.gui.getListActiveUser().setModel(clients);
-	}
+	}*/
 
 	private void stopClient()
 	{
@@ -208,10 +279,10 @@ public class Control implements Runnable
 
 		read.interrupt();
 		start.interrupt();
-		gui.changeStatus("verbindung getrennt");
-		switchGui();
+		//gui.changeStatus("verbindung getrennt");
+		//switchGui();
 	}
-
+/*
 	private void setToolTip()
 	{
 		int index = gui.hoveredItem();
@@ -226,21 +297,21 @@ public class Control implements Runnable
 		}
 
 	}
-	
-	protected boolean checkUsername()
+	*/
+	/*protected boolean checkUsername()
 	{
 		if(startGui.getTextFieldUsername().getText().isBlank())
 		{
-			guiError("username");
+			//guiError("username");
 			return false;
 		}
 		else
 		{
 			return true;
 		}
-	}
+	}*/
 
-	private void guiError(String error)
+	/*private void guiError(String error)
 	{
 		switch (error)
 		{
@@ -304,9 +375,9 @@ public class Control implements Runnable
 				}).start();
 				break;
 		}
-	}
+	}*/
 	
-	private void addUserToNewChat()
+	/*private void addUserToNewChat()
 	{
 		try
 		{
@@ -321,9 +392,9 @@ public class Control implements Runnable
 		{
 			System.out.println("nichts ausgewählt");
 		}
-	}
+	}*/
 	
-	private void entfUserFromNewChat()
+	/*private void entfUserFromNewChat()
 	{
 		try
 		{
@@ -338,6 +409,9 @@ public class Control implements Runnable
 			System.out.println("nichts ausgewählt");
 		}
 	}
+<<<<<<< HEAD
+	*/
+
 	
 	protected void login(String benutzer, String pass, boolean anmeldung)
 	{
@@ -358,10 +432,21 @@ public class Control implements Runnable
 	{
 		try
 		{
+			if(socket == null)
+			{
+				socket = new Socket("localhost",5555);
+			}
+			else if(socket != null)
+			{
+				if(socket.isConnected() == false)
+				{
+					socket = new Socket("localhost", 5555);
+				}
+			}
 			
-			socket = new Socket("localhost",5555);
 			//ois = new ObjectInputStream(socket.getInputStream());
 			out = new ObjectOutputStream(socket.getOutputStream());
+			Thread.sleep(2000);
 		}
 		catch (UnknownHostException e)
 		{
@@ -369,6 +454,11 @@ public class Control implements Runnable
 			e.printStackTrace();
 		}
 		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (InterruptedException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -387,6 +477,34 @@ public class Control implements Runnable
 		{
 			Parent SignUpParent = FXMLLoader.load(getClass().getResource("LoginGUI.fxml"));
 			return new Scene(SignUpParent);
+		}
+	}
+	
+	protected Scene erfolgreicherLogin() throws IOException
+	{
+		Parent debugParent = FXMLLoader.load(getClass().getResource("Debug.fxml"));
+		return new Scene(debugParent);
+	}
+	
+	protected void empfangeNachrichtVomAnmeldeServer() throws IOException, ClassNotFoundException
+	{
+		ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+		FehlerNachricht fehler = (FehlerNachricht) ois.readObject();
+		
+		if (fehler.isDatenbankFehler())
+		{
+			
+		}
+		else if (fehler.isNutzernameVergebenFehler()) 
+		{
+			
+		}
+		else if (fehler.isNutzernameFehler()) 
+		{
+			
+		}
+		else if (fehler.isPasswortFehler()) 
+		{
 			
 		}
 	}
@@ -394,18 +512,24 @@ public class Control implements Runnable
 	@Override
 	public void run()
 	{
-		switchGui();
 		while (!read.isInterrupted())
 		{
-
 			try
 			{
-				readMessage();
+				empfangeNachrichtVomAnmeldeServer();
 				Thread.sleep(1000);
 			}
 			catch (InterruptedException e)
 			{
 				read.interrupt();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			catch (ClassNotFoundException e)
+			{
+				e.printStackTrace();
 			}
 		}
 	}

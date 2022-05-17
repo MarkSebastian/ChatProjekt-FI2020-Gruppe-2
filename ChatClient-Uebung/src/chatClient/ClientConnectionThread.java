@@ -13,7 +13,7 @@ public class ClientConnectionThread extends Thread
 	public ClientConnectionThread(Control control)
 	{
 		this.control = control;
-		this.gui = control.gui; 
+		//this.gui = control.gui; 
 	}
 	
 	protected void startStreams()
@@ -33,7 +33,7 @@ public class ClientConnectionThread extends Thread
 	@Override 
 	public void run()
 	{
-		if(control!=null)
+		/*if(control!=null)
 		{
 			control.messages.clear();
 			control.akList();
@@ -68,7 +68,7 @@ public class ClientConnectionThread extends Thread
 					System.out.println(e + "\n in run of ServerConnectionThread");
 				}
 			}
-		}
+		}*/
 	}
 	
 }

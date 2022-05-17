@@ -1,26 +1,18 @@
 package chatClient;
 
-import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-
 import java.io.IOException;
-
-import com.gluonhq.charm.glisten.control.Avatar;
 
 public class LoginGUIController extends Control
 {
-	@FXML
-	private Avatar avatarIcon;
 	@FXML
 	private TextField anmeldenField;
 	@FXML
@@ -29,17 +21,47 @@ public class LoginGUIController extends Control
 	private Button anmeldenButton;
 	@FXML
 	private Label regestrierenLabel;
-	
+
 	@FXML
 	protected void buttonOnClick()
 	{
-		super.login(anmeldenField.getText(),passwordField.getText(),false);
+		super.startConnect();
+		super.login(anmeldenField.getText(), passwordField.getText(), false);
+		//if ferigstellen
+		if (true)
+		{
+			sceneChange(true);
+		}
+		else
+		{
+			makeAlert("Login fehlgeschlagen");
+		}
 	}
-	
+
 	@FXML
 	protected void labelOnClick()
 	{
-			Stage stageEventChangeStage = (Stage) regestrierenLabel.getScene().getWindow();
+		sceneChange(false);
+	}
+
+	@FXML
+	protected void labelOnHover()
+	{
+		regestrierenLabel.setTextFill(Color.BLUE);
+	}
+
+	@FXML
+	protected void labelOnLeave()
+	{
+		regestrierenLabel.setTextFill(Color.BLACK);
+	}
+
+	private void sceneChange(boolean b)
+	{
+		Stage stageEventChangeStage = (Stage) regestrierenLabel.getScene().getWindow();
+
+		if (b == false)
+		{
 			try
 			{
 				stageEventChangeStage.setScene(super.changeScene(true));
@@ -50,17 +72,27 @@ public class LoginGUIController extends Control
 			{
 				e.printStackTrace();
 			}
+		}
+		else
+		{
+			try
+			{
+				stageEventChangeStage.setScene(super.erfolgreicherLogin());
+				stageEventChangeStage.setTitle("Debug");
+				stageEventChangeStage.show();
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
-	
-	@FXML
-	protected void labelOnHover()
+
+	private void makeAlert(String messang)
 	{
-		regestrierenLabel.setTextFill(Color.BLUE);
-	}
-	
-	@FXML
-	protected void labelOnLeave()
-	{
-		regestrierenLabel.setTextFill(Color.BLACK);
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setHeaderText(null);
+		alert.setContentText(messang);
+		alert.show();
 	}
 }

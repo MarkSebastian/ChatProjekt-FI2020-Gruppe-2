@@ -14,7 +14,7 @@ public class MainAnmeldung extends Application
 	public static void main(String[] args)
 	{
 		System.out.println("A");
-		new Control();
+		//new Control();
 		launch(args);
 		
 		

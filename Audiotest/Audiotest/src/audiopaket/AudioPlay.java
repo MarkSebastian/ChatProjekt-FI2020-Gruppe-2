@@ -13,14 +13,14 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class AudioPlay extends Thread
 {
-	private Controller controllerM;
+	private ControllerM controllerM;
 	private AudioInputStream audioStream;
 	private AudioFormat audioFormat;
-	//private String temp = "Test.wav";
+	private String temp = "Test.wav";
 	//hier test mit ChinGong.wav
-	private String temp = "ChinGong.wav";
+	//private String temp = "ChinGong.wav";
 
-	public AudioPlay(ControllerM controller)
+	public AudioPlay(ControllerM controllerM)
 	{
 		this.controllerM = controllerM;
 	}
@@ -33,12 +33,28 @@ public class AudioPlay extends Thread
 			//hier test mit ChinGong.wav
 			File file = new File(temp);
 			audioStream = AudioSystem.getAudioInputStream(file);
-			audioFormat = audioStream.getFormat();
+			audioFormat  = new AudioFormat(44100, 16, 2, true, true);
+			//audioFormat = audioStream.getFormat();
+			System.out.println(audioStream.getFormat());
 			DataLine.Info info = new DataLine.Info(Clip.class, audioFormat);
+			
+			System.out.println("Hier nicht 1");
 			Clip clip = (Clip) AudioSystem.getLine(info);
-
+			System.out.println("Hier nicht 2");
+			/////
+			//was braucht der für ein audioformat
+			System.out.println(clip.getFormat());
+		
 			clip.open(audioStream);
+			//
+			System.out.println("Hier nicht 33");
 			clip.start();
+		
+		}
+		catch(IllegalArgumentException e)
+		{
+			e.printStackTrace();
+			//System.out.println("AudioDate <0");
 		}
 		catch (UnsupportedAudioFileException e )
 		{

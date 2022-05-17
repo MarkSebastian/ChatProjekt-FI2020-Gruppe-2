@@ -46,7 +46,7 @@ public class Controller
 			
 			
 			//musste line auskommentieren sonst läuft programm nicht
-			//captureThread = new CaptureThread(this);
+		//	captureThread = new CaptureThread(this);
 			captureThread.start();
 			JOptionPane.showMessageDialog(null,"Press ok to stop recording");
 			captureThread.interrupt();

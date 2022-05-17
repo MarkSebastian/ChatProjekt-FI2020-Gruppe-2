@@ -21,9 +21,8 @@ public class ControllerM
 
 	private void setButtons()
 	{
-		this.gui.setBtnAbspielen(e -> audioPlay());
-		//kurz auskommentiert
 		this.gui.setBtnAufnehmen(e -> audioRecord());
+		this.gui.setBtnAbspielen(e -> audioPlay());
 		this.gui.setBtnStop(e -> recordStop());
 		this.gui.getBtnStop().setVisible(false);
 	}
@@ -37,11 +36,16 @@ public class ControllerM
 			this.gui.getBtnStop().setVisible(true);
 			this.gui.getBtnAufnehmen().setVisible(false);
 			//This beim neuen CaptureThread übergeben sonst friert GUI ein
+			//musste die line auskommentieren
+			System.out.println("Hier nicht 4");
 			captureThread = new CaptureThread(this);
+			System.out.println("Hier nicht 5");
 			//run() wird aufgerufen
 			captureThread.start();
+			System.out.println("Hier nicht 6");
+			//hier fehler
 			JOptionPane.showMessageDialog(null,"Press ok to stop recording");
-			captureThread.interrupt();
+			//captureThread.interrupt();
 		}
 
 		catch (Exception e )
@@ -54,6 +58,7 @@ public class ControllerM
 	public void audioPlay()
 	{
 
+		//musste line auskommentieren
 		audioPlayThread = new AudioPlay(this);
 		audioPlayThread.start();
 	}

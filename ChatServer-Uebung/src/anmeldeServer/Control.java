@@ -194,7 +194,16 @@ public class Control
 			{
 				if(message.getPasswort().compareTo(passwort) == 0)
 				{
-					
+					try
+					{
+						oos = new ObjectOutputStream(socket.getOutputStream());
+						FehlerNachricht erfolgreich = new FehlerNachricht(false, false, false, false);
+						oos.writeObject(erfolgreich);
+					}
+					catch (IOException e)
+					{
+						e.printStackTrace();
+					}
 				}
 			}
 		}

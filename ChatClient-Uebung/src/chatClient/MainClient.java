@@ -17,9 +17,9 @@ public class MainClient extends Application
 	@Override
 	public void start(Stage stage) throws Exception
 	{
-		Parent LogInParent = FXMLLoader.load(getClass().getResource("LoginGUI.fxml"));
+		Parent LogInParent = FXMLLoader.load(getClass().getResource("Chat.fxml"));
 		Scene scene = new Scene(LogInParent);
-		stage.setTitle("Login");
+		stage.setTitle("Chat");
 		stage.setScene(scene);
 		stage.show();
 		

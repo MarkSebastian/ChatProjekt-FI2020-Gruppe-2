@@ -21,14 +21,14 @@ public class Control
 	public Control()
 	{
 		baukasten =new SQLBaukasten();
-		verbindungslinkLoginserver="\"jdbc:ucanaccess://src/Login_DB.accdb\"";
-		verbindungslinkDatenbank="\"jdbc:ucanaccess://src/Datenkrake.accdb\""; 
+		verbindungslinkLoginserver="jdbc:ucanaccess://src/Login_DB.accdb";
+		verbindungslinkDatenbank="jdbc:ucanaccess://src/Datenkrake.accdb"; 
 		
 		try 
 		{
 			verbindungLogin = DriverManager.getConnection(verbindungslinkLoginserver,"","");
 			verbindungDatenKrake = DriverManager.getConnection(verbindungslinkDatenbank,"","");
-			
+			System.out.println("verbindung mit datenbanken aufgebaut");
 		}
 		catch (SQLException e)
 		{
@@ -100,7 +100,6 @@ public class Control
 		{
 			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
 			vorbereiteteAussage.setDate(1, tStampBeginn);
-			//vorbereiteteAussage.setDate(2, tStampEnde);
 			vorbereiteteAussage.setString(2, iP);
 			vorbereiteteAussage.executeUpdate();
 		}
@@ -258,7 +257,7 @@ public class Control
 	{
 		boolean erfolg=true;
 		String passwort =null;
-		sqlBefehl=baukasten.select_chatroomnamen_by_client();
+		sqlBefehl=baukasten.select_passwort();
 		try
 		{
 			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
@@ -285,6 +284,8 @@ public class Control
 			return true;
 		}
 	}
+	
+	
 	//=================================================================================================================Select ende
 	
 } 

@@ -26,10 +26,21 @@ import java.awt.event.MouseAdapter;
 
 public class ClientControl implements Runnable, Serializable
 {
+	private boolean first = true;
+	private boolean nachrichtPrivat = false;
+	private boolean startWindow = false;
+	private ClientConnectionThread start;
+	private Color rot = new Color(255, 102, 102);
+	private Color weiss = new Color(255, 255, 255, 255);
 	protected Gui gui;
-	protected VerbindungsGUI startGui;
 	protected int port;
+	protected ObjectInputStream ois;
+	protected ObjectOutputStream out;
+	private Set<PrivatChat> privatChats; 	
 	protected Socket socket;
+	private String user;
+	protected Thread read;
+	protected VerbindungsGUI startGui;
 	
 	// Nachrichten Globaler Chat
 	private ArrayList<Nachricht> messagesArray = new ArrayList<Nachricht>();
@@ -43,23 +54,8 @@ public class ClientControl implements Runnable, Serializable
 	// Auswahl User PC	
 	private ArrayList<String> auswahlClientsPC = new ArrayList<String>();
 	protected DefaultListModel<String> choosenClients = new DefaultListModel<String>();
-
-	protected Thread read;
-	private ClientConnectionThread start;
-
-	protected ObjectInputStream ois;
-	protected ObjectOutputStream out;
-
-	private boolean startWindow = false;
-
-	private Color rot = new Color(255, 102, 102);
-	private Color weiss = new Color(255, 255, 255, 255);
-
-	private boolean first = true;
-	private Set<PrivatChat> privatChats; 
-	private String user;
 	
-	boolean nachrichtPrivat = false;
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public ClientControl()
 	{
@@ -300,8 +296,9 @@ public class ClientControl implements Runnable, Serializable
 				if(n.getEmpfaenger() != null)
 				{
 					this.aktiveClients = n.getEmpfaenger();
-					akClientList();
-					
+/*					akClientList();
+					akListPC();
+*/					akClients();
 				}
 				getNewMessages(n);
 			}
@@ -380,7 +377,30 @@ public class ClientControl implements Runnable, Serializable
 		messagesArray.forEach(n -> messages.addElement(n));
 	}
 
-	protected void akClientList()
+	private void akClients()
+	{
+		clients.removeAllElements();
+		clientsPC.removeAllElements();
+		choosenClients.removeAllElements();
+		
+		// DefaultListModel User globaler Chat füllen
+		aktiveClients.forEach(e -> clients.addElement(e));
+		
+		// DefaultListModel User PC füllen (gleiche Liste ohne einen selbst)
+		aktiveClients.forEach(e ->
+		{
+			if (!e.equals(user))
+			{
+				auswahlClientsPC.add(e);
+			}
+		});
+		auswahlClientsPC.forEach(e -> clientsPC.addElement(e));
+		
+		// DefaultListModel User PC ausgewählt füllen
+		teilnehmerPrivatChat.forEach(t -> choosenClients.addElement(t));		
+	}
+	
+/*	protected void akClientList()
 	{
 		// Listen leeren
 		clients.removeAllElements();
@@ -409,7 +429,7 @@ public class ClientControl implements Runnable, Serializable
 		auswahlClientsPC.forEach(a -> clientsPC.addElement(a));
 		teilnehmerPrivatChat.forEach(t -> choosenClients.addElement(t));		
 	}
-
+*/
 	private void stopClient()
 	{
 		try
@@ -515,7 +535,8 @@ public class ClientControl implements Runnable, Serializable
 			String selected = (String)gui.getListActiveUser().getSelectedValue();
 			teilnehmerPrivatChat.add(selected);
 			auswahlClientsPC.remove(selected);	
-			akListPC();
+		//	akListPC();
+			akClients();
 		}
 		catch (ArrayIndexOutOfBoundsException e)
 		{
@@ -530,7 +551,8 @@ public class ClientControl implements Runnable, Serializable
 			String selected = (String)gui.getListChoosenUser().getSelectedValue();			
 			auswahlClientsPC.add(selected);
 			teilnehmerPrivatChat.remove(selected);
-			akListPC();
+		//	akListPC();
+			akClients();
 		}
 		catch (ArrayIndexOutOfBoundsException e)
 		{

@@ -17,12 +17,23 @@ public class ServerConnectionThread extends Thread
 	private ArrayList<String> empfaenger = new ArrayList<String>();
 	private int clientCount = 1;
 
-	public ServerConnectionThread(ServerSocket server, ArrayList<Client> clients, ServerControl control)
+	public ServerConnectionThread(ServerSocket server, ServerControl control)
 	{
 		this.server = server;
-		this.clients = clients;
+		this.clients = new ArrayList<Client>();
 		this.control = control;
+	}	
 
+	public ArrayList<Client> getClients()
+	{
+		return clients;
+	}
+	
+	
+
+	public ArrayList<String> getEmpfaenger()
+	{
+		return empfaenger;
 	}
 
 	@Override

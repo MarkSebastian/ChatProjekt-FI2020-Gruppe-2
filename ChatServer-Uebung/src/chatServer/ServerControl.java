@@ -20,9 +20,11 @@ public class ServerControl
 	private ServerSocket server;
 	protected ServerConnectionThread connect;
 	protected DefaultListModel<Nachricht> messages = new DefaultListModel<Nachricht>();
-	private ArrayList<Client> clients = new ArrayList<Client>();
+//	private ArrayList<Client> clients = new ArrayList<Client>();
 	private DefaultListModel<Client> clientListe = new DefaultListModel<Client>();
-	private ArrayList<String>empfaenger = new ArrayList<String>();
+//	private ArrayList<String>empfaenger = new ArrayList<String>();
+	
+	
 	
 	public ServerControl()
 	{
@@ -30,7 +32,13 @@ public class ServerControl
 		messages.clear();
 		this.gui.getList().setModel(messages);
 		addListener();
+		setModel();
 		printAddress();
+	}
+
+	public ServerConnectionThread getConnect()
+	{
+		return connect;
 	}
 
 	private void addListener()
@@ -55,6 +63,11 @@ public class ServerControl
 				setToolTip();
 			};
 		});
+	}
+
+	private void setModel()
+	{
+		this.gui.getListUser().setModel(clientListe);
 	}
 
 	private void printAddress()
@@ -87,20 +100,20 @@ public class ServerControl
 			System.out.println(e + "\n in starten");
 		}
 		System.out.println("Server gestartet!");
-		connect = new ServerConnectionThread(server, clients, this);
+		connect = new ServerConnectionThread(server, this);
 		connect.start();
 	}
 
 	private void clearLists()
 	{
-		clients.clear();
+		clientListe.clear();
 		messages.clear();
 	}
 
 	private void sendMessage()
 	{
 		Nachricht message = new Nachricht(this.gui.getTextNachrichtenEingabe().getText(), true);
-		if (!clients.isEmpty())
+		if (!connect.getClients().isEmpty())
 		{
 			broadcastMessage(message);
 		}
@@ -111,10 +124,19 @@ public class ServerControl
 	{
 		messages.addElement(n);
 	}
+	
+	protected void broadcastMessage(Nachricht n)
+	{
+		messages.addElement(n);
+
+		connect.getClients().forEach(e -> e.sendMessage(n));
+
+		this.gui.getTextNachrichtenEingabe().setText("");
+	}
 
 	protected void broadcastMessage(Nachricht n, Client from)
 	{
-		clients.forEach(e ->
+		connect.getClients().forEach(e ->
 		{
 			if (e != from)
 				e.sendMessage(n);
@@ -124,7 +146,7 @@ public class ServerControl
 	// PrivatChatObjekt hat ArrayList mit Empfängern, nur an diese Liste wird der PrivatChat geschickt
 	protected void broadcastPrivatChat(PrivatChatSenden pcs)
 	{
-		clients.forEach(e -> pcs.getEmpfaenger().forEach(s ->
+		connect.getClients().forEach(e -> pcs.getEmpfaenger().forEach(s ->
 		{
 			if(!pcs.getUser().equals(e)) 
 				if (e.getName().equals(s))
@@ -136,32 +158,22 @@ public class ServerControl
 	// Nachricht wird auch nur an diese Clients weitergeleitet
 	protected void broadcastPrivatMessage(Nachricht n)
 	{
-		clients.forEach(e -> n.getEmpfaenger().forEach(s ->
+		connect.getClients().forEach(e -> n.getEmpfaenger().forEach(s ->
 		{
 			if (e.getName().equals(s))
 				e.sendMessage(n);				
 		}));
 	}
 
-
-	protected void broadcastMessage(Nachricht n)
-	{
-		messages.addElement(n);
-
-		clients.forEach(e -> e.sendMessage(n));
-
-		this.gui.getTextNachrichtenEingabe().setText("");
-	}
-
 	protected void closeClient(Client c)
 	{
-		clients.remove(c);
+		connect.getClients().remove(c);
 		akClientList();
 	}
 
 	private void stoppen()
 	{
-		for (Client c : clients)
+		for (Client c : connect.getClients())
 		{
 			c.stopClient();
 		}
@@ -174,7 +186,7 @@ public class ServerControl
 		{
 			System.out.println(e + "\n in stoppen");
 		}
-		clients.clear();
+		connect.getClients().clear();
 		akClientList();
 		System.out.println("Server gestoppt.");
 	}
@@ -195,39 +207,33 @@ public class ServerControl
 
 	}
 
-	protected DefaultListModel<String> clientListeAbspecken()
+	protected ArrayList<String> clientEntfernen(String name)
 	{
-		DefaultListModel<String> nl = new DefaultListModel<String>();
-		for (Client c : clients)
-		{
-			System.out.println(c);
-			String s = c.getId() + " " + c.getName();
-			nl.addElement(s);
-		}
-
-		return nl;
+		ArrayList<String> rueckgabe = new ArrayList<String>();
+		
+		connect.getClients().forEach(c -> {
+			if(c.getName().equals(name))
+			{
+				System.out.println(c.getName() + " wird entfernt");
+				connect.getClients().remove(c);	
+				connect.getEmpfaenger().remove(c.getName());
+			}});
+				
+		connect.getClients().forEach(c -> {rueckgabe.add(c.getName());});
+		
+		return rueckgabe;
 	}
-	
 	
 	protected ArrayList<String> listeFuellen()
 	{
-		ArrayList<String> temp = new ArrayList<String>();
-		
+		ArrayList<String> temp = new ArrayList<String>();		
 		return temp;
 	}
 
 	protected void akClientList()
 	{
-		empfaenger.clear();
-		clients.forEach(e -> empfaenger.add(e.getName()));
 		clientListe.clear();
-
-		for (Client c : clients)
-		{
-			clientListe.addElement(c);
-		}
-
-		this.gui.getListUser().setModel(clientListe);
+		connect.getClients().forEach(c -> clientListe.addElement(c));
 	}
 
 }

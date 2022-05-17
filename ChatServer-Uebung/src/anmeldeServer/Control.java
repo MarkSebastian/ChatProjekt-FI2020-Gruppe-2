@@ -13,6 +13,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import Message.nachrichtP.FehlerNachricht;
 
 public class Control
 {
@@ -79,15 +80,28 @@ public class Control
 	
 	protected void registrieren(LogInNachricht message, Socket socket)
 	{
-		boolean nameFrei = false;
+		boolean []nameFrei;
 		nameFrei = controlDB.nutzerNameFreiFragezeichen(message.getBenutzerName());
-		if(nameFrei == false)
+		if(nameFrei[0] == false)
 		{
 			try
 			{
 				oos = new ObjectOutputStream(socket.getOutputStream());
-				LogInNachricht registerFail = new LogInNachricht(null, null, false);
-				oos.writeObject(registerFail);
+				FehlerNachricht dbFehler = new FehlerNachricht(true, false, false, false);
+				oos.writeObject(dbFehler);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		else if(nameFrei[1] == false)
+		{
+			try
+			{
+				oos = new ObjectOutputStream(socket.getOutputStream());
+				FehlerNachricht nameVergeben = new FehlerNachricht(false, true, false, false);
+				oos.writeObject(nameVergeben);
 			}
 			catch (IOException e)
 			{
@@ -96,15 +110,15 @@ public class Control
 		}
 		else
 		{
-			boolean flag= false;
+			boolean flag;
 			flag = controlDB.insert_LoginDB(message.getBenutzerName(), message.getPasswort());
 			if(flag == false)
 			{
 				try
 				{
 					oos = new ObjectOutputStream(socket.getOutputStream());
-					LogInNachricht registerFail = new LogInNachricht(null, null, false);
-					oos.writeObject(registerFail);
+					FehlerNachricht dbFehler = new FehlerNachricht(true, false, false, false);
+					oos.writeObject(dbFehler);
 				}
 				catch (IOException e)
 				{
@@ -117,7 +131,8 @@ public class Control
 				try
 				{
 					oos = new ObjectOutputStream(socket.getOutputStream());
-					LogInNachricht registerFail = new LogInNachricht(null, null, true);
+					FehlerNachricht erfolgreich = new FehlerNachricht(false, false, false, false);
+					oos.writeObject(erfolgreich);
 				}
 				catch (IOException e)
 				{
@@ -129,15 +144,58 @@ public class Control
 	
 	protected void anmelden(LogInNachricht message, Socket socket)
 	{
-		boolean flag = false;
+		boolean []flag;
 		flag = controlDB.nutzernameExistent(message.getBenutzerName());
-		if(flag == true)
+		if(flag[0] == false)
+		{
+			try
+			{
+				oos = new ObjectOutputStream(socket.getOutputStream());
+				FehlerNachricht dbFehler = new FehlerNachricht(true, false, false, false);
+				oos.writeObject(dbFehler);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		else if(flag[1] == false)
+		{
+			try
+			{
+				oos = new ObjectOutputStream(socket.getOutputStream());
+				FehlerNachricht nameNichtVorhanden = new FehlerNachricht(false, false, true, false);
+				oos.writeObject(nameNichtVorhanden);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		else if(flag[1] == true)
 		{
 			String passwort = null;
 			passwort = controlDB.select_passwort(message.getBenutzerName());
-			if(message.getPasswort().compareTo(passwort) == 0)
+			if(passwort == null)
 			{
-				
+				try
+				{
+					oos = new ObjectOutputStream(socket.getOutputStream());
+					FehlerNachricht pwFehler = new FehlerNachricht(false, false, false, true);
+					oos.writeObject(pwFehler);
+				}
+				catch (IOException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			else if(passwort != null)
+			{
+				if(message.getPasswort().compareTo(passwort) == 0)
+				{
+					
+				}
 			}
 		}
 	}

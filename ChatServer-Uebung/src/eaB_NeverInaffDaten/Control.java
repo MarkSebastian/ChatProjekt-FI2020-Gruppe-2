@@ -21,8 +21,8 @@ public class Control
 	public Control()
 	{
 		baukasten =new SQLBaukasten();
-		verbindungslinkLoginserver="\"jdbc:ucanaccess://src/Login_DB.accdb\"";
-		verbindungslinkDatenbank="\"jdbc:ucanaccess://src/Datenkrake.accdb\""; 
+		verbindungslinkLoginserver="jdbc:ucanaccess://src/Login_DB.accdb";
+		verbindungslinkDatenbank="jdbc:ucanaccess://src/Datenkrake.accdb"; 
 		
 		try 
 		{

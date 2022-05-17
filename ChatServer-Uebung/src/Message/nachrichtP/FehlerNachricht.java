@@ -1,7 +1,14 @@
 package Message.nachrichtP;
 
-public class FehlerNachricht
+import java.io.Serializable;
+
+public class FehlerNachricht implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private boolean datenbankFehler;
 	
 	private boolean nutzernameVergebenFehler;
@@ -18,22 +25,22 @@ public class FehlerNachricht
 		this.passwortFehler = passwortFehler;
 	}
 	
-	protected boolean isDatenbankFehler()
+	public boolean isDatenbankFehler()
 	{
 		return datenbankFehler;
 	}
 
-	protected boolean isNutzernameVergebenFehler()
+	public boolean isNutzernameVergebenFehler()
 	{
 		return nutzernameVergebenFehler;
 	}
 
-	protected boolean isNutzernameFehler()
+	public boolean isNutzernameFehler()
 	{
 		return nutzernameFehler;
 	}
 
-	protected boolean isPasswortFehler()
+	public boolean isPasswortFehler()
 	{
 		return passwortFehler;
 	}

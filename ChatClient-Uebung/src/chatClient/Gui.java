@@ -43,6 +43,7 @@ public class Gui
 	private JScrollPane scrollPaneUserList;
 	private JTextField textFieldPfadEingabe;
 	private JButton btnBildSenden;
+	private JLabel lblBildAnzeige;
 
 	public Gui()
 	{
@@ -53,12 +54,13 @@ public class Gui
 	{
 		frmClient = new JFrame();
 		frmClient.setTitle("Client");
-		frmClient.setBounds(100, 100, 360, 373);
+		frmClient.setBounds(100, 100, 360, 554);
 		frmClient.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmClient.getContentPane().setLayout(null);
 		frmClient.getContentPane().add(getTabbedPane());
 		frmClient.getContentPane().add(getTextFieldPfadEingabe());
 		frmClient.getContentPane().add(getBtnBildSenden());
+		frmClient.getContentPane().add(getLblBildAnzeige());
 
 		frmClient.setAlwaysOnTop(true);
 
@@ -375,5 +377,12 @@ public class Gui
 	public void addBildSendenListener(ActionListener l)
 	{
 		this.getBtnBildSenden().addActionListener(l);
+	}
+	protected JLabel getLblBildAnzeige() {
+		if (lblBildAnzeige == null) {
+			lblBildAnzeige = new JLabel("New label");
+			lblBildAnzeige.setBounds(10, 331, 324, 173);
+		}
+		return lblBildAnzeige;
 	}
 }

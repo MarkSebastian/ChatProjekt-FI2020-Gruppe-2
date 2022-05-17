@@ -1,6 +1,8 @@
 package chatServer;
 
 
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.awt.event.MouseMotionAdapter;
@@ -11,6 +13,7 @@ import java.net.ServerSocket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -18,7 +21,7 @@ import javax.swing.JLabel;
 public class Control
 {
 
-	private Gui gui;
+	protected Gui gui;
 	private ServerSocket server;
 	protected ServerConnectionThread connect;
 	protected DefaultListModel<Nachricht> messages = new DefaultListModel<Nachricht>();
@@ -102,10 +105,8 @@ public class Control
 		{
 			broadcastMessage(message);
 		}
-		
-
 	}
-
+	
 	protected void getNewMessages(Nachricht n)
 	{
 		messages.addElement(n);

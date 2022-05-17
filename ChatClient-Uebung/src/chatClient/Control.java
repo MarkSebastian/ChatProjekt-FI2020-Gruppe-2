@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import Message.nachrichtP.Nachricht;
 import java.io.ObjectOutputStream;
+import java.io.OptionalDataException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
@@ -164,9 +165,9 @@ public class Control implements Runnable
 
 	protected void sendBild() throws IOException
 	{
-		//OutputStream bildOut = socket.getOutputStream();
+		// OutputStream bildOut = socket.getOutputStream();
 
-		//BufferedOutputStream bufferedBildOut = new BufferedOutputStream(bildOut);
+		// BufferedOutputStream bufferedBildOut = new BufferedOutputStream(bildOut);
 
 		ImageIcon imageIcon = new ImageIcon(gui.getTextFieldPfadEingabe().getText());
 		Image image = imageIcon.getImage();
@@ -175,16 +176,15 @@ public class Control implements Runnable
 				BufferedImage.TYPE_INT_RGB);
 
 		Graphics graphics = bufferedImage.createGraphics();
-		graphics.drawImage(image,0,0, image.getWidth(null), image.getHeight(null),null);
+		graphics.drawImage(image, 0, 0, image.getWidth(null), image.getHeight(null), null);
 		graphics.dispose();
-		
-		
-		//ImageIO.write(bufferedImage, "png", bufferedBildOut);
+
+		// ImageIO.write(bufferedImage, "png", bufferedBildOut);
 		ImageIO.write(bufferedImage, "png", out);
 
-		//bufferedBildOut.close();
-		//out.close();
-		
+		// bufferedBildOut.close();
+		// out.close();
+
 	}
 
 	private void readMessage()
@@ -205,13 +205,37 @@ public class Control implements Runnable
 		} catch (SocketException e1)
 		{
 			stopClient();
-		} catch (EOFException e2)
+		} 
+		
+		catch(OptionalDataException e3)
+		{
+			e3.printStackTrace();
+			//System.out.println("");
+		}
+		catch (EOFException e2)
 		{
 			stopClient();
 		} catch (Exception e)
 		{
 			System.out.println(e + "\n in readMessage");
 		}
+	}
+
+	public void readBildMessage() throws IOException
+	{
+		// BufferedImage bufferedImage = ImageIO.read(bufferedBildIn);
+		BufferedImage bufferedImage = ImageIO.read(ois);
+
+		// bufferedBildIn.close();
+		// ois.close();
+		if (bufferedImage != null)
+		{
+
+			ImageIcon icon = new ImageIcon(bufferedImage);
+			gui.getLblBildAnzeige().setIcon(icon);
+
+		}
+
 	}
 
 	protected void getNewMessages(Nachricht n)
@@ -381,6 +405,14 @@ public class Control implements Runnable
 			try
 			{
 				readMessage();
+				try
+				{
+					readBildMessage();
+				} catch (IOException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				Thread.sleep(1000);
 			} catch (InterruptedException e)
 			{

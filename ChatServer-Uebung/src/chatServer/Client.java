@@ -1,5 +1,7 @@
 package chatServer;
 
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.EOFException;
@@ -12,6 +14,7 @@ import java.net.Socket;
 import java.net.SocketException;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 import Message.nachrichtP.Nachricht;
 
@@ -71,6 +74,30 @@ public class Client implements Runnable
 		}
 
 	}
+	
+	public void broadcastBild(BufferedImage bufferedImage) throws IOException
+	{
+		//OutputStream bildOut = socket.getOutputStream();
+
+				//BufferedOutputStream bufferedBildOut = new BufferedOutputStream(bildOut);
+
+				ImageIcon imageIcon = new ImageIcon(bufferedImage);
+				Image image = imageIcon.getImage();
+
+//				BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null),
+//						BufferedImage.TYPE_INT_RGB);
+
+				Graphics graphics = bufferedImage.createGraphics();
+				graphics.drawImage(image,0,0, image.getWidth(null), image.getHeight(null),null);
+				graphics.dispose();
+				
+				
+				//ImageIO.write(bufferedImage, "png", bufferedBildOut);
+				ImageIO.write(bufferedImage, "png", out);
+
+				//bufferedBildOut.close();
+				//out.close();
+	}
 
 	protected void readMessage()
 	{
@@ -119,6 +146,8 @@ public class Client implements Runnable
 		{
 			control.setImage(bufferedImage);
 		}
+		
+		broadcastBild(bufferedImage);
 	}
 
 	@Override

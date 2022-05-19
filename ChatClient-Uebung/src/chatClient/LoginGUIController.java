@@ -77,9 +77,10 @@ public class LoginGUIController extends Control
 		{
 			try
 			{
-				stageEventChangeStage.setScene(super.erfolgreicherLogin());
-				stageEventChangeStage.setTitle("Debug");
-				stageEventChangeStage.show();
+				System.out.println("Klappt");
+				//stageEventChangeStage.setScene(super.erfolgreicherLogin());
+				//stageEventChangeStage.setTitle("Debug");
+				//stageEventChangeStage.show();
 			}
 			catch (Exception e)
 			{

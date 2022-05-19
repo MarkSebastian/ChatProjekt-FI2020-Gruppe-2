@@ -480,10 +480,11 @@ public class Control implements Runnable
 		}
 	}
 	
-	protected Scene erfolgreicherLogin() throws IOException
+	//protected Scene erfolgreicherLogin() throws IOException
 	{
-		Parent debugParent = FXMLLoader.load(getClass().getResource("Client.fxml"));
-		return new Scene(debugParent);
+		//to do
+		//Parent debugParent = FXMLLoader.load(getClass().getResource("Client.fxml"));
+		//return new Scene(debugParent);
 	}
 	
 	protected void empfangeNachrichtVomAnmeldeServer() throws IOException, ClassNotFoundException

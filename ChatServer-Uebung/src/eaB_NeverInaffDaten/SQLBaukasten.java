@@ -223,6 +223,6 @@ public class SQLBaukasten
 	protected String select_nachricht_in_chatroom()
 	{
 		//jöötet die nachrichten aus bekannten chatroom aus
-		return select+"cl."+benutzername+komma+"n."+timestamp+komma+"n."+inhalt+from+nachricht+"n "+komma+client+"cl"+komma+chatroom+"ch "+where+"n."+chatroom_id+ist+"ch."+id+and+"ch."+hashcode+ist+fragezeichen;
+		return select+"cl."+benutzername+komma+"n."+timestamp+komma+"n."+inhalt+"n.typ "+from+nachricht+"n "+komma+client+"cl"+komma+chatroom+"ch "+where+"n."+chatroom_id+ist+"ch."+id+and+"ch."+hashcode+ist+fragezeichen;
 	} 
 }

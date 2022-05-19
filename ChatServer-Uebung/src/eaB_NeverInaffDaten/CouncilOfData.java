@@ -190,6 +190,42 @@ public class CouncilOfData
 		return erfolg; 
 	}
 	//=================================================================================================================Ende Insert Befehle
+	//=================================================================================================================Start Update Befehle
+	public boolean update_Benutzername(String bNameNeu, String bNameAlt)//nutzername ändern
+	{
+		boolean erfolg=true;
+		sqlBefehl=baukasten.update_Benutzername();
+		try
+		{
+			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
+			vorbereiteteAussage.setString(1, bNameNeu);
+			vorbereiteteAussage.setString(2, bNameAlt);
+			vorbereiteteAussage.executeUpdate();
+		}
+		catch (SQLException e)
+		{
+			erfolg=false;//datenbankfehler
+		}
+		return erfolg; 
+	}
+	
+	public boolean update_timestamp(String bName)//login mit end-timestamp versehen
+	{
+		boolean erfolg=true;
+		sqlBefehl=baukasten.update_timestamp();
+		try
+		{
+			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
+			vorbereiteteAussage.setString(1, bName);
+			vorbereiteteAussage.executeUpdate();
+		}
+		catch (SQLException e)
+		{
+			erfolg=false;//datenbankfehler
+		}
+		return erfolg; 
+	}
+	//=================================================================================================================Ende Update Befehle
 	//=================================================================================================================Select anfang
 	public boolean[] nutzerNameFreiFragezeichen(String bName)//überprüfen ob der name noch frei ist
 	{
@@ -236,6 +272,25 @@ public class CouncilOfData
 			erfolg[0]=true;//datenbankfehler
 		}
 		return erfolg; 
+	} 
+	
+	public ResultSet profilBildSelect(String bName)//anhand des client namens wird das dazugehörige pb geladen (pb=profil bild)
+	{
+		boolean erfolg=true;
+		ResultSet ruckgabe = null;
+		sqlBefehl=baukasten.select_chatroomnamen_by_client();
+		try
+		{
+			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
+			vorbereiteteAussage.setString(1, bName);
+			ResultSet ergebnis = vorbereiteteAussage.executeQuery();	
+			ruckgabe=ergebnis;
+		}
+		catch (SQLException e)
+		{
+			erfolg=false;//datenbankfehler
+		}
+		return ruckgabe; 
 	} 
 	
 	public ResultSet chatroomNamenVonUserSelecten(String bName)//anhand des client namens sämmtliche ihm zugeordnete chatrooms ausgeben

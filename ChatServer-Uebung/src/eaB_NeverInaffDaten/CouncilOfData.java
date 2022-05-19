@@ -170,7 +170,7 @@ public class CouncilOfData
 		return erfolg; 
 	}
 	
-	public boolean insert_Nachricht(String inhalt, Date timestamp, String accountname, String hashcode)//nachricht archivieren
+	public boolean insert_Nachricht(String inhalt, Date timestamp, String accountname, String hashcode)//nachricht archivieren inhalt=entweder der string inhalt oder der dateipfad
 	{
 		boolean erfolg=true;
 		sqlBefehl=baukasten.insert_Nachricht();
@@ -382,4 +382,4 @@ public class CouncilOfData
 		return ruckgabe; 
 	}
 	//=================================================================================================================Select ende
-} 
+}

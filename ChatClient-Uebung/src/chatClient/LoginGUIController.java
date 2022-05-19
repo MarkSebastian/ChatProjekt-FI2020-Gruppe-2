@@ -27,16 +27,34 @@ public class LoginGUIController extends Control
 	{
 		super.startConnect();
 		super.login(anmeldenField.getText(), passwordField.getText(), false);
-		if (super.empfangeNachrichtVomAnmeldeServer() == true)
+		super.run();
+		if (super.getErfolgreich() == true)
 		{
 			sceneChange(true);
+			super.setErfolgreich(false);
 		}
 	}
 
 	@FXML
 	protected void labelOnClick()
 	{
-		sceneChange(false);
+
+		if (super.read != null)
+		{
+			if (super.read.isInterrupted() == false)
+			{
+				super.read.interrupt();
+				sceneChange(false);
+			}
+			else
+			{
+				sceneChange(false);
+			}
+		}
+		else
+		{
+			sceneChange(false);
+		}
 	}
 
 	@FXML
@@ -73,9 +91,9 @@ public class LoginGUIController extends Control
 			try
 			{
 				System.out.println("Klappt");
-				//stageEventChangeStage.setScene(super.erfolgreicherLogin());
-				//stageEventChangeStage.setTitle("Debug");
-				//stageEventChangeStage.show();
+				// stageEventChangeStage.setScene(super.erfolgreicherLogin());
+				// stageEventChangeStage.setTitle("Debug");
+				// stageEventChangeStage.show();
 			}
 			catch (Exception e)
 			{

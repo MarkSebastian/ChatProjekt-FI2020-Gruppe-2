@@ -53,11 +53,12 @@ public class Control implements Runnable
 	protected DefaultListModel<Nachricht> messages = new DefaultListModel<Nachricht>();
 	protected DefaultListModel<String> clients = new DefaultListModel<String>();
 	protected DefaultListModel<String> choosenClients = new DefaultListModel<String>();
+	private boolean erfolgreich;
 
 	protected Thread read;
 	private ClientConnectionThread start;
 
-	protected ObjectInputStream ois;
+	//protected ObjectInputStream ois;
 	protected ObjectOutputStream out;
 
 	private boolean startWindow = false;
@@ -76,7 +77,7 @@ public class Control implements Runnable
 
 	public Control()
 	{
-
+		read = new Thread(this);
 	}
 
 	private void initFX()
@@ -174,7 +175,7 @@ public class Control implements Runnable
 
 	}
 
-	private void readMessage()
+	/*private void readMessage()
 	{
 		try
 		{
@@ -202,7 +203,7 @@ public class Control implements Runnable
 		{
 			System.out.println(e + "\n in readMessage");
 		}
-	}
+	}*/
 
 	protected void getNewMessages(Nachricht n)
 	{
@@ -216,7 +217,7 @@ public class Control implements Runnable
 	 * this.gui.getListActiveUser().setModel(clients); }
 	 */
 
-	private void stopClient()
+	/*private void stopClient()
 	{
 		try
 		{
@@ -234,7 +235,7 @@ public class Control implements Runnable
 		start.interrupt();
 		// gui.changeStatus("verbindung getrennt");
 		// switchGui();
-	}
+	}*/
 	/*
 	 * private void setToolTip() { int index = gui.hoveredItem(); if (index != -1) {
 	 * Nachricht n = messages.getElementAt(index); String time =
@@ -371,48 +372,61 @@ public class Control implements Runnable
 		// return new Scene(debugParent);
 	}
 
-	protected boolean empfangeNachrichtVomAnmeldeServer()
+	public boolean getErfolgreich()
+	{
+		return this.erfolgreich;
+	}
+	
+	public void setErfolgreich(boolean erfolgreich)
+	{
+		this.erfolgreich = erfolgreich;
+	}
+	
+	protected void empfangeNachrichtVomAnmeldeServer()
 	{
 		ObjectInputStream ois;
 		try
 		{
 			ois = new ObjectInputStream(socket.getInputStream());
 			FehlerNachricht fehler = (FehlerNachricht) ois.readObject();
-
+			
 			if (fehler.isDatenbankFehler())
 			{
 				makeAlert("Die Verbindung ist fehlgeschlagen");
-				return false;
+				erfolgreich = false;
 			}
 			else if (fehler.isNutzernameVergebenFehler())
 			{
+				System.out.println("Vor alert");
 				makeAlert("Der Nutzername ist bereits vergeben");
-				return false;
+				erfolgreich = false;
+				System.out.println("Nach alert");
 			}
 			else if (fehler.isNutzernameFehler())
 			{
 				makeAlert("Der Nutzername ist falsch");
-				return false;
+				erfolgreich = false;
 			}
 			else if (fehler.isPasswortFehler())
 			{
 				makeAlert("Das Passwort ist falsch");
-				return false;
+				erfolgreich = false;
 			}
 			else
 			{
-				return true;
+				erfolgreich = true;
 			}
+			read.interrupt();
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
-			return false;
+			erfolgreich = false;
 		}
 		catch (ClassNotFoundException e)
 		{
 			e.printStackTrace();
-			return false;
+			erfolgreich = false;
 		}
 	}
 
@@ -432,7 +446,7 @@ public class Control implements Runnable
 			try
 			{
 				empfangeNachrichtVomAnmeldeServer();
-				Thread.sleep(1000);
+				Thread.sleep(500);
 			}
 			catch (InterruptedException e)
 			{

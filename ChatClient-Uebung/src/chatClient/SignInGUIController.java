@@ -21,20 +21,22 @@ public class SignInGUIController extends Control
 	private PasswordField passwordFieldBestaetigung;
 	@FXML
 	private Label anmeldeLabel;
-	
+
 	@FXML
 	protected void buttonOnClick()
 	{
-		if(passwordField.getText().compareTo(passwordFieldBestaetigung.getText()) == 0)
+		if (passwordField.getText().compareTo(passwordFieldBestaetigung.getText()) == 0)
 		{
 			super.startConnect();
-			super.login(anmeldenField.getText(), passwordField.getText(),true);
-			if (super.empfangeNachrichtVomAnmeldeServer() == true)
+			super.login(anmeldenField.getText(), passwordField.getText(), true);
+			super.run();
+			if (super.getErfolgreich() == true)
 			{
 				sceneChange();
+				super.setErfolgreich(false);
 			}
 		}
-		else 
+		else
 		{
 			makeAlert("Die Passwörter stimmen nicht überein");
 		}
@@ -43,21 +45,37 @@ public class SignInGUIController extends Control
 	@FXML
 	protected void labelOnClick()
 	{
-		sceneChange();
+		if (super.read != null)
+		{
+			if (super.read.isInterrupted() == false)
+			{
+				super.read.interrupt();
+				sceneChange();
+			}
+			else
+			{
+				sceneChange();
+			}
+		}
+		else
+		{
+			sceneChange();
+		}
+
 	}
-	
+
 	@FXML
 	protected void labelOnHover()
 	{
 		anmeldeLabel.setTextFill(Color.BLUE);
 	}
-	
+
 	@FXML
 	protected void labelOnLeave()
 	{
 		anmeldeLabel.setTextFill(Color.BLACK);
 	}
-	
+
 	private void sceneChange()
 	{
 		Stage stageEventChangeStage = (Stage) anmeldeLabel.getScene().getWindow();
@@ -72,7 +90,7 @@ public class SignInGUIController extends Control
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void makeAlert(String messang)
 	{
 		Alert alert = new Alert(AlertType.INFORMATION);

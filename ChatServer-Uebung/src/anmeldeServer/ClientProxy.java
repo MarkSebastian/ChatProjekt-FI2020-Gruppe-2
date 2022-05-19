@@ -69,6 +69,7 @@ public class ClientProxy implements Runnable
 			message = (LogInNachricht)ois.readObject();
 			System.out.println(message.getBenutzerName());
 			System.out.println(message.getPasswort());
+			System.out.println(message.getFlag());
 			if(message.getFlag() == true)
 			{
 				control.registrieren(message, socket);

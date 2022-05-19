@@ -196,11 +196,10 @@ public class ControlDB
 		sqlBefehl=baukasten.select_Loginname();
 		try
 		{
-			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
+			PreparedStatement vorbereiteteAussage = verbindungLogin.prepareStatement(sqlBefehl);
 			vorbereiteteAussage.setString(1, bName);
-			stellungsnahme = verbindungLogin.createStatement();
-			ResultSet ergebnis = stellungsnahme.executeQuery(sqlBefehl);
-			if (ergebnis.first())
+			ResultSet ergebnis = vorbereiteteAussage.executeQuery();
+			if (ergebnis.next())
 			{
 				erfolg[1]=false;//Name bereits vergeben
 			}
@@ -208,6 +207,7 @@ public class ControlDB
 		}
 		catch (SQLException e)
 		{
+			e.printStackTrace();
 			erfolg[0]=false;//datenbankfehler
 		}
 		return erfolg; 

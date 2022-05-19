@@ -225,6 +225,24 @@ public class CouncilOfData
 		}
 		return erfolg; 
 	}
+	
+	public boolean update_client_pic(String profilbildPfad, String bName)//profilbild updaten zuerst pfad zum neuen profilbild dann nutzername
+	{
+		boolean erfolg=true;
+		sqlBefehl=baukasten.update_client_pic();
+		try
+		{
+			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
+			vorbereiteteAussage.setString(1, profilbildPfad);
+			vorbereiteteAussage.setString(2, bName);
+			vorbereiteteAussage.executeUpdate();
+		}
+		catch (SQLException e)
+		{
+			erfolg=false;//datenbankfehler
+		}
+		return erfolg; 
+	}
 	//=================================================================================================================Ende Update Befehle
 	//=================================================================================================================Select anfang
 	public boolean[] nutzerNameFreiFragezeichen(String bName)//überprüfen ob der name noch frei ist
@@ -278,7 +296,7 @@ public class CouncilOfData
 	{
 		boolean erfolg=true;
 		ResultSet ruckgabe = null;
-		sqlBefehl=baukasten.select_chatroomnamen_by_client();
+		sqlBefehl=baukasten.select_client_pic();
 		try
 		{
 			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);

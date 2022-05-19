@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Control
+public class Council
 {
 	private String verbindungslink;
 	private String sqlBefehl;
@@ -31,7 +31,7 @@ public class Control
 	
 
 	
-	public Control()
+	public Council()
 	{
 		verbindungslink="jdbc:ucanaccess://Testdatenbank.accdb";
 		sqlBefehl="Select * from Test where Feld1='Dagobert';"; //Auslesen

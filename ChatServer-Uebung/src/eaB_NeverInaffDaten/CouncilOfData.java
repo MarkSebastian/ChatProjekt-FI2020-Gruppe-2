@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Control
+public class CouncilOfData
 {
 	private String verbindungslinkLoginserver;
 	private String verbindungslinkDatenbank;
@@ -16,7 +16,7 @@ public class Control
 	private Connection verbindungDatenKrake;
 	private SQLBaukasten baukasten;
 	
-	public Control()
+	public CouncilOfData()
 	{
 		baukasten =new SQLBaukasten();
 		verbindungslinkLoginserver="jdbc:ucanaccess://src/Login_DB.accdb";//link zur Loginserver DB

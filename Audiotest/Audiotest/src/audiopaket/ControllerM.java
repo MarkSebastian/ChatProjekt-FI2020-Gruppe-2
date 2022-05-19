@@ -10,8 +10,10 @@ import javax.swing.JOptionPane;
 public class ControllerM
 {
 	protected Gui gui;
-	protected Thread captureThread;
+	//protected Thread captureThread;
+	protected Thread audioAufnehmen;
 	protected Thread audioPlayThread;
+	protected Thread audioAufnehmenM;
 
 	public ControllerM()
 	{
@@ -31,17 +33,13 @@ public class ControllerM
 	{
 		try
 		{
-			
-			System.out.println("Starte Aufnahme");
 			this.gui.getBtnStop().setVisible(true);
 			this.gui.getBtnAufnehmen().setVisible(false);
-			//This beim neuen CaptureThread übergeben sonst friert GUI ein
-			//musste die line auskommentieren
-			System.out.println("Hier nicht 4");
-			captureThread = new CaptureThread(this);
-			System.out.println("Hier nicht 5");
-			//run() wird aufgerufen
-			captureThread.start();
+			audioAufnehmenM = new AudioAufnehmenM(this);
+			audioAufnehmenM.start();
+			
+			//captureThread = new CaptureThread(this);
+			//captureThread.start();
 			System.out.println("Hier nicht 6");
 			//hier fehler
 			JOptionPane.showMessageDialog(null,"Press ok to stop recording");
@@ -54,20 +52,29 @@ public class ControllerM
 		}
 	}
 
-	//funktioniert
+	
 	public void audioPlay()
 	{
-
+		//funktioniert
 		//musste line auskommentieren
 		audioPlayThread = new AudioPlay(this);
 		audioPlayThread.start();
 	}
 
+	/**
+     * Closes the target data line to finish capturing and recording
+     */
 	public void recordStop()
 	{
 		//Beendet den Thread nicht, funktioniert noch nicht
-		captureThread.interrupt();
+		//grade nicht gebraucht
+		//thread wird beendet
+		//captureThread.interrupt();
 		gui.getBtnAufnehmen().setVisible(true);
 		gui.getBtnStop().setVisible(false);
+		//interrupt des threads mit abchecken ob der schläft oder so ?
+		
 	}	
+	
+	 
 }

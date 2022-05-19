@@ -88,7 +88,8 @@ public class CaptureThread extends Thread
 						//geht rein
 						//AudioInputStream, AudioFileFormat, TargetDataLine
 						System.out.println("Hier nicht 3");
-						AudioSystem.write(AudioInputStream,Type, File)
+						//muss ich kurz auskommentieren
+						//AudioSystem.write(AudioInputStream,Type, File)
 						//AudioInputStream
 						
 						//AudioSystem.write(ais, fileFormat, file);
@@ -108,10 +109,10 @@ public class CaptureThread extends Thread
 						// TODO: handle exception
 						System.out.println("EX");
 					}
-					catch (IOException exe) {
+					/*catch (IOException exe) {
 						// TODO: handle exception
 						System.out.println("EXE- Fehlermeldung");
-					}
+					}*/
 				
 				}
 

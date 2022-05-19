@@ -35,6 +35,11 @@ public class Control
 			e.printStackTrace();
 		}
 	}
+	public void schliesenDATENBANK() throws SQLException//<----------Methode zum schliesen der DB-Connection
+	{
+		verbindungLogin.close();
+		verbindungDatenKrake.close();
+	}
 	//=================================================================================================================Start Delete befehle
 	public boolean delete_loginDaten(String bName)//löscht die Logindaten o7
 	{
@@ -196,11 +201,10 @@ public class Control
 		sqlBefehl=baukasten.select_Loginname();
 		try
 		{
-			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
+			PreparedStatement vorbereiteteAussage = verbindungLogin.prepareStatement(sqlBefehl);
 			vorbereiteteAussage.setString(1, bName);
-			stellungsnahme = verbindungLogin.createStatement();
-			ResultSet ergebnis = stellungsnahme.executeQuery(sqlBefehl);
-			if (ergebnis.first())
+			ResultSet ergebnis = vorbereiteteAussage.executeQuery();
+			if (ergebnis.next())
 			{
 				erfolg[1]=false;//Name bereits vergeben
 			}
@@ -223,9 +227,8 @@ public class Control
 		{
 			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
 			vorbereiteteAussage.setString(1, bName);
-			stellungsnahme = verbindungLogin.createStatement();
-			ResultSet ergebnis = stellungsnahme.executeQuery(sqlBefehl);
-			if (ergebnis.first())
+			ResultSet ergebnis = vorbereiteteAussage.executeQuery();
+			if (ergebnis.next())
 			{
 				erfolg[1]=false;//Name bereits vergeben
 			} 
@@ -246,8 +249,7 @@ public class Control
 		{
 			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
 			vorbereiteteAussage.setString(1, bName);
-			stellungsnahme = verbindungLogin.createStatement();
-			ResultSet ergebnis = stellungsnahme.executeQuery(sqlBefehl);	
+			ResultSet ergebnis = vorbereiteteAussage.executeQuery();	
 			ruckgabe=ergebnis;
 		}
 		catch (SQLException e)
@@ -266,8 +268,7 @@ public class Control
 		{
 			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
 			vorbereiteteAussage.setString(1, bName);
-			stellungsnahme = verbindungLogin.createStatement();
-			ResultSet ergebnis = stellungsnahme.executeQuery(sqlBefehl);	
+			ResultSet ergebnis = vorbereiteteAussage.executeQuery();	
 			passwort=ergebnis.getNString(1);
 		}
 		catch (SQLException e)
@@ -300,8 +301,7 @@ public class Control
 		{
 			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
 			vorbereiteteAussage.setString(1, bName);
-			stellungsnahme = verbindungLogin.createStatement();
-			ResultSet ergebnis = stellungsnahme.executeQuery(sqlBefehl);	
+			ResultSet ergebnis = vorbereiteteAussage.executeQuery();	
 			ruckgabe=ergebnis;
 		}
 		catch (SQLException e)

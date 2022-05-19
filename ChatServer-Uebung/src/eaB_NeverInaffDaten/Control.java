@@ -6,7 +6,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class Control
 {
@@ -16,18 +15,17 @@ public class Control
 	private Connection verbindungLogin;
 	private Connection verbindungDatenKrake;
 	private SQLBaukasten baukasten;
-	private Statement stellungsnahme;
 	
 	public Control()
 	{
 		baukasten =new SQLBaukasten();
-		verbindungslinkLoginserver="jdbc:ucanaccess://src/Login_DB.accdb";
-		verbindungslinkDatenbank="jdbc:ucanaccess://src/Datenkrake.accdb"; 
+		verbindungslinkLoginserver="jdbc:ucanaccess://src/Login_DB.accdb";//link zur Loginserver DB
+		verbindungslinkDatenbank="jdbc:ucanaccess://src/Datenkrake.accdb";//link zur Haupt Datenbank
 		
 		try 
 		{
-			verbindungLogin = DriverManager.getConnection(verbindungslinkLoginserver,"","");
-			verbindungDatenKrake = DriverManager.getConnection(verbindungslinkDatenbank,"","");
+			verbindungLogin = DriverManager.getConnection(verbindungslinkLoginserver,"","");//Verbindungsaufbau LoginserverDB
+			verbindungDatenKrake = DriverManager.getConnection(verbindungslinkDatenbank,"","");//Verbindungsaufbau HaupDB
 			System.out.println("verbindung mit datenbanken aufgebaut");
 		}
 		catch (SQLException e)

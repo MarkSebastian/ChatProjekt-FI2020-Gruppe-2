@@ -482,7 +482,7 @@ public class Control implements Runnable
 	
 	protected Scene erfolgreicherLogin() throws IOException
 	{
-		Parent debugParent = FXMLLoader.load(getClass().getResource("Debug.fxml"));
+		Parent debugParent = FXMLLoader.load(getClass().getResource("Client.fxml"));
 		return new Scene(debugParent);
 	}
 	

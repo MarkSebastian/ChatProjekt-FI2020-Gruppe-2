@@ -23,9 +23,7 @@ public class ServerControl
 //	private ArrayList<Client> clients = new ArrayList<Client>();
 	private DefaultListModel<Client> clientListe = new DefaultListModel<Client>();
 //	private ArrayList<String>empfaenger = new ArrayList<String>();
-	
-	
-	
+
 	public ServerControl()
 	{
 		gui = new Gui();
@@ -124,7 +122,7 @@ public class ServerControl
 	{
 		messages.addElement(n);
 	}
-	
+
 	protected void broadcastMessage(Nachricht n)
 	{
 		messages.addElement(n);
@@ -142,16 +140,17 @@ public class ServerControl
 				e.sendMessage(n);
 		});
 	}
-	
-	// PrivatChatObjekt hat ArrayList mit Empfängern, nur an diese Liste wird der PrivatChat geschickt
+
+	// PrivatChatObjekt hat ArrayList mit Empfängern, nur an diese Liste wird der
+	// PrivatChat geschickt
 	protected void broadcastPrivatChat(PrivatChatSenden pcs)
 	{
 		connect.getClients().forEach(e -> pcs.getEmpfaenger().forEach(s ->
 		{
-			if(!pcs.getUser().equals(e)) 
+			if (!pcs.getUser().equals(e))
 				if (e.getName().equals(s))
 					e.sendMessage(pcs);
-			}));
+		}));
 	}
 
 	// Nachricht hat eine ArrayList mit den empfaengern des privatChats, die
@@ -161,13 +160,14 @@ public class ServerControl
 		connect.getClients().forEach(e -> n.getEmpfaenger().forEach(s ->
 		{
 			if (e.getName().equals(s))
-				e.sendMessage(n);				
+				e.sendMessage(n);
 		}));
 	}
 
 	protected void closeClient(Client c)
 	{
 		connect.getClients().remove(c);
+		connect.getEmpfaenger().remove(c.getName());
 		akClientList();
 	}
 
@@ -191,7 +191,6 @@ public class ServerControl
 		System.out.println("Server gestoppt.");
 	}
 
-
 	private void setToolTip()
 	{
 		int index = gui.hoveredItem();
@@ -207,26 +206,11 @@ public class ServerControl
 
 	}
 
-	protected ArrayList<String> clientEntfernen(String name)
-	{
-		ArrayList<String> rueckgabe = new ArrayList<String>();
-		
-		connect.getClients().forEach(c -> {
-			if(c.getName().equals(name))
-			{
-				System.out.println(c.getName() + " wird entfernt");
-				connect.getClients().remove(c);	
-				connect.getEmpfaenger().remove(c.getName());
-			}});
-				
-		connect.getClients().forEach(c -> {rueckgabe.add(c.getName());});
-		
-		return rueckgabe;
-	}
-	
+
+
 	protected ArrayList<String> listeFuellen()
 	{
-		ArrayList<String> temp = new ArrayList<String>();		
+		ArrayList<String> temp = new ArrayList<String>();
 		return temp;
 	}
 

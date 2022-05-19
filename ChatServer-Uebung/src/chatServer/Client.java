@@ -69,7 +69,7 @@ public class Client implements Runnable
 		}			
 		catch (SocketException | EOFException e1)
 		{
-			control.closeClient(this);
+			control.closeClient(this);			
 			stopClient();
 		} catch (Exception e)
 		{
@@ -137,17 +137,17 @@ public class Client implements Runnable
 			} catch (InterruptedException e)
 			{
 				System.out.println(name + " verbindung getrennt");
-				control.broadcastMessage(new Nachricht("verbindung mit " + name + " getrennt!", control.clientEntfernen(name)));
-				System.out.println("Verbindung geschlossen, Empfänger:");
-				for (String s : control.getConnect().getEmpfaenger())
-				{
-					System.out.println(s);
-				}
-				System.out.println("Verbindung geschlossen, Clients:");
-				for (Client c : control.getConnect().getClients())
-				{
-					System.out.println(c.getName());
-				}
+				control.broadcastMessage(new Nachricht("verbindung mit " + name + " getrennt!", control.getConnect().getEmpfaenger()));
+//				System.out.println("Verbindung geschlossen, Empfänger:");
+//				for (String s : control.getConnect().getEmpfaenger())
+//				{
+//					System.out.println(s);
+//				}
+//				System.out.println("Verbindung geschlossen, Clients:");
+//				for (Client c : control.getConnect().getClients())
+//				{
+//					System.out.println(c.getName());
+//				}
 				read.interrupt();
 			}
 		}

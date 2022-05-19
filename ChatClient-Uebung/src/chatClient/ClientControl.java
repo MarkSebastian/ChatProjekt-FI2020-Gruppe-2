@@ -295,10 +295,11 @@ public class ClientControl implements Runnable, Serializable
 			{
 				if(n.getEmpfaenger() != null)
 				{
+					aktiveClients = null;
 					this.aktiveClients = n.getEmpfaenger();
-/*					akClientList();
-					akListPC();
-*/					akClients();
+					System.out.println("CLIENT!!!!    Neue Nachricht empfangen, Empfänger:");
+					n.getEmpfaenger().forEach(e -> System.out.println(e));
+					akClients();
 				}
 				getNewMessages(n);
 			}
@@ -307,7 +308,6 @@ public class ClientControl implements Runnable, Serializable
 		{
 			System.out.println(e + "\n in nachrichtEmpfangen");
 		}
-
 	}
 
 	private boolean privatChatStarten(Object o)
@@ -400,40 +400,15 @@ public class ClientControl implements Runnable, Serializable
 		teilnehmerPrivatChat.forEach(t -> choosenClients.addElement(t));		
 	}
 	
-/*	protected void akClientList()
-	{
-		// Listen leeren
-		clients.removeAllElements();
-		clientsPC.removeAllElements();
-		
-		// DefaultListModel User globaler Chat füllen
-		aktiveClients.forEach(e -> clients.addElement(e));
-		
-		// DefaultListModel User PC füllen (gleiche Liste ohne einen selbst)
-		aktiveClients.forEach(e ->
-		{
-			if (!e.equals(user))
-			{
-				auswahlClientsPC.add(e);
-			}
-		});
-		auswahlClientsPC.forEach(e -> clientsPC.addElement(e));
-	}
-	
-	private void akListPC()
-	{
-		// Listen leeren
-		clientsPC.removeAllElements();
-		choosenClients.removeAllElements();
-		// Listen füllen
-		auswahlClientsPC.forEach(a -> clientsPC.addElement(a));
-		teilnehmerPrivatChat.forEach(t -> choosenClients.addElement(t));		
-	}
-*/
 	private void stopClient()
 	{
 		try
 		{
+			messagesArray.clear();
+			aktiveClients.clear();
+			teilnehmerPrivatChat.clear();
+			auswahlClientsPC.clear();
+			
 			first = true;
 			ois.close();
 			out.close();

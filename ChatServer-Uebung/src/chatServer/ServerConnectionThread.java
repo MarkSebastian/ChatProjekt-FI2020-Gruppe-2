@@ -13,14 +13,13 @@ public class ServerConnectionThread extends Thread
 	private ServerControl control;
 	private ServerSocket server;
 	private Socket socket;
-	private ArrayList<Client> clients;
+	private ArrayList<Client> clients = new ArrayList<Client>();
 	private ArrayList<String> empfaenger = new ArrayList<String>();
 	private int clientCount = 1;
 
 	public ServerConnectionThread(ServerSocket server, ServerControl control)
 	{
 		this.server = server;
-		this.clients = new ArrayList<Client>();
 		this.control = control;
 	}	
 
@@ -50,9 +49,14 @@ public class ServerConnectionThread extends Thread
 				clientCount++;
 				control.akClientList();		
 				System.out.println("Verbindung hergestellt");
-				Nachricht beitritt = new Nachricht (newClient.getName() + " ist beigetreten!", empfaenger);
-				System.out.println("Broadcast Server Empfänger");
+	//			System.out.println("Broadcast Server Nachricht Empfaenger: ");
+	//			beitritt.getEmpfaenger().forEach(e -> System.out.println(e));
+				System.out.println("Broadcast Server ArrayEmpfänger");
 				empfaenger.forEach(e -> System.out.println(e));
+				System.out.println("Boardcast Server ArrayClients");
+				clients.forEach(e -> System.out.println(e));
+				Nachricht beitritt = new Nachricht (newClient.getName() + " ist beigetreten!", empfaenger);
+
 				control.broadcastMessage(beitritt);
 				Thread.sleep(1000);
 			} catch(SocketException e1)

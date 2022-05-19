@@ -16,6 +16,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 import java.awt.ScrollPane;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
 
 public class Gui
 {
@@ -39,6 +41,7 @@ public class Gui
 	private JButton btnUserEntfernen;
 	private JButton btnNeuerChat;
 	private JScrollPane scrollPaneUserList;
+	private JButton btnRecord;
 
 	// HI
 	public Gui()
@@ -101,7 +104,7 @@ public class Gui
 		if (lblStatus == null)
 		{
 			lblStatus = new JLabel("Satus");
-			lblStatus.setBounds(10, 244, 190, 13);
+			lblStatus.setBounds(10, 244, 87, 13);
 			lblStatus.setHorizontalAlignment(SwingConstants.LEFT);
 		}
 		return lblStatus;
@@ -252,6 +255,7 @@ public class Gui
 			panelGlobalChat.add(getBtnShowUserList());
 			panelGlobalChat.add(getBtnStop());
 			panelGlobalChat.add(getScrollPaneUserList());
+			panelGlobalChat.add(getBtnRecord());
 		}
 		return panelGlobalChat;
 	}
@@ -304,7 +308,7 @@ public class Gui
 	}
 
 	public void addAddListner(ActionListener l)
-	{
+	{	
 		this.getBtnUserHinzufügen().addActionListener(l);
 	}
 
@@ -347,5 +351,28 @@ public class Gui
 
 		}
 		return scrollPaneUserList;
+	}
+
+	public void setBtnRecord(ActionListener l) 
+	{
+		this.btnRecord.addActionListener(l);
+	}
+	
+	protected JButton getBtnRecord()
+	{
+		if (btnRecord == null)
+		{
+			btnRecord = new JButton("O");
+			btnRecord.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent e)
+				{
+				}
+			});
+			btnRecord.setForeground(new Color(34, 139, 34));
+			btnRecord.setFont(new Font("Times New Roman", Font.BOLD, 16));
+			btnRecord.setBounds(109, 239, 89, 23);
+		}
+		return btnRecord;
 	}
 }

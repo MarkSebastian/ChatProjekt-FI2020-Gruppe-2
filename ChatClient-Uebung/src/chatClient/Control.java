@@ -69,6 +69,8 @@ public class Control implements Runnable
 	{
 		this.gui.addEingabeListener(l -> sendMessage());
 		this.gui.addBtnStopListener(l -> stopClient());
+		//neuer Button für audioRecord
+		this.gui.setBtnRecord(l -> recordAudio());
 
 		this.startGui.addBtnVerbindenListener(l ->
 		{
@@ -340,6 +342,39 @@ public class Control implements Runnable
 		{
 			System.out.println("nichts ausgewählt");
 		}
+	}
+	
+	//neue Methode audioRecord
+	public void recordAudio()
+	{
+		//Nachricht nachricht = new Nachricht(null, clients);
+		try
+		{
+			/*Nachricht message;
+			if (first)
+			{
+				message = new Nachricht(startGui.getTextFieldUsername().getText(), false);
+				out.writeObject(message);
+				first = false;
+			}
+			else
+			{
+				message = new Nachricht(this.gui.getTextFieldEingabe().getText(), false);
+				out.writeObject(message);
+				messages.addElement(message);
+				akList();
+			}*/
+		}
+		catch (NullPointerException e )
+		{
+			gui.changeStatus("Noch nicht mit Server Verbunden!");
+		}
+		catch (Exception e )
+		{
+			System.out.println(e + "\n in sendMessage");
+		}
+		this.gui.getTextFieldEingabe().setText("");
+
 	}
 
 	@Override

@@ -225,6 +225,4 @@ public class SQLBaukasten
 		//jöötet die nachrichten aus bekannten chatroom aus
 		return select+"cl."+benutzername+komma+"n."+timestamp+komma+"n."+inhalt+from+nachricht+"n "+komma+client+"cl"+komma+chatroom+"ch "+where+"n."+chatroom_id+ist+"ch."+id+and+"ch."+hashcode+ist+fragezeichen;
 	} 
-	 
-	
 }

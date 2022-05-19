@@ -84,11 +84,13 @@ public class Control
 		nameFrei = controlDB.nutzerNameFreiFragezeichen(message.getBenutzerName());
 		if(nameFrei[0] == false)
 		{
+			System.out.println("Name nicht frei db fehler");
 			try
 			{
 				oos = new ObjectOutputStream(socket.getOutputStream());
 				FehlerNachricht dbFehler = new FehlerNachricht(true, false, false, false);
 				oos.writeObject(dbFehler);
+				
 			}
 			catch (IOException e)
 			{
@@ -97,6 +99,7 @@ public class Control
 		}
 		else if(nameFrei[1] == false)
 		{
+			System.out.println("Name nicht frei");
 			try
 			{
 				oos = new ObjectOutputStream(socket.getOutputStream());
@@ -112,6 +115,7 @@ public class Control
 		{
 			boolean flag;
 			flag = controlDB.insert_LoginDB(message.getBenutzerName(), message.getPasswort());
+			System.out.println(flag);
 			if(flag == false)
 			{
 				try
@@ -133,6 +137,7 @@ public class Control
 					oos = new ObjectOutputStream(socket.getOutputStream());
 					FehlerNachricht erfolgreich = new FehlerNachricht(false, false, false, false);
 					oos.writeObject(erfolgreich);
+					System.out.println(flag);
 				}
 				catch (IOException e)
 				{

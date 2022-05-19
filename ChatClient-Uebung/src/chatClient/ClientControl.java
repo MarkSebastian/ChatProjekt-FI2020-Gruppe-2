@@ -295,8 +295,9 @@ public class ClientControl implements Runnable, Serializable
 			{
 				if(n.getEmpfaenger() != null)
 				{
-					aktiveClients = null;
-					this.aktiveClients = n.getEmpfaenger();
+					aktiveClients = new ArrayList<String>();
+					n.getEmpfaenger().forEach(e -> aktiveClients.add(e));
+					//this.aktiveClients = n.getEmpfaenger();
 					System.out.println("CLIENT!!!!    Neue Nachricht empfangen, Empfänger:");
 					n.getEmpfaenger().forEach(e -> System.out.println(e));
 					akClients();

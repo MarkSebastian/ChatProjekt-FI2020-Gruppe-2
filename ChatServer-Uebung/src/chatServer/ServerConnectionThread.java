@@ -49,14 +49,13 @@ public class ServerConnectionThread extends Thread
 				clientCount++;
 				control.akClientList();		
 				System.out.println("Verbindung hergestellt");
-	//			System.out.println("Broadcast Server Nachricht Empfaenger: ");
-	//			beitritt.getEmpfaenger().forEach(e -> System.out.println(e));
 				System.out.println("Broadcast Server ArrayEmpfänger");
 				empfaenger.forEach(e -> System.out.println(e));
 				System.out.println("Boardcast Server ArrayClients");
 				clients.forEach(e -> System.out.println(e));
 				Nachricht beitritt = new Nachricht (newClient.getName() + " ist beigetreten!", empfaenger);
-
+				System.out.println("Nachricht beitritt:");
+				beitritt.getEmpfaenger().forEach(n -> System.out.println(n));
 				control.broadcastMessage(beitritt);
 				Thread.sleep(1000);
 			} catch(SocketException e1)

@@ -29,14 +29,9 @@ public class SignInGUIController extends Control
 		{
 			super.startConnect();
 			super.login(anmeldenField.getText(), passwordField.getText(),true);
-			//if fertigstellen
-			if (true)
+			if (super.empfangeNachrichtVomAnmeldeServer() == true)
 			{
 				sceneChange();
-			}
-			else 
-			{
-				makeAlert("Registration fehlgeschlagen");
 			}
 		}
 		else 

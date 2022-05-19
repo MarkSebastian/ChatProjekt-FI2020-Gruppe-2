@@ -27,14 +27,9 @@ public class LoginGUIController extends Control
 	{
 		super.startConnect();
 		super.login(anmeldenField.getText(), passwordField.getText(), false);
-		//if ferigstellen
-		if (true)
+		if (super.empfangeNachrichtVomAnmeldeServer() == true)
 		{
 			sceneChange(true);
-		}
-		else
-		{
-			makeAlert("Login fehlgeschlagen");
 		}
 	}
 

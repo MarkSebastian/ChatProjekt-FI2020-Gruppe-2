@@ -3,6 +3,7 @@ package anmeldeServer;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
@@ -14,6 +15,7 @@ public class ClientProxy implements Runnable
 	private Socket socket;
 	private ObjectInputStream ois;
 	private Thread thread;
+	
 	
 	public ClientProxy(Control control, Socket socket)
 	{

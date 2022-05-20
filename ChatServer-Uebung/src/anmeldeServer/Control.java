@@ -7,6 +7,8 @@ import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 
+import com.esotericsoftware.kryonet.Server;
+
 import Message.nachrichtP.LogInNachricht;
 import eaB_NeverInaffDaten.ControlDB;
 import javafx.application.Application;
@@ -17,7 +19,8 @@ import Message.nachrichtP.FehlerNachricht;
 
 public class Control
 {
-	private ServerSocket serverSocket;
+	//private ServerSocket serverSocket;
+	private Server server;
 	protected ServerConnectionThread connectionThread;
 	private ArrayList<ClientProxy> clients;
 	private ControlDB controlDB;
@@ -38,7 +41,10 @@ public class Control
 	{
 		try
 		{
-			serverSocket = new ServerSocket(5555);
+			//serverSocket = new ServerSocket(5555);
+			server = new Server();
+			server.start();
+			server.bind(5555);
 		}
 		catch (IOException e)
 		{
@@ -46,7 +52,7 @@ public class Control
 		}
 		System.out.println("Erfolgreicher Start");
 		clients = new ArrayList<ClientProxy>();
-		connectionThread = new ServerConnectionThread(this.serverSocket, this, this.clients);
+		connectionThread = new ServerConnectionThread(this.server, this, this.clients);
 	}
 	
 	protected void stoppen()
@@ -60,14 +66,14 @@ public class Control
 			clients.clear();
 		}
 		connectionThread.interrupt();
-		try
-		{
-			serverSocket.close();
-		}
-		catch (IOException e)
+		//try
+		//{
+			server.close();
+		//}
+		/*catch (IOException e)
 		{
 			e.printStackTrace();
-		}
+		}*/
 		
 		System.out.println("Server gestoppt");
 	}

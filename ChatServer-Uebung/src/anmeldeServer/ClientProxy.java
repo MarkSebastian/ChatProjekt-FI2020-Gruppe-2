@@ -7,20 +7,23 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
+import com.esotericsoftware.kryonet.Connection;
+
 import Message.nachrichtP.LogInNachricht;
 
 public class ClientProxy implements Runnable
 {
 	private Control control;
-	private Socket socket;
-	private ObjectInputStream ois;
+	//private Socket socket;
+	private Connection connection;
+	//private ObjectInputStream ois;
 	private Thread thread;
 	
 	
-	public ClientProxy(Control control, Socket socket)
+	public ClientProxy(Control control, Connection connection)
 	{
 		this.control = control;
-		this.socket = socket;
+		this.connection = connection;
 		startStreams();
 		thread = new Thread(this);
 		thread.start();

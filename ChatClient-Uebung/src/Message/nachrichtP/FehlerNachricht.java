@@ -2,12 +2,12 @@ package Message.nachrichtP;
 
 import java.io.Serializable;
 
-public class FehlerNachricht implements Serializable
+public class FehlerNachricht
 {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	//private static final long serialVersionUID = 1L;
 
 	private boolean datenbankFehler;
 	

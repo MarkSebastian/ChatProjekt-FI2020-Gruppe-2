@@ -25,9 +25,7 @@ public class LoginGUIController extends Control
 	@FXML
 	protected void buttonOnClick()
 	{
-		super.startConnect();
 		super.login(anmeldenField.getText(), passwordField.getText(), false);
-		super.run();
 		if (super.getErfolgreich() == true)
 		{
 			sceneChange(true);
@@ -38,23 +36,7 @@ public class LoginGUIController extends Control
 	@FXML
 	protected void labelOnClick()
 	{
-
-		if (super.read != null)
-		{
-			if (super.read.isInterrupted() == false)
-			{
-				super.read.interrupt();
-				sceneChange(false);
-			}
-			else
-			{
-				sceneChange(false);
-			}
-		}
-		else
-		{
-			sceneChange(false);
-		}
+		sceneChange(false);
 	}
 
 	@FXML

@@ -27,9 +27,7 @@ public class SignInGUIController extends Control
 	{
 		if (passwordField.getText().compareTo(passwordFieldBestaetigung.getText()) == 0)
 		{
-			super.startConnect();
 			super.login(anmeldenField.getText(), passwordField.getText(), true);
-			super.run();
 			if (super.getErfolgreich() == true)
 			{
 				sceneChange();
@@ -45,23 +43,7 @@ public class SignInGUIController extends Control
 	@FXML
 	protected void labelOnClick()
 	{
-		if (super.read != null)
-		{
-			if (super.read.isInterrupted() == false)
-			{
-				super.read.interrupt();
-				sceneChange();
-			}
-			else
-			{
-				sceneChange();
-			}
-		}
-		else
-		{
-			sceneChange();
-		}
-
+		sceneChange();
 	}
 
 	@FXML

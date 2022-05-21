@@ -2,9 +2,9 @@ package Message.nachrichtP;
 
 import java.io.Serializable;
 
-public class LogInNachricht implements Serializable
+public class LogInNachricht
 {
-	private static final long serialVersionUID = 1L;
+	//private static final long serialVersionUID = 1L;
 	private String benutzerName;
 	private String passwort;
 	private boolean flag;

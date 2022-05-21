@@ -42,7 +42,12 @@ import Message.nachrichtP.FehlerNachricht;
 import Message.nachrichtP.LogInNachricht;
 import javax.swing.DefaultListModel;
 
-public class Control implements Runnable
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+
+public class Control
 {
 
 	// protected Gui gui;
@@ -55,15 +60,13 @@ public class Control implements Runnable
 	protected DefaultListModel<String> choosenClients = new DefaultListModel<String>();
 	private boolean erfolgreich;
 
-	protected Thread read;
-	private ClientConnectionThread start;
-
 	//protected ObjectInputStream ois;
 	protected ObjectOutputStream out;
 
 	private boolean startWindow = false;
 
 	private boolean first = true;
+	private static Client client;
 
 	// FX
 	@FXML
@@ -77,7 +80,12 @@ public class Control implements Runnable
 
 	public Control()
 	{
-		read = new Thread(this);
+		//read = new Thread(this);
+		client = new Client();
+		addListenerToClient();
+		Kryo kryo = client.getKryo();
+		kryo.register(LogInNachricht.class);
+		kryo.register(FehlerNachricht.class);
 	}
 
 	private void initFX()
@@ -303,8 +311,11 @@ public class Control implements Runnable
 		System.out.print(benutzer + " " + pass);
 		try
 		{
-			out = new ObjectOutputStream(socket.getOutputStream());
-			out.writeObject(new LogInNachricht(benutzer, pass, anmeldung));
+			client.start();
+			client.connect(5000, "localhost", 5555, 8008);
+			client.sendTCP(new LogInNachricht(benutzer, pass, anmeldung));
+			System.out.println("Erfolgreich gesendet");
+			System.out.println(client.getRemoteAddressTCP());
 		}
 		catch (IOException e)
 		{
@@ -312,43 +323,63 @@ public class Control implements Runnable
 			e.printStackTrace();
 		}
 	}
-
-	protected void startConnect()
+	
+	protected void addListenerToClient()
 	{
-		try
+		client.addListener(new Listener()
 		{
-			if (socket == null)
+			public void received(Connection connection, Object object)
 			{
-				socket = new Socket("localhost", 5555);
-			}
-			else if (socket != null)
-			{
-				if (socket.isConnected() == false)
+				if (object instanceof FehlerNachricht) 
 				{
-					socket = new Socket("localhost", 5555);
+					try
+					{
+						client.update(100);
+						FehlerNachricht fehler = (FehlerNachricht) object;
+						System.out.println("Verbindung hergestellt mit Kryo");
+						connection.sendTCP(new String("Hat geklappt vom Client"));
+						if (fehler.isDatenbankFehler())
+						{
+							makeAlert("Die Verbindung ist fehlgeschlagen");
+							erfolgreich = false;
+						}
+						else if (fehler.isNutzernameVergebenFehler())
+						{
+							System.out.println("Vor alert");
+							makeAlert("Der Nutzername ist bereits vergeben");
+							erfolgreich = false;
+							System.out.println("Nach alert");
+						}
+						else if (fehler.isNutzernameFehler())
+						{
+							makeAlert("Der Nutzername ist falsch");
+							erfolgreich = false;
+						}
+						else if (fehler.isPasswortFehler())
+						{
+							makeAlert("Das Passwort ist falsch");
+							erfolgreich = false;
+						}
+						else
+						{
+							erfolgreich = true;
+						}
+						Thread.sleep(1000);
+					}
+					catch (IOException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					catch (InterruptedException e)
+					{
+						// TODO Auto-generated catch block
+						client.stop();
+						e.printStackTrace();
+					}
 				}
 			}
-
-			// ois = new ObjectInputStream(socket.getInputStream());
-			out = new ObjectOutputStream(socket.getOutputStream());
-			Thread.sleep(2000);
-		}
-		catch (UnknownHostException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (InterruptedException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		});
 	}
 
 	protected Scene changeScene(boolean singin) throws IOException
@@ -382,77 +413,11 @@ public class Control implements Runnable
 		this.erfolgreich = erfolgreich;
 	}
 	
-	protected void empfangeNachrichtVomAnmeldeServer()
-	{
-		ObjectInputStream ois;
-		try
-		{
-			ois = new ObjectInputStream(socket.getInputStream());
-			FehlerNachricht fehler = (FehlerNachricht) ois.readObject();
-			
-			if (fehler.isDatenbankFehler())
-			{
-				makeAlert("Die Verbindung ist fehlgeschlagen");
-				erfolgreich = false;
-			}
-			else if (fehler.isNutzernameVergebenFehler())
-			{
-				System.out.println("Vor alert");
-				makeAlert("Der Nutzername ist bereits vergeben");
-				erfolgreich = false;
-				System.out.println("Nach alert");
-			}
-			else if (fehler.isNutzernameFehler())
-			{
-				makeAlert("Der Nutzername ist falsch");
-				erfolgreich = false;
-			}
-			else if (fehler.isPasswortFehler())
-			{
-				makeAlert("Das Passwort ist falsch");
-				erfolgreich = false;
-			}
-			else
-			{
-				erfolgreich = true;
-			}
-			read.interrupt();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-			erfolgreich = false;
-		}
-		catch (ClassNotFoundException e)
-		{
-			e.printStackTrace();
-			erfolgreich = false;
-		}
-	}
-
 	private void makeAlert(String messang)
 	{
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setHeaderText(null);
 		alert.setContentText(messang);
 		alert.show();
-	}
-
-	@Override
-	public void run()
-	{
-		while (!read.isInterrupted())
-		{
-			try
-			{
-				empfangeNachrichtVomAnmeldeServer();
-				Thread.sleep(500);
-			}
-			catch (InterruptedException e)
-			{
-				read.interrupt();
-			}
-
-		}
 	}
 }

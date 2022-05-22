@@ -1,13 +1,16 @@
 package Message.nachrichtP;
 
-import java.io.Serializable;
 
 public class LogInNachricht
 {
-	//private static final long serialVersionUID = 1L;
 	private String benutzerName;
 	private String passwort;
 	private boolean flag;
+	
+	public LogInNachricht()
+	{
+		
+	}
 	
 	public LogInNachricht(String benutzerName, String passwort, boolean flag)
 	{

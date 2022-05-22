@@ -23,10 +23,8 @@ import Message.nachrichtP.FehlerNachricht;
 
 public class Control
 {
-	private Server server;
+	private static Server server;
 	private ControlDB controlDB;
-	private ObjectOutputStream oos;
-	private Kryo kryo;
 	
 	public Control() 
 	{
@@ -39,12 +37,10 @@ public class Control
 		try
 		{
 			server = new Server();
-			addListenerToServer();
-			this.kryo = server.getKryo();
-			kryo.register(LogInNachricht.class);
-			kryo.register(FehlerNachricht.class);
-			server.start();
+			Register.register(server.getKryo());
 			server.bind(5555,8008);
+			server.start();
+			addListenerToServer();
 		}
 		catch (IOException e)
 		{
@@ -135,10 +131,8 @@ public class Control
 	{
 		server.addListener(new Listener()
 		{
-			@Override
 			public void received (Connection connection, Object object)
 			{
-				System.out.println("Hilfe");
 				if(object instanceof LogInNachricht)
 				{
 						try
@@ -162,6 +156,11 @@ public class Control
 							server.stop();
 							System.out.println("ConnectionThread geschlossen");
 						}
+						/*catch (IOException e)
+						{
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}*/
 				}
 			}
 		});

@@ -31,6 +31,10 @@ public class LoginGUIController extends Control
 			sceneChange(true);
 			super.setErfolgreich(false);
 		}
+		else 
+		{
+			makeAlertWarnig(getFehlerMeldungString());
+		}
 	}
 
 	@FXML
@@ -84,9 +88,17 @@ public class LoginGUIController extends Control
 		}
 	}
 
-	private void makeAlert(String messang)
+	private void makeAlertInformation(String messang)
 	{
 		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setHeaderText(null);
+		alert.setContentText(messang);
+		alert.show();
+	}
+	
+	private void makeAlertWarnig(String messang)
+	{
+		Alert alert = new Alert(AlertType.WARNING);
 		alert.setHeaderText(null);
 		alert.setContentText(messang);
 		alert.show();

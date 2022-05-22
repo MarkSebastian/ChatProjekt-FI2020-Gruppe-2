@@ -1,13 +1,9 @@
 package Message.nachrichtP;
 
-import java.io.Serializable;
 
 public class FehlerNachricht
 {
-	/**
-	 * 
-	 */
-	//private static final long serialVersionUID = 1L;
+
 
 	private boolean datenbankFehler;
 	
@@ -16,6 +12,11 @@ public class FehlerNachricht
 	private boolean nutzernameFehler;
 	
 	private boolean passwortFehler;
+	
+	public FehlerNachricht()
+	{
+		
+	}
 
 	public FehlerNachricht(boolean datenbankFehler, boolean nutzernameVergebenFehler, boolean nutzernameFehler, boolean passwortFehler)
 	{

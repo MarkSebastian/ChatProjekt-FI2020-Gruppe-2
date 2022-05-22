@@ -33,10 +33,14 @@ public class SignInGUIController extends Control
 				sceneChange();
 				super.setErfolgreich(false);
 			}
+			else
+			{
+				makeAlertWarnig(getFehlerMeldungString());
+			}
 		}
 		else
 		{
-			makeAlert("Die Passwörter stimmen nicht überein");
+			makeAlertInformation("Die Passwörter stimmen nicht überein");
 		}
 	}
 
@@ -73,9 +77,17 @@ public class SignInGUIController extends Control
 		}
 	}
 
-	private void makeAlert(String messang)
+	private void makeAlertInformation(String messang)
 	{
 		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setHeaderText(null);
+		alert.setContentText(messang);
+		alert.show();
+	}
+	
+	private void makeAlertWarnig(String messang)
+	{
+		Alert alert = new Alert(AlertType.WARNING);
 		alert.setHeaderText(null);
 		alert.setContentText(messang);
 		alert.show();

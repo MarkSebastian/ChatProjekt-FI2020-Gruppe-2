@@ -67,6 +67,7 @@ public class Control
 
 	private boolean first = true;
 	private static Client client;
+	private String fehlerMeldungString;
 
 	// FX
 	@FXML
@@ -324,6 +325,11 @@ public class Control
 		}
 	}
 	
+	public String getFehlerMeldungString()
+	{
+		return this.fehlerMeldungString;
+	}
+	
 	protected void addListenerToClient()
 	{
 		client.addListener(new Listener()
@@ -340,24 +346,24 @@ public class Control
 						connection.sendTCP(new String("Hat geklappt vom Client"));
 						if (fehler.isDatenbankFehler())
 						{
-							makeAlert("Die Verbindung ist fehlgeschlagen");
+							fehlerMeldungString = "Die Verbindung ist fehlgeschlagen";
 							erfolgreich = false;
 						}
 						else if (fehler.isNutzernameVergebenFehler())
 						{
 							System.out.println("Vor alert");
-							makeAlert("Der Nutzername ist bereits vergeben");
+							fehlerMeldungString = "Der Nutzername ist bereits vergeben";
 							erfolgreich = false;
 							System.out.println("Nach alert");
 						}
 						else if (fehler.isNutzernameFehler())
 						{
-							makeAlert("Der Nutzername ist falsch");
+							fehlerMeldungString = "Der Nutzername ist falsch";
 							erfolgreich = false;
 						}
 						else if (fehler.isPasswortFehler())
 						{
-							makeAlert("Das Passwort ist falsch");
+							fehlerMeldungString = "Das Passwort ist falsch";
 							erfolgreich = false;
 						}
 						else
@@ -377,6 +383,10 @@ public class Control
 						client.stop();
 						e.printStackTrace();
 					}
+				}
+				else if(object instanceof String)
+				{
+					System.out.println((String)object);
 				}
 			}
 		});
@@ -413,11 +423,4 @@ public class Control
 		this.erfolgreich = erfolgreich;
 	}
 	
-	private void makeAlert(String messang)
-	{
-		Alert alert = new Alert(AlertType.WARNING);
-		alert.setHeaderText(null);
-		alert.setContentText(messang);
-		alert.show();
-	}
 }

@@ -170,7 +170,8 @@ public class CouncilOfData
 		return erfolg; 
 	}
 	
-	public boolean insert_Nachricht(String inhalt, Date timestamp, String accountname, String hashcode)//nachricht archivieren inhalt=entweder der string inhalt oder der dateipfad
+	public boolean insert_Nachricht(String inhalt, Date timestamp, String accountname, String hashcode, String typ)//nachricht archivieren inhalt=entweder der string inhalt oder der dateipfad 
+	//(!!!Typ zur festlegung welcher dateityp A=Audio, B=Bild, D=Datei, N=Nachricht(String)<--Default wert)
 	{
 		boolean erfolg=true;
 		sqlBefehl=baukasten.insert_Nachricht();
@@ -181,6 +182,7 @@ public class CouncilOfData
 			vorbereiteteAussage.setDate(2, timestamp);
 			vorbereiteteAussage.setString(3, accountname);
 			vorbereiteteAussage.setString(4, hashcode);
+			vorbereiteteAussage.setString(5, typ);
 			vorbereiteteAussage.executeUpdate();
 		}
 		catch (SQLException e)

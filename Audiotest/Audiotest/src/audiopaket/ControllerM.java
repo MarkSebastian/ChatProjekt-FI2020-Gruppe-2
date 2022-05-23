@@ -35,6 +35,7 @@ public class ControllerM
 		{
 			this.gui.getBtnStop().setVisible(true);
 			this.gui.getBtnAufnehmen().setVisible(false);
+			//
 			audioAufnehmenM = new AudioAufnehmenM(this);
 			audioAufnehmenM.start();
 			

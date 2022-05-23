@@ -32,7 +32,7 @@ public class ControllerM
 	public void audioRecord()
 	{
 		try
-		{
+		{//test
 			this.gui.getBtnStop().setVisible(true);
 			this.gui.getBtnAufnehmen().setVisible(false);
 			//

@@ -29,26 +29,18 @@ public class SignInGUIController extends Control
 		if (passwordField.getText().compareTo(passwordFieldBestaetigung.getText()) == 0)
 		{
 			super.login(anmeldenField.getText(), passwordField.getText(), true);
-			boolean b = false;
-			do
+			if (super.getErfolgreich() == true)
 			{
-				if (super.getErfolgreich() == true)
+				sceneChange();
+				super.setErfolgreich(false);
+			}
+			else if (super.getErfolgreich() == false)
+			{
+				if (getFehlerMeldungString() != null)
 				{
-					sceneChange();
-					super.setErfolgreich(false);
+					makeAlertWarnig(getFehlerMeldungString());	
 				}
-				else if (super.getErfolgreich() == false)
-				{
-					
-					if (getFehlerMeldungString() != null)
-					{
-						makeAlertWarnig(getFehlerMeldungString());
-						b = true;
-					}
-
-				}
-			} while (b == false);
-			b = false;
+			}
 		}
 		else
 		{

@@ -46,6 +46,7 @@ public class SQLBaukasten
 	private String accountname;
 	private String max;
 	private String hashcode;
+	private String pic;
 	
 	public SQLBaukasten()
 	{
@@ -92,6 +93,7 @@ public class SQLBaukasten
 		accountname="accountname ";
 		max="max ";
 		hashcode="hashcode ";
+		pic="pic";
 	}
 	
 	//deletes
@@ -162,7 +164,15 @@ public class SQLBaukasten
 	protected String update_timestamp()
 	{
 		//bei Ausloggen wird der momentane login mit end-timestamp versehen
-		return update+loginliste+set+timestamp_ende+ist+fragezeichen+where+id+ist;
+		return update+loginliste+set+timestamp_ende+ist+"sysdate() "+where+id+ist+
+				klammerAuf+select+max+klammerAuf+"lczt."+id+klammerZu+from+client+"c "+komma+loginClient_ZT+"lczt "+
+				where+"c."+id+ist+"lczt."+id+and+"c."+accountname+ist+fragezeichen+klammerZu;
+	}
+	
+	protected String update_client_pic()
+	{
+		//Polarisiert den Eintrag zum Profilbild mit dem neuen
+		return update+client+set+pic+ist+fragezeichen+where+accountname+ist+fragezeichen;
 	}
 	
 	//selects
@@ -223,8 +233,12 @@ public class SQLBaukasten
 	protected String select_nachricht_in_chatroom()
 	{
 		//jöötet die nachrichten aus bekannten chatroom aus
-		return select+"cl."+benutzername+komma+"n."+timestamp+komma+"n."+inhalt+from+nachricht+"n "+komma+client+"cl"+komma+chatroom+"ch "+where+"n."+chatroom_id+ist+"ch."+id+and+"ch."+hashcode+ist+fragezeichen;
+		return select+"cl."+benutzername+komma+"n."+timestamp+komma+"n."+inhalt+komma+"n.typ "+from+nachricht+"n "+komma+client+"cl"+komma+chatroom+"ch "+where+"n."+chatroom_id+ist+"ch."+id+and+"ch."+hashcode+ist+fragezeichen;
 	} 
-	 
 	
+	protected String select_client_pic()
+	{
+		//legt die Profilbilder zum Anzeigen dar
+		return select+"pic"+from+client+where+accountname+ist+fragezeichen;
+	}
 }

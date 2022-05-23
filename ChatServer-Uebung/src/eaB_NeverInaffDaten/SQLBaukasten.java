@@ -148,10 +148,11 @@ public class SQLBaukasten
 	protected String insert_Nachricht()
 	{
 		//Nachricht einfügen
-		return insert+into+nachricht+klammerAuf+inhalt+komma+timestamp+komma+client_id+komma+chatroom_id+klammerZu+
+		return insert+into+nachricht+klammerAuf+inhalt+komma+timestamp+komma+client_id+komma+chatroom_id+komma+"typ"+klammerZu+
 				values+klammerAuf+fragezeichen+komma+fragezeichen+komma+
 				select_Client_id()+komma+
-				select_Chatroom_nach_hashcode()+klammerZu;
+				select_Chatroom_nach_hashcode()+
+				fragezeichen+klammerZu;
 	}
 	
 	//updates

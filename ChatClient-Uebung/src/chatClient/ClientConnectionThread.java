@@ -54,7 +54,6 @@ public class ClientConnectionThread extends Thread
 					startStreams();
 
 					control.sendMessage();
-
 					control.read = new Thread(control);
 					control.read.start();
 				}

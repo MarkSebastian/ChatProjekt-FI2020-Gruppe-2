@@ -122,13 +122,11 @@ public class ServerControl
 	{
 		messages.addElement(n);
 	}
-
+		
 	protected void broadcastMessage(Nachricht n)
 	{
 		messages.addElement(n);
-
 		connect.getClients().forEach(e -> e.sendMessage(n));
-
 		this.gui.getTextNachrichtenEingabe().setText("");
 	}
 

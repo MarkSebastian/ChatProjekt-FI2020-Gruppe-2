@@ -9,7 +9,11 @@ import javax.swing.DefaultListModel;
 
 public class Nachricht implements Serializable
 {	
-	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2962890154987449386L;
 	private long hashcode;
 	private String absender;
 	private int absenderId;

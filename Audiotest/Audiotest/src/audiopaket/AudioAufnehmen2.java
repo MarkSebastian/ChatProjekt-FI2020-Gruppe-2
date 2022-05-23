@@ -38,6 +38,7 @@ public class AudioAufnehmen2 extends Thread
 	private AudioAufnehmen2 audioAufnehmen2;
 	
 
+	//gui und GuiAudio sind auch threads
 	public AudioInputStream getAis()
 	{
 		return ais;
@@ -74,19 +75,22 @@ public class AudioAufnehmen2 extends Thread
 		thread.setName("Aufzeichnen");
 		thread.start();
 	}*/
-	public void starteRun(AudioAufnehmen2 audioAufnehmen2)
+	
+	public void aufzeichneThread(AudioAufnehmen2 audioAufnehmen2)
 	{
 		thread = new Thread(this);
 		thread.setName("Aufzeichnen");
-		System.out.println("2 "+audioAufnehmen2.getName());
-		System.out.println("3 "+thread.getName());
+		System.out.println("In AudioAufnehmen2 Thread Name "+thread.getName());
 		thread.start();
 	}
+	
 	public void stopThread()
 	{
 		thread = null;
 	}
 
+	//threads in einzelnen methoden
+	
 	@Override
 	public void run()
 	{
@@ -99,8 +103,6 @@ public class AudioAufnehmen2 extends Thread
 
 			System.out.println("Hi");
 			final int bufferLengthInBytes = bufferLengthInFrames * frameSizeInBytes;
-			// Vielleicht out auch Globaler anlegen, who knows
-
 			schreibeOutputStream(out, tdl, frameSizeInBytes, bufferLengthInBytes);
 			this.ais = new AudioInputStream(tdl);
 			setAis(convertToAudioIStream(out, frameSizeInBytes));
@@ -113,7 +115,7 @@ public class AudioAufnehmen2 extends Thread
 		}
 
 	}
-
+	
 	public AudioFormat build(AudioFormat format)
 	{
 		this.format = format;

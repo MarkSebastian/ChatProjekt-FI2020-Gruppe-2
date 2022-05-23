@@ -46,9 +46,10 @@ public class AudioPlay extends Thread
 			System.out.println(clip.getFormat());
 		
 			clip.open(audioStream);
-			//
 			System.out.println("Hier nicht 33");
 			clip.start();
+			System.out.println("Aktueller Thread "+this.currentThread());
+			System.out.println("Aktueller Thread Name "+this.currentThread().getName());
 		
 		}
 		catch(IllegalArgumentException e)
@@ -73,12 +74,9 @@ public class AudioPlay extends Thread
 		{
 			System.out.println("Exception e " + e);
 		}
-		/*
-		 * finally { if ((audioStream != null)) { try {
-		 * 
-		 * audioStream.close(); } catch (IOException e ) {
-		 * System.out.println("IOException-Close()" + e); } } }
-		 */
+		finally {
+			//this.
+		}
 	}
 
 }

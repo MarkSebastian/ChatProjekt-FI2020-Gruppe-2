@@ -36,14 +36,15 @@ public class ControllerM
 		try
 		{
 			AudioFormat format = setzeSoundEinstellungen();
-			//this.gui.getBtnAufnehmen().setVisible(false);
-			//audioAufnehmen2 = new AudioAufnehmen2(this.guiAudio);
 			audioAufnehmen2 = new AudioAufnehmen2();
 
 			audioAufnehmen2.build(format);
 			System.out.println("Das ist das audioFormat" +audioAufnehmen2);
 			System.out.println("recording");
-			audioAufnehmen2.starteRun(audioAufnehmen2);
+			audioAufnehmen2.setName("AudioHauptThread");
+			//thread audioAufnehmen
+			System.out.println("In Controllert Thread Name "+audioAufnehmen2.getName());
+			audioAufnehmen2.aufzeichneThread(audioAufnehmen2);
 			
 			Thread.sleep(20000);
 		    audioAufnehmen2.interrupt();
@@ -67,10 +68,11 @@ public class ControllerM
 	
 	public void audioPlay()
 	{
-		//funktioniert
-		//musste line auskommentieren
+		//thread
 		audioPlayThread = new AudioPlay(this);
+		System.out.println("In ControllerM Aktueller Thread Name "+audioPlayThread.getName());
 		audioPlayThread.start();
+		//thread beenden hier ? oder bei run ?
 	}
 
 	public static AudioFormat setzeSoundEinstellungen() {

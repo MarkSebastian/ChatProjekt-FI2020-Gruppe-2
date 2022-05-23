@@ -14,10 +14,14 @@ public class ControllerM
 	protected Thread audioAufnehmen;
 	protected Thread audioPlayThread;
 	protected Thread audioAufnehmenM;
+	private AudioAufnehmen2 audioAufnehmen2;
+	protected GUIAudio guiAudio;
+	private WavSpeichern wavspeichern;
 
 	public ControllerM()
 	{
 		gui = new Gui();
+		guiAudio= new GUIAudio();
 		setButtons();
 	}
 
@@ -25,26 +29,33 @@ public class ControllerM
 	{
 		this.gui.setBtnAufnehmen(e -> audioRecord());
 		this.gui.setBtnAbspielen(e -> audioPlay());
-		this.gui.setBtnStop(e -> recordStop());
-		this.gui.getBtnStop().setVisible(false);
 	}
 
 	public void audioRecord()
 	{
 		try
-		{//test
-			this.gui.getBtnStop().setVisible(true);
-			this.gui.getBtnAufnehmen().setVisible(false);
-			//
-			audioAufnehmenM = new AudioAufnehmenM(this);
-			audioAufnehmenM.start();
+		{
+			AudioFormat format = setzeSoundEinstellungen();
+			//this.gui.getBtnAufnehmen().setVisible(false);
+			//audioAufnehmen2 = new AudioAufnehmen2(this.guiAudio);
+			audioAufnehmen2 = new AudioAufnehmen2();
+
+			audioAufnehmen2.build(format);
+			System.out.println("Das ist das audioFormat" +audioAufnehmen2);
+			System.out.println("recording");
+			audioAufnehmen2.starteRun(audioAufnehmen2);
 			
-			//captureThread = new CaptureThread(this);
-			//captureThread.start();
+			Thread.sleep(20000);
+		    audioAufnehmen2.interrupt();
+
+		    wavspeichern =new WavSpeichern();
+			//schreibt wav 
+		    wavspeichern.speichereInWav(audioAufnehmen2.getAis());
 			System.out.println("Hier nicht 6");
 			//hier fehler
-			JOptionPane.showMessageDialog(null,"Press ok to stop recording");
-			//captureThread.interrupt();
+			guiAudio.setVisible(true);
+			
+			//audioAufnehmen.interrupt();
 		}
 
 		catch (Exception e )
@@ -62,20 +73,17 @@ public class ControllerM
 		audioPlayThread.start();
 	}
 
-	/**
-     * Closes the target data line to finish capturing and recording
-     */
-	public void recordStop()
-	{
-		//Beendet den Thread nicht, funktioniert noch nicht
-		//grade nicht gebraucht
-		//thread wird beendet
-		//captureThread.interrupt();
-		gui.getBtnAufnehmen().setVisible(true);
-		gui.getBtnStop().setVisible(false);
-		//interrupt des threads mit abchecken ob der schläft oder so ?
-		
-	}	
+	public static AudioFormat setzeSoundEinstellungen() {
+        SoundEinstellungen settings = new SoundEinstellungen();
+        AudioFormat.Encoding encoding = settings.ENCODING;
+        float rate = settings.RATE;
+        int channels = settings.CHANNELS;
+        int sampleSize = settings.SAMPLE_SIZE;
+        boolean bigEndian = settings.BIG_ENDIAN;
+
+        return new AudioFormat(encoding, rate, sampleSize, channels, (sampleSize / 8) * channels, rate, bigEndian);
+    }
+	
 	
 	 
 }

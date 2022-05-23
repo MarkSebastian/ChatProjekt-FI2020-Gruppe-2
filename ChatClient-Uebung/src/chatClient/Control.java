@@ -340,7 +340,7 @@ public class Control
 				{
 					try
 					{
-						client.update(100);
+						client.update(1);
 						FehlerNachricht fehler = (FehlerNachricht) object;
 						System.out.println("Verbindung hergestellt mit Kryo");
 						connection.sendTCP(new String("Hat geklappt vom Client"));

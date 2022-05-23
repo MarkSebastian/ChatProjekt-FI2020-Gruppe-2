@@ -28,15 +28,26 @@ public class SignInGUIController extends Control
 		if (passwordField.getText().compareTo(passwordFieldBestaetigung.getText()) == 0)
 		{
 			super.login(anmeldenField.getText(), passwordField.getText(), true);
-			if (super.getErfolgreich() == true)
+			boolean b = false;
+			do
 			{
-				sceneChange();
-				super.setErfolgreich(false);
-			}
-			else
-			{
-				makeAlertWarnig(getFehlerMeldungString());
-			}
+				if (super.getErfolgreich() == true)
+				{
+					sceneChange();
+					super.setErfolgreich(false);
+				}
+				else if (super.getErfolgreich() == false)
+				{
+					
+					if (getFehlerMeldungString() != null)
+					{
+						makeAlertWarnig(getFehlerMeldungString());
+						b = true;
+					}
+
+				}
+			} while (b == false);
+			b = false;
 		}
 		else
 		{
@@ -84,7 +95,7 @@ public class SignInGUIController extends Control
 		alert.setContentText(messang);
 		alert.show();
 	}
-	
+
 	private void makeAlertWarnig(String messang)
 	{
 		Alert alert = new Alert(AlertType.WARNING);

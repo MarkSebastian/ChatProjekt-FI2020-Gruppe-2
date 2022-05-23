@@ -25,6 +25,7 @@ public class SignInGUIController extends Control
 	@FXML
 	protected void buttonOnClick()
 	{
+		//TO-DO: Fehlerbox Leerer Text
 		if (passwordField.getText().compareTo(passwordFieldBestaetigung.getText()) == 0)
 		{
 			super.login(anmeldenField.getText(), passwordField.getText(), true);
@@ -84,7 +85,7 @@ public class SignInGUIController extends Control
 		alert.setContentText(messang);
 		alert.show();
 	}
-	
+
 	private void makeAlertWarnig(String messang)
 	{
 		Alert alert = new Alert(AlertType.WARNING);

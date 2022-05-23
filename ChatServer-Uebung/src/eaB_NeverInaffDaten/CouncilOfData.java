@@ -6,9 +6,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
-public class ControlDB
+public class CouncilOfData
 {
 	private String verbindungslinkLoginserver;
 	private String verbindungslinkDatenbank;
@@ -16,24 +15,28 @@ public class ControlDB
 	private Connection verbindungLogin;
 	private Connection verbindungDatenKrake;
 	private SQLBaukasten baukasten;
-	private Statement stellungsnahme;
 	
-	public ControlDB()
+	public CouncilOfData()
 	{
 		baukasten =new SQLBaukasten();
-		verbindungslinkLoginserver="jdbc:ucanaccess://src/Login_DB.accdb";
-		verbindungslinkDatenbank="jdbc:ucanaccess://src/Datenkrake.accdb"; 
+		verbindungslinkLoginserver="jdbc:ucanaccess://src/Login_DB.accdb";//link zur Loginserver DB
+		verbindungslinkDatenbank="jdbc:ucanaccess://src/Datenkrake.accdb";//link zur Haupt Datenbank
 		
 		try 
 		{
-			verbindungLogin = DriverManager.getConnection(verbindungslinkLoginserver,"","");
-			verbindungDatenKrake = DriverManager.getConnection(verbindungslinkDatenbank,"","");
+			verbindungLogin = DriverManager.getConnection(verbindungslinkLoginserver,"","");//Verbindungsaufbau LoginserverDB
+			verbindungDatenKrake = DriverManager.getConnection(verbindungslinkDatenbank,"","");//Verbindungsaufbau HaupDB
 			System.out.println("verbindung mit datenbanken aufgebaut");
 		}
 		catch (SQLException e)
 		{
 			e.printStackTrace();
 		}
+	}
+	public void schliesenDATENBANK() throws SQLException//<----------Methode zum schliesen der DB-Connection
+	{
+		verbindungLogin.close();
+		verbindungDatenKrake.close();
 	}
 	//=================================================================================================================Start Delete befehle
 	public boolean delete_loginDaten(String bName)//löscht die Logindaten o7
@@ -167,7 +170,8 @@ public class ControlDB
 		return erfolg; 
 	}
 	
-	public boolean insert_Nachricht(String inhalt, Date timestamp, String accountname, String hashcode)//nachricht archivieren
+	public boolean insert_Nachricht(String inhalt, Date timestamp, String accountname, String hashcode, String typ)//nachricht archivieren inhalt=entweder der string inhalt oder der dateipfad 
+	//(!!!Typ zur festlegung welcher dateityp A=Audio, B=Bild, D=Datei, N=Nachricht(String)<--Default wert)
 	{
 		boolean erfolg=true;
 		sqlBefehl=baukasten.insert_Nachricht();
@@ -178,6 +182,7 @@ public class ControlDB
 			vorbereiteteAussage.setDate(2, timestamp);
 			vorbereiteteAussage.setString(3, accountname);
 			vorbereiteteAussage.setString(4, hashcode);
+			vorbereiteteAussage.setString(5, typ);
 			vorbereiteteAussage.executeUpdate();
 		}
 		catch (SQLException e)
@@ -187,6 +192,60 @@ public class ControlDB
 		return erfolg; 
 	}
 	//=================================================================================================================Ende Insert Befehle
+	//=================================================================================================================Start Update Befehle
+	public boolean update_Benutzername(String bNameNeu, String bNameAlt)//nutzername ändern
+	{
+		boolean erfolg=true;
+		sqlBefehl=baukasten.update_Benutzername();
+		try
+		{
+			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
+			vorbereiteteAussage.setString(1, bNameNeu);
+			vorbereiteteAussage.setString(2, bNameAlt);
+			vorbereiteteAussage.executeUpdate();
+		}
+		catch (SQLException e)
+		{
+			erfolg=false;//datenbankfehler
+		}
+		return erfolg; 
+	}
+	
+	public boolean update_timestamp(String bName)//login mit end-timestamp versehen
+	{
+		boolean erfolg=true;
+		sqlBefehl=baukasten.update_timestamp();
+		try
+		{
+			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
+			vorbereiteteAussage.setString(1, bName);
+			vorbereiteteAussage.executeUpdate();
+		}
+		catch (SQLException e)
+		{
+			erfolg=false;//datenbankfehler
+		}
+		return erfolg; 
+	}
+	
+	public boolean update_client_pic(String profilbildPfad, String bName)//profilbild updaten zuerst pfad zum neuen profilbild dann nutzername
+	{
+		boolean erfolg=true;
+		sqlBefehl=baukasten.update_client_pic();
+		try
+		{
+			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
+			vorbereiteteAussage.setString(1, profilbildPfad);
+			vorbereiteteAussage.setString(2, bName);
+			vorbereiteteAussage.executeUpdate();
+		}
+		catch (SQLException e)
+		{
+			erfolg=false;//datenbankfehler
+		}
+		return erfolg; 
+	}
+	//=================================================================================================================Ende Update Befehle
 	//=================================================================================================================Select anfang
 	public boolean[] nutzerNameFreiFragezeichen(String bName)//überprüfen ob der name noch frei ist
 	{
@@ -207,7 +266,6 @@ public class ControlDB
 		}
 		catch (SQLException e)
 		{
-			e.printStackTrace();
 			erfolg[0]=false;//datenbankfehler
 		}
 		return erfolg; 
@@ -223,9 +281,8 @@ public class ControlDB
 		{
 			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
 			vorbereiteteAussage.setString(1, bName);
-			stellungsnahme = verbindungLogin.createStatement();
-			ResultSet ergebnis = stellungsnahme.executeQuery(sqlBefehl);
-			if (ergebnis.first())
+			ResultSet ergebnis = vorbereiteteAussage.executeQuery();
+			if (ergebnis.next())
 			{
 				erfolg[1]=false;//Name bereits vergeben
 			} 
@@ -237,6 +294,25 @@ public class ControlDB
 		return erfolg; 
 	} 
 	
+	public ResultSet profilBildSelect(String bName)//anhand des client namens wird das dazugehörige pb geladen (pb=profil bild)
+	{
+		boolean erfolg=true;
+		ResultSet ruckgabe = null;
+		sqlBefehl=baukasten.select_client_pic();
+		try
+		{
+			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
+			vorbereiteteAussage.setString(1, bName);
+			ResultSet ergebnis = vorbereiteteAussage.executeQuery();	
+			ruckgabe=ergebnis;
+		}
+		catch (SQLException e)
+		{
+			erfolg=false;//datenbankfehler
+		}
+		return ruckgabe; 
+	} 
+	
 	public ResultSet chatroomNamenVonUserSelecten(String bName)//anhand des client namens sämmtliche ihm zugeordnete chatrooms ausgeben
 	{
 		boolean erfolg=true;
@@ -246,8 +322,7 @@ public class ControlDB
 		{
 			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
 			vorbereiteteAussage.setString(1, bName);
-			stellungsnahme = verbindungLogin.createStatement();
-			ResultSet ergebnis = stellungsnahme.executeQuery(sqlBefehl);	
+			ResultSet ergebnis = vorbereiteteAussage.executeQuery();	
 			ruckgabe=ergebnis;
 		}
 		catch (SQLException e)
@@ -266,8 +341,7 @@ public class ControlDB
 		{
 			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
 			vorbereiteteAussage.setString(1, bName);
-			stellungsnahme = verbindungLogin.createStatement();
-			ResultSet ergebnis = stellungsnahme.executeQuery(sqlBefehl);	
+			ResultSet ergebnis = vorbereiteteAussage.executeQuery();	
 			passwort=ergebnis.getNString(1);
 		}
 		catch (SQLException e)
@@ -300,8 +374,7 @@ public class ControlDB
 		{
 			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
 			vorbereiteteAussage.setString(1, bName);
-			stellungsnahme = verbindungLogin.createStatement();
-			ResultSet ergebnis = stellungsnahme.executeQuery(sqlBefehl);	
+			ResultSet ergebnis = vorbereiteteAussage.executeQuery();	
 			ruckgabe=ergebnis;
 		}
 		catch (SQLException e)
@@ -311,5 +384,4 @@ public class ControlDB
 		return ruckgabe; 
 	}
 	//=================================================================================================================Select ende
-	
-} 
+}

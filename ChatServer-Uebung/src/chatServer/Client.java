@@ -4,7 +4,11 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -12,6 +16,7 @@ import java.io.ObjectOutputStream;
 import java.io.OptionalDataException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -20,6 +25,7 @@ import Message.nachrichtP.Nachricht;
 
 public class Client implements Runnable
 {
+	static ArrayList<Datei> dateien;
 
 	private Control control;
 
@@ -46,6 +52,7 @@ public class Client implements Runnable
 		readMessage();
 		read = new Thread(this);
 		read.start();
+		dateien = new ArrayList<>();
 	}
 
 	private void startStreams()
@@ -74,29 +81,29 @@ public class Client implements Runnable
 		}
 
 	}
-	
+
 	public void broadcastBild(BufferedImage bufferedImage) throws IOException
 	{
-		//OutputStream bildOut = socket.getOutputStream();
+		// OutputStream bildOut = socket.getOutputStream();
 
-				//BufferedOutputStream bufferedBildOut = new BufferedOutputStream(bildOut);
+		// BufferedOutputStream bufferedBildOut = new BufferedOutputStream(bildOut);
 
-				ImageIcon imageIcon = new ImageIcon(bufferedImage);
-				Image image = imageIcon.getImage();
+		ImageIcon imageIcon = new ImageIcon(bufferedImage);
+		Image image = imageIcon.getImage();
 
-//				BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null),
-//						BufferedImage.TYPE_INT_RGB);
+		// BufferedImage bufferedImage = new BufferedImage(image.getWidth(null),
+		// image.getHeight(null),
+		// BufferedImage.TYPE_INT_RGB);
 
-				Graphics graphics = bufferedImage.createGraphics();
-				graphics.drawImage(image,0,0, image.getWidth(null), image.getHeight(null),null);
-				graphics.dispose();
-				
-				
-				//ImageIO.write(bufferedImage, "png", bufferedBildOut);
-				ImageIO.write(bufferedImage, "png", out);
+		Graphics graphics = bufferedImage.createGraphics();
+		graphics.drawImage(image, 0, 0, image.getWidth(null), image.getHeight(null), null);
+		graphics.dispose();
 
-				//bufferedBildOut.close();
-				//out.close();
+		// ImageIO.write(bufferedImage, "png", bufferedBildOut);
+		ImageIO.write(bufferedImage, "png", out);
+
+		// bufferedBildOut.close();
+		// out.close();
 	}
 
 	protected void readMessage()
@@ -104,7 +111,7 @@ public class Client implements Runnable
 		try
 		{
 			Nachricht message = null;
-			
+
 			message = (Nachricht) ois.readObject();
 			if (first)
 			{
@@ -119,13 +126,11 @@ public class Client implements Runnable
 				control.getNewMessages(message);
 				control.broadcastMessage(message, this);
 			}
-		}
-		catch(OptionalDataException e2)
+		} catch (OptionalDataException e2)
 		{
 			e2.printStackTrace();
-			//System.out.println("");
-		}
-		catch (SocketException | EOFException e1)
+			// System.out.println("");
+		} catch (SocketException | EOFException e1)
 		{
 			control.closeClient(this);
 			stopClient();
@@ -146,8 +151,69 @@ public class Client implements Runnable
 		{
 			control.setImage(bufferedImage);
 		}
-		
+
 		broadcastBild(bufferedImage);
+	}
+
+	public void readDatei() throws IOException
+	{
+		DataInputStream dis = new DataInputStream(ois);
+
+		int dateiNameLaenge = dis.readInt();
+
+		if (dateiNameLaenge > 0)
+		{
+			byte[] dateiNameBytes = new byte[dateiNameLaenge];
+			dis.readFully(dateiNameBytes, 0, dateiNameBytes.length);
+
+			String dateiName = new String(dateiNameBytes);
+
+			int dateiInhaltLaenge = dis.readInt();
+
+			if (dateiInhaltLaenge > 0)
+			{
+				byte[] dateiInhaltBytes = new byte[dateiInhaltLaenge];
+				dis.readFully(dateiInhaltBytes, 0, dateiInhaltLaenge);
+
+				if (getDateiEndung(dateiName).equalsIgnoreCase("txt"))
+				{
+					
+				}
+				
+				try
+				{
+					File datei = new File(dateiName);
+					
+					FileOutputStream fos = new FileOutputStream(datei);
+					
+					//FileInputStream fis = new FileInputStream(dateiInhaltLaenge);
+					
+					byte[] dateiInhalt;
+					
+					fos.write(dateiNameBytes);
+					fos.close();
+				}
+				finally
+				{
+					
+				}
+			}
+
+		}
+	}
+	
+	public String getDateiEndung(String dateiName)
+	{
+		int i = dateiName.lastIndexOf('.');
+		
+		if(i > 0)
+		{
+			return dateiName.substring(i+1);
+		}
+		else
+		{
+			return "keine Dateiendung";
+		}
 	}
 
 	@Override
@@ -160,6 +226,7 @@ public class Client implements Runnable
 			{
 				readMessage();
 				readBildMessage();
+				readDatei();
 
 				Thread.sleep(500);
 			} catch (InterruptedException | IOException e)

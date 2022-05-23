@@ -6,7 +6,11 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
 import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import Message.nachrichtP.Nachricht;
@@ -47,11 +51,15 @@ public class Control implements Runnable
 
 	private boolean first = true;
 
+	private final File[] datei;
+
 	public Control()
 	{
 		startGui = new VerbindungsGUI();
 		gui = new Gui();
 		setListener();
+
+		datei = new File[1];
 	}
 
 	public void switchGui()
@@ -107,6 +115,19 @@ public class Control implements Runnable
 				e1.printStackTrace();
 			}
 		});
+
+		this.gui.addDateiSendenListener(l ->
+		{
+			try
+			{
+				sendDatei();
+			} catch (IOException e1)
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+		this.gui.addDateiWahlListener(l -> ChooseFile());
 	}
 
 	protected boolean checkPort()
@@ -187,6 +208,33 @@ public class Control implements Runnable
 
 	}
 
+	protected void sendDatei() throws IOException
+	{
+		if (datei == null)
+		{
+
+		} else
+		{
+			FileInputStream fis = new FileInputStream(datei[0].getAbsolutePath());
+			DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+
+			String dateiname = datei[0].getName();
+			byte[] dateinameBytes = dateiname.getBytes();
+
+			byte[] dateiInhaltBytes = new byte[(int) datei[0].length()];
+			fis.read(dateiInhaltBytes);
+
+			dos.writeInt(dateiInhaltBytes.length);
+			dos.write(dateiInhaltBytes);
+		}
+
+	}
+
+	public void ChooseFile()
+	{
+		datei[0] = gui.OpenFileChooser();
+	}
+
 	private void readMessage()
 	{
 		try
@@ -205,14 +253,13 @@ public class Control implements Runnable
 		} catch (SocketException e1)
 		{
 			stopClient();
-		} 
-		
-		catch(OptionalDataException e3)
+		}
+
+		catch (OptionalDataException e3)
 		{
 			e3.printStackTrace();
-			//System.out.println("");
-		}
-		catch (EOFException e2)
+			// System.out.println("");
+		} catch (EOFException e2)
 		{
 			stopClient();
 		} catch (Exception e)

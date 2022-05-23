@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.awt.Color;
@@ -12,6 +13,8 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import java.awt.SystemColor;
 import java.awt.event.MouseMotionAdapter;
+import java.io.File;
+
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
@@ -44,6 +47,9 @@ public class Gui
 	private JTextField textFieldPfadEingabe;
 	private JButton btnBildSenden;
 	private JLabel lblBildAnzeige;
+	private JButton btnDateiWaehlen;
+	private JButton btnDateiSenden;
+	
 
 	public Gui()
 	{
@@ -61,6 +67,8 @@ public class Gui
 		frmClient.getContentPane().add(getTextFieldPfadEingabe());
 		frmClient.getContentPane().add(getBtnBildSenden());
 		frmClient.getContentPane().add(getLblBildAnzeige());
+		frmClient.getContentPane().add(getBtnDateiWaehlen());
+		frmClient.getContentPane().add(getBtnDateiSenden());
 
 		frmClient.setAlwaysOnTop(true);
 
@@ -363,7 +371,7 @@ public class Gui
 		}
 		return textFieldPfadEingabe;
 	}
-	
+
 	protected JButton getBtnBildSenden()
 	{
 		if (btnBildSenden == null)
@@ -373,16 +381,62 @@ public class Gui
 		}
 		return btnBildSenden;
 	}
-	
+
 	public void addBildSendenListener(ActionListener l)
 	{
 		this.getBtnBildSenden().addActionListener(l);
 	}
-	protected JLabel getLblBildAnzeige() {
-		if (lblBildAnzeige == null) {
+
+	protected JLabel getLblBildAnzeige()
+	{
+		if (lblBildAnzeige == null)
+		{
 			lblBildAnzeige = new JLabel("New label");
-			lblBildAnzeige.setBounds(10, 331, 324, 173);
+			lblBildAnzeige.setBounds(10, 331, 229, 173);
 		}
 		return lblBildAnzeige;
+	}
+
+	protected JButton getBtnDateiWaehlen()
+	{
+		if (btnDateiWaehlen == null)
+		{
+			btnDateiWaehlen = new JButton("Datei w\u00E4hlen");
+			btnDateiWaehlen.setBounds(249, 336, 89, 78);
+		}
+		return btnDateiWaehlen;
+	}
+	
+	public void addDateiWahlListener(ActionListener l)
+	{
+		this.getBtnDateiWaehlen().addActionListener(l);
+	}
+
+	protected JButton getBtnDateiSenden()
+	{
+		if (btnDateiSenden == null)
+		{
+			btnDateiSenden = new JButton("Datei senden");
+			btnDateiSenden.setBounds(249, 426, 89, 78);
+		}
+		return btnDateiSenden;
+	}
+	
+	public void addDateiSendenListener(ActionListener l)
+	{
+		this.getBtnDateiSenden().addActionListener(l);
+	}
+	
+	protected File OpenFileChooser()
+	{	
+		final File[] datei = new File[1];
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle("Zu verschickende Datei wählen");
+		
+		if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+		{
+			datei[0] = fileChooser.getSelectedFile();
+		}
+		return datei[0];
 	}
 }

@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.SystemColor;
+import javax.swing.JPanel;
 
 public class Gui
 {
@@ -31,6 +32,7 @@ public class Gui
 	private boolean userList = false;
 	private JScrollPane scrollPaneListUser;
 	protected JLabel lblBildLabel;
+	private JPanel panelDateiIn;
 
 	public Gui()
 	{
@@ -44,7 +46,7 @@ public class Gui
 	{
 		frmServer = new JFrame();
 		frmServer.setTitle("Server");
-		frmServer.setBounds(100, 450, 342, 500);
+		frmServer.setBounds(100, 450, 591, 550);
 		frmServer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmServer.getContentPane().setLayout(null);
 		frmServer.getContentPane().add(getList());
@@ -58,6 +60,7 @@ public class Gui
 		frmServer.getContentPane().add(getListUser());
 		frmServer.getContentPane().add(getScrollPaneListUser());
 		frmServer.getContentPane().add(getLblBildLabel());
+		frmServer.getContentPane().add(getPanelDateiIn());
 
 		frmServer.setAlwaysOnTop(true);
 		frmServer.setVisible(true);
@@ -264,8 +267,18 @@ public class Gui
 		if (lblBildLabel == null)
 		{
 			lblBildLabel = new JLabel("new Label");
-			lblBildLabel.setBounds(11, 314, 286, 136);
+			lblBildLabel.setBounds(11, 314, 286, 177);
 		}
 		return lblBildLabel;
+	}
+
+	protected JPanel getPanelDateiIn()
+	{
+		if (panelDateiIn == null)
+		{
+			panelDateiIn = new JPanel();
+			panelDateiIn.setBounds(328, 284, 248, 207);
+		}
+		return panelDateiIn;
 	}
 }

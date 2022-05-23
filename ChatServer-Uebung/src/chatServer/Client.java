@@ -126,7 +126,6 @@ public class Client implements Runnable
 	@Override
 	public void run()
 	{
-
 		while (!read.isInterrupted())
 		{
 			try
@@ -143,7 +142,6 @@ public class Client implements Runnable
 				read.interrupt();
 			}
 		}
-
 	}
 
 	public String getName()

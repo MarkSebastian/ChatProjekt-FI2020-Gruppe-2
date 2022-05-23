@@ -1,4 +1,0 @@
-module message
-{
-	exports nachrichtP;
-}

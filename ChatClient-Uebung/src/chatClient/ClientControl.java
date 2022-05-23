@@ -269,17 +269,25 @@ public class ClientControl implements Runnable, Serializable
 			// Ansonsten wird nachrichtEmpfangen() aufgerufen
 			if (privatChatObjekt == false)
 			{
-				nachrichtEmpfangen(o);
-			}
+				try
+				{
+					Nachricht n = (Nachricht) o;
+					nachrichtEmpfangen(n);
+				}
+				catch(ClassCastException e)
+				{
+					System.out.println(e + "\n in readMessage");
+				}
+				
+				}
 		}
 	}
 
-	private void nachrichtEmpfangen(Object o)
+	private void nachrichtEmpfangen(Nachricht n)
 	{
 		nachrichtPrivat = false;
 		try
 		{
-			Nachricht n = (Nachricht) o;
 			// Liste mit PrivatChats wird durchlaufen, wenn PrivatChat mit richtigem
 			// Hashcode vorhanden, wird die Nachricht im PrivatChat angezeigt
 			privatChats.forEach(pc ->
@@ -290,16 +298,14 @@ public class ClientControl implements Runnable, Serializable
 					nachrichtPrivat = true;
 				}
 			});
+			
 			// Ansonsten wird die Nachricht im GlobalenChat angezeigt
 			if (nachrichtPrivat == false)
 			{
 				if (n.getEmpfaenger() != null)
 				{
-					aktiveClients = new ArrayList<String>();
-					
+					aktiveClients = new ArrayList<String>();					
 					n.getEmpfaenger().forEach(e -> aktiveClients.add(e));
-				//	this.aktiveClients = n.getEmpfaenger();
-
 					akClients();
 				}
 				getNewMessages(n);

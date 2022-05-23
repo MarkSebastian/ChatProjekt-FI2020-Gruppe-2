@@ -27,7 +27,6 @@ public class ClientConnectionThread extends Thread
 		{
 			System.out.println(e + "\n in startStreams");
 		}
-
 	}
 
 	@Override

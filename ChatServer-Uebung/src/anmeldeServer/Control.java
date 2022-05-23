@@ -14,7 +14,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import Message.nachrichtP.LogInNachricht;
-import eaB_NeverInaffDaten.ControlDB;
+import eaB_NeverInaffDaten.CouncilOfData;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -24,11 +24,11 @@ import Message.nachrichtP.FehlerNachricht;
 public class Control
 {
 	private static Server server;
-	private ControlDB controlDB;
+	private CouncilOfData controlDB;
 	
 	public Control() 
 	{
-		controlDB = new ControlDB();
+		controlDB = new CouncilOfData();
 
 	}
 

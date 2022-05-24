@@ -95,6 +95,7 @@ public class Control
 	
 	protected void anmelden(LogInNachricht message, Connection connection)
 	{
+		System.out.println("Anmeldung eingang");
 		boolean []flag;
 		flag = controlDB.nutzernameExistent(message.getBenutzerName());
 		if(flag[0] == false)
@@ -109,10 +110,13 @@ public class Control
 		}
 		else if(flag[1] == true)
 		{
-			String passwort = null;
+			String passwort;
 			passwort = controlDB.select_passwort(message.getBenutzerName());
+			
+			System.out.println(passwort);
 			if(passwort == null)
 			{
+				
 				FehlerNachricht pwFehler = new FehlerNachricht(false, false, false, true);
 				connection.sendTCP(pwFehler);
 			}

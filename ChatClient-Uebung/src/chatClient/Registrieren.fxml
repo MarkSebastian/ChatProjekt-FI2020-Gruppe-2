@@ -24,14 +24,14 @@
       </AnchorPane>
       <ImageView fx:id="profile_picture" fitHeight="100.0" fitWidth="100.0" layoutX="100.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../Downloads/profil.png" />
+            <Image url="@../images/user.png"/>
          </image>
       </ImageView>
       <TextField fx:id="username" layoutX="50.0" layoutY="175.0" prefWidth="200.0" promptText="Benutzername" />
       <PasswordField fx:id="password" layoutX="50.0" layoutY="226.0" prefWidth="200.0" promptText="Passwort" />
       <PasswordField fx:id="password1" layoutX="50.0" layoutY="276.0" prefWidth="200.0" promptText="Passwort wiederholen" />
-      <Button fx:id="btn_einloggen" layoutX="75.0" layoutY="323.0" mnemonicParsing="false" prefWidth="150.0" style="-fx-background-color: #5d7faf; -fx-background-radius: 25;" text="einloggen" textFill="WHITE" />
-      <Hyperlink fx:id="btn_neuesKonto" layoutX="125.0" layoutY="365.0" text="bei bestehendem Konto anmelden">
+      <Button fx:id="btn_einloggen" layoutX="75.0" layoutY="323.0" mnemonicParsing="false" prefWidth="150.0" style="-fx-background-color: #5d7faf; -fx-background-radius: 25;" text="registrieren" textFill="WHITE" onAction="#buttonOnClick"/>
+      <Hyperlink fx:id="btn_neuesKonto" layoutX="125.0" layoutY="365.0" text="bei bestehendem Konto anmelden" onMouseClicked="#labelOnClick">
          <font>
             <Font size="10.0" />
          </font>

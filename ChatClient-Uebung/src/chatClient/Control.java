@@ -220,21 +220,21 @@ public class Control
 	{
 		if (singin == true)
 		{
-			Parent SignUpParent = FXMLLoader.load(getClass().getResource("SignUpGUI.fxml"));
+			Parent SignUpParent = FXMLLoader.load(getClass().getResource("Registrieren.fxml"));
 			return new Scene(SignUpParent);
 		}
 		else
 		{
-			Parent SignUpParent = FXMLLoader.load(getClass().getResource("LoginGUI.fxml"));
+			Parent SignUpParent = FXMLLoader.load(getClass().getResource("Login.fxml"));
 			return new Scene(SignUpParent);
 		}
 	}
 
-	// protected Scene erfolgreicherLogin() throws IOException
+	protected Scene erfolgreicherLogin() throws IOException
 	{
 		// to do
-		// Parent debugParent = FXMLLoader.load(getClass().getResource("Client.fxml"));
-		// return new Scene(debugParent);
+		Parent debugParent = FXMLLoader.load(getClass().getResource("Chat.fxml"));
+		return new Scene(debugParent);
 	}
 
 	public boolean getErfolgreich()

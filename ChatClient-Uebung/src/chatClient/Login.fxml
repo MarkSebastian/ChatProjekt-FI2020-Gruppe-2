@@ -23,13 +23,13 @@
       </AnchorPane>
       <ImageView fx:id="profile_picture" fitHeight="100.0" fitWidth="100.0" layoutX="100.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../Downloads/profil.png" />
+            <Image url="@../images/user.png"/>
          </image>
       </ImageView>
       <TextField fx:id="username" layoutX="50.0" layoutY="182.0" prefWidth="200.0" promptText="Benutzername" />
       <PasswordField fx:id="password" layoutX="50.0" layoutY="252.0" prefWidth="200.0" promptText="Passwort" />
-      <Button fx:id="btn_einloggen" layoutX="75.0" layoutY="306.0" mnemonicParsing="false" prefWidth="150.0" style="-fx-background-color: #5d7faf; -fx-background-radius: 25;" text="einloggen" textFill="WHITE" />
-      <Hyperlink fx:id="btn_neuesKonto" layoutX="186.0" layoutY="366.0" text="neues Konto anlegen">
+      <Button fx:id="btn_einloggen" layoutX="75.0" layoutY="306.0" mnemonicParsing="false" prefWidth="150.0" style="-fx-background-color: #5d7faf; -fx-background-radius: 25;" text="einloggen" textFill="WHITE" onAction="#buttonOnClick"/>
+      <Hyperlink fx:id="btn_neuesKonto" layoutX="186.0" layoutY="366.0" text="neues Konto anlegen" onMouseClicked="#labelOnClick">
          <font>
             <Font size="10.0" />
          </font>

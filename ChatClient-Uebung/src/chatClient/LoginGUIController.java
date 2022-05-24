@@ -3,33 +3,43 @@ package chatClient;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.io.IOException;
 
 public class LoginGUIController extends Control
 {
 	@FXML
-	private TextField anmeldenField;
+	private ImageView profile_picture;
 	@FXML
-	private PasswordField passwordField;
+	private TextField username;
 	@FXML
-	private Button anmeldenButton;
+	private PasswordField password;
 	@FXML
-	private Label regestrierenLabel;
-
+	private Button btn_einloggen;
+	@FXML
+	private Hyperlink btn_neuesKonto;
+	
 	@FXML
 	protected void buttonOnClick()
 	{
-		super.login(anmeldenField.getText(), passwordField.getText(), false);
+		super.login(username.getText(), password.getText(), false);
 		if (super.getErfolgreich() == true)
 		{
-			sceneChange(true);
-			super.setErfolgreich(false);
+			try
+			{
+				erfolgreicherLogin();
+				super.setErfolgreich(false);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			
 		}
 		else 
 		{
@@ -43,28 +53,16 @@ public class LoginGUIController extends Control
 		sceneChange(false);
 	}
 
-	@FXML
-	protected void labelOnHover()
-	{
-		regestrierenLabel.setTextFill(Color.BLUE);
-	}
-
-	@FXML
-	protected void labelOnLeave()
-	{
-		regestrierenLabel.setTextFill(Color.BLACK);
-	}
-
 	private void sceneChange(boolean b)
 	{
-		Stage stageEventChangeStage = (Stage) regestrierenLabel.getScene().getWindow();
+		Stage stageEventChangeStage = (Stage) btn_neuesKonto.getScene().getWindow();
 
 		if (b == false)
 		{
 			try
 			{
 				stageEventChangeStage.setScene(super.changeScene(true));
-				stageEventChangeStage.setTitle("Sign Up");
+				stageEventChangeStage.setTitle("Registrieren");
 				stageEventChangeStage.show();
 			}
 			catch (IOException e)

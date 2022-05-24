@@ -5,6 +5,8 @@ import java.io.IOException;
 import javafx.scene.control.TextField;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -14,21 +16,23 @@ import javafx.stage.Stage;
 public class SignInGUIController extends Control
 {
 	@FXML
-	private TextField anmeldenField;
+	private TextField username;
 	@FXML
-	private PasswordField passwordField;
+	private PasswordField password;
 	@FXML
-	private PasswordField passwordFieldBestaetigung;
+	private PasswordField password1;
 	@FXML
-	private Label anmeldeLabel;
+	private Button btn_einloggen;
+	@FXML
+	private Hyperlink btn_neuesKonto;
 
 	@FXML
 	protected void buttonOnClick()
 	{
 		//TO-DO: Fehlerbox Leerer Text
-		if (passwordField.getText().compareTo(passwordFieldBestaetigung.getText()) == 0)
+		if (password.getText().compareTo(password1.getText()) == 0)
 		{
-			super.login(anmeldenField.getText(), passwordField.getText(), true);
+			super.login(username.getText(), password.getText(), true);
 			if (super.getErfolgreich() == true)
 			{
 				sceneChange();
@@ -51,21 +55,9 @@ public class SignInGUIController extends Control
 		sceneChange();
 	}
 
-	@FXML
-	protected void labelOnHover()
-	{
-		anmeldeLabel.setTextFill(Color.BLUE);
-	}
-
-	@FXML
-	protected void labelOnLeave()
-	{
-		anmeldeLabel.setTextFill(Color.BLACK);
-	}
-
 	private void sceneChange()
 	{
-		Stage stageEventChangeStage = (Stage) anmeldeLabel.getScene().getWindow();
+		Stage stageEventChangeStage = (Stage) btn_neuesKonto.getScene().getWindow();
 		try
 		{
 			stageEventChangeStage.setScene(super.changeScene(false));

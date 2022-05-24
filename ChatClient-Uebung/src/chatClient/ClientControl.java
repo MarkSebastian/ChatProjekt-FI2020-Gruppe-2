@@ -1,6 +1,7 @@
 package chatClient;
 
 import java.awt.Color;
+
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -24,11 +25,22 @@ import javax.swing.DefaultListModel;
 import javax.swing.text.AttributeSet.ColorAttribute;
 import java.awt.event.MouseAdapter;
 
+/////////////////////////////////////////////////////////////////////////////////////////////////
+// TO-DO´s Client-Control:
+//
+// -> ArrayListe von Usern PrivatChat füllt sich teilweise doppelt?
+//
+// -> readMessage gibt Exception beim disconnect vom User aus (Programm geht aber trotzdem..?)
+//    ....versucht mit Login boolean zu lösen, klappt aber grade noch nicht..
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
 public class ClientControl implements Runnable, Serializable
 {
 	private boolean first = true;
 	private boolean nachrichtPrivat = false;
 	private boolean startWindow = false;
+	private boolean login = false;
 	private ClientConnectionThread start;
 	private Color rot = new Color(255, 102, 102);
 	private Color weiss = new Color(255, 255, 255, 255);
@@ -218,6 +230,7 @@ public class ClientControl implements Runnable, Serializable
 				user = startGui.getTextFieldUsername().getText();
 				message = new Nachricht(user, false);
 				out.writeObject(message);
+				login = true;
 				first = false;
 			}
 			else
@@ -242,52 +255,57 @@ public class ClientControl implements Runnable, Serializable
 	private void readMessage()
 	{
 		boolean privatChatObjekt = false;
+		
 		Object o = new Object();
-
-		try
+		
+		if(login)
 		{
-			o = ois.readObject();
-		}
-		catch (SocketException e1)
-		{
-			stopClient();
-		}
-		catch (EOFException e2)
-		{
-			stopClient();
-		}
-		catch (Exception e)
-		{
-			System.out.println(e + "\n Test in readMessage");
-		}
-
-		if (o != null)
-		{
-			// Wenn empfangenes Objekt PrivatChat ist, wird ein neuer PrivatChat erstellt
-			privatChatObjekt = privatChatStarten(o);
-
-			// Ansonsten wird nachrichtEmpfangen() aufgerufen
-			if (privatChatObjekt == false)
+			try
 			{
-				try
+				o = ois.readObject();
+			}
+			catch (SocketException e1)
+			{
+				stopClient();
+			}
+			catch (EOFException e2)
+			{
+				stopClient();
+			}
+			catch (Exception e)
+			{
+				System.out.println(e + "\n in readMessage");
+			}
+
+			if (o != null)
+			{
+				// Wenn empfangenes Objekt PrivatChat ist, wird ein neuer PrivatChat erstellt
+				privatChatObjekt = privatChatStarten(o);
+
+				// Ansonsten wird nachrichtEmpfangen() aufgerufen
+				if (privatChatObjekt == false)
 				{
-					Nachricht n = (Nachricht) o;
-					nachrichtEmpfangen(n);
+					try
+					{
+						Nachricht n = (Nachricht)o;
+						nachrichtEmpfangen(n);
+					}
+					catch (ClassCastException e)
+					{
+						System.out.println(e + "\n in readMessage");
+					}
 				}
-				catch(ClassCastException e)
-				{
-					System.out.println(e + "\n in readMessage");
-				}
-				
-				}
-		}
+			}
+		}		
 	}
+		
 
 	private void nachrichtEmpfangen(Nachricht n)
 	{
 		nachrichtPrivat = false;
 		try
 		{
+			System.out.println("Test, kommen in nachrichtEmpfangen an!");
 			// Liste mit PrivatChats wird durchlaufen, wenn PrivatChat mit richtigem
 			// Hashcode vorhanden, wird die Nachricht im PrivatChat angezeigt
 			privatChats.forEach(pc ->
@@ -298,13 +316,13 @@ public class ClientControl implements Runnable, Serializable
 					nachrichtPrivat = true;
 				}
 			});
-			
+
 			// Ansonsten wird die Nachricht im GlobalenChat angezeigt
 			if (nachrichtPrivat == false)
 			{
 				if (n.getEmpfaenger() != null)
 				{
-					aktiveClients = new ArrayList<String>();					
+					aktiveClients = new ArrayList<String>();
 					n.getEmpfaenger().forEach(e -> aktiveClients.add(e));
 					akClients();
 				}
@@ -390,10 +408,13 @@ public class ClientControl implements Runnable, Serializable
 		clientsPC.removeAllElements();
 		choosenClients.removeAllElements();
 
+		// aktiveClients sortieren
+		aktiveClients.sort((s1, s2) -> s1.compareTo(s2));
+
 		// DefaultListModel User globaler Chat füllen
 		aktiveClients.forEach(e -> clients.addElement(e));
 
-		// DefaultListModel User PC füllen (gleiche Liste ohne einen selbst)
+		// Alle Elemente ungleich man selbst werden auswahlClientsPC hinzugefügt
 		aktiveClients.forEach(e ->
 		{
 			if (!e.equals(user))
@@ -401,6 +422,7 @@ public class ClientControl implements Runnable, Serializable
 				auswahlClientsPC.add(e);
 			}
 		});
+		// DefaultListModel User PC füllen
 		auswahlClientsPC.forEach(e -> clientsPC.addElement(e));
 
 		// DefaultListModel User PC ausgewählt füllen
@@ -426,9 +448,11 @@ public class ClientControl implements Runnable, Serializable
 			System.out.println(e + "\n in stopClient");
 		}
 
+		login = false;
 		read.interrupt();
 		start.interrupt();
 		gui.changeStatus("verbindung getrennt");
+		
 		switchGui();
 	}
 
@@ -515,10 +539,10 @@ public class ClientControl implements Runnable, Serializable
 		try
 		{
 			String selected = (String) gui.getListActiveUser().getSelectedValue();
-			teilnehmerPrivatChat.add(selected);
-			auswahlClientsPC.remove(selected);
-			// akListPC();
-			akClients();
+			System.out.println("Add: " + selected);
+			teilnehmerPrivatChat.remove(selected);
+			auswahlClientsPC.add(selected);
+			akPrivatChats();
 		}
 		catch (ArrayIndexOutOfBoundsException e)
 		{
@@ -531,16 +555,39 @@ public class ClientControl implements Runnable, Serializable
 		try
 		{
 			String selected = (String) gui.getListChoosenUser().getSelectedValue();
-			auswahlClientsPC.add(selected);
-			teilnehmerPrivatChat.remove(selected);
-			// akListPC();
-			akClients();
+			System.out.println("Remove : " + selected);
+			teilnehmerPrivatChat.add(selected);
+			auswahlClientsPC.remove(selected);
+			akPrivatChats();
 		}
 		catch (ArrayIndexOutOfBoundsException e)
 		{
 			System.out.println("nichts ausgewählt");
 		}
 	}
+
+	private void akPrivatChats()
+	{
+		// DefaulListModels clearen
+		clientsPC = new DefaultListModel<String>();
+		choosenClients = new DefaultListModel<String>();
+
+		// ArrayListen sortieren
+		try
+		{
+			auswahlClientsPC.sort((s1, s2) -> s1.compareTo(s2));
+			teilnehmerPrivatChat.sort((s1, s2) -> s1.compareTo(s2));
+		}
+		catch(NullPointerException e)
+		{
+			System.out.println(e + "\n in akPrivatChats");
+		}
+		
+		// DefaultListModels füllen
+		teilnehmerPrivatChat.forEach(s -> clientsPC.addElement(s));
+		auswahlClientsPC.forEach(s -> choosenClients.addElement(s));
+	}
+	
 
 	@Override
 	public void run()

@@ -36,10 +36,7 @@ public class SignInGUIController extends Control
 			}
 			else if (super.getErfolgreich() == false)
 			{
-				if (getFehlerMeldungString() != null)
-				{
-					makeAlertWarnig(getFehlerMeldungString());	
-				}
+					makeAlertWarnig();	
 			}
 		}
 		else
@@ -89,11 +86,13 @@ public class SignInGUIController extends Control
 		alert.show();
 	}
 
-	private void makeAlertWarnig(String messang)
+	private void makeAlertWarnig()
 	{
+		String message = "Fehler bei der Registrierung";
+		
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setHeaderText(null);
-		alert.setContentText(messang);
+		alert.setContentText(message);
 		alert.show();
 	}
 }

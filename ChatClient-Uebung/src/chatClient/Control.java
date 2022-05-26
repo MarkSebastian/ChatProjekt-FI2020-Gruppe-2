@@ -11,6 +11,9 @@ import Message.nachrichtP.Nachricht;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.security.PublicKey;
+
+import javax.sound.sampled.AudioFormat;
 import javax.swing.DefaultListModel;
 
 public class Control implements Runnable
@@ -18,12 +21,13 @@ public class Control implements Runnable
 
 	protected Gui gui;
 	protected VerbindungsGUI startGui;
+	protected GUIAudio guiAudio;
 	protected int port;
 	protected Socket socket;
 	protected DefaultListModel<Nachricht> messages = new DefaultListModel<Nachricht>();
 	protected DefaultListModel<String> clients = new DefaultListModel<String>();
 	protected DefaultListModel<String> choosenClients = new DefaultListModel<String>();
-
+	protected AudioAufnehmen audioAufnehmen;
 	protected Thread read;
 	private ClientConnectionThread start;
 
@@ -69,8 +73,9 @@ public class Control implements Runnable
 	{
 		this.gui.addEingabeListener(l -> sendMessage());
 		this.gui.addBtnStopListener(l -> stopClient());
-		//neuer Button für audioRecord
-		this.gui.setBtnRecord(l -> recordAudio());
+		// neuer Button fï¿½r audioRecord
+		this.gui.setBtnRecord(l -> sendAudio());
+		this.gui.setBtnAudioStop(l -> stopAudio());
 
 		this.startGui.addBtnVerbindenListener(l ->
 		{
@@ -147,6 +152,75 @@ public class Control implements Runnable
 		}
 		this.gui.getTextFieldEingabe().setText("");
 
+	}
+
+	protected void sendAudio()
+	{
+		try
+		{
+			AudioFormat format = setzeSoundEinstellungen();
+			audioAufnehmen = new AudioAufnehmen();
+			audioAufnehmen.build(format);
+			
+			audioAufnehmen.aufzeichneThread(audioAufnehmen);
+			System.out.println("Hier vor speichern");
+			WavSpeichern audioDateiSpeichern = new WavSpeichern();
+			audioDateiSpeichern.speichereInWav(audioAufnehmen.getAis());
+		}
+		catch (Exception e )
+		{
+			System.out.println("Ich war kacken!");
+		}
+
+		
+		/*try
+		{
+			Nachricht message;
+			if (first)
+			{
+				// Konstruktor in Nachricht Ã¤ndern
+				message = new Nachricht(startGui.getTextFieldUsername().getText(), false);
+				out.writeObject(message);
+				first = false;
+			}
+			else
+			{
+				message = new Nachricht(this.gui.getTextFieldEingabe().getText(), false);
+				out.writeObject(message);
+				messages.addElement(message);
+				akList();
+			}
+		}
+		catch (NullPointerException e )
+		{
+			gui.changeStatus("Noch nicht mit Server Verbunden!");
+		}
+		catch (Exception e )
+		{
+			System.out.println(e + "\n in sendMessage");
+		}
+		this.gui.getTextFieldEingabe().setText("");
+*/
+	}
+	
+
+	protected void stopAudio()
+	{
+		audioAufnehmen.stopThread();
+		audioAufnehmen.interrupt();
+		
+	}
+
+	public static AudioFormat setzeSoundEinstellungen()
+	{
+		SoundEinstellungen settings = new SoundEinstellungen();
+		AudioFormat.Encoding encoding = settings.ENCODING;
+		float rate = settings.RATE;
+		int channels = settings.CHANNELS;
+		int sampleSize = settings.SAMPLE_SIZE;
+		boolean bigEndian = settings.BIG_ENDIAN;
+
+		return new AudioFormat(encoding, rate, sampleSize, channels, (sampleSize / 8) * channels, rate, bigEndian);
 	}
 
 	private void readMessage()
@@ -324,7 +398,7 @@ public class Control implements Runnable
 		}
 		catch (ArrayIndexOutOfBoundsException e )
 		{
-			System.out.println("nichts ausgewählt");
+			System.out.println("nichts ausgewï¿½hlt");
 		}
 	}
 
@@ -340,41 +414,8 @@ public class Control implements Runnable
 		}
 		catch (ArrayIndexOutOfBoundsException e )
 		{
-			System.out.println("nichts ausgewählt");
+			System.out.println("nichts ausgewï¿½hlt");
 		}
-	}
-	
-	//neue Methode audioRecord
-	public void recordAudio()
-	{
-		//Nachricht nachricht = new Nachricht(null, clients);
-		try
-		{
-			/*Nachricht message;
-			if (first)
-			{
-				message = new Nachricht(startGui.getTextFieldUsername().getText(), false);
-				out.writeObject(message);
-				first = false;
-			}
-			else
-			{
-				message = new Nachricht(this.gui.getTextFieldEingabe().getText(), false);
-				out.writeObject(message);
-				messages.addElement(message);
-				akList();
-			}*/
-		}
-		catch (NullPointerException e )
-		{
-			gui.changeStatus("Noch nicht mit Server Verbunden!");
-		}
-		catch (Exception e )
-		{
-			System.out.println(e + "\n in sendMessage");
-		}
-		this.gui.getTextFieldEingabe().setText("");
-
 	}
 
 	@Override

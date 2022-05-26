@@ -37,11 +37,12 @@ public class Gui
 	private JPanel panelNeuerChat;
 	private JList listActiveUser;
 	private JList listChoosenUser;
-	private JButton btnUserHinzufügen;
+	private JButton btnUserHinzufuegen;
 	private JButton btnUserEntfernen;
 	private JButton btnNeuerChat;
 	private JScrollPane scrollPaneUserList;
 	private JButton btnRecord;
+	private JButton btnAudioStop;
 
 	// HI
 	public Gui()
@@ -256,6 +257,7 @@ public class Gui
 			panelGlobalChat.add(getBtnStop());
 			panelGlobalChat.add(getScrollPaneUserList());
 			panelGlobalChat.add(getBtnRecord());
+			panelGlobalChat.add(getBtnAudioStop());
 		}
 		return panelGlobalChat;
 	}
@@ -268,7 +270,7 @@ public class Gui
 			panelNeuerChat.setLayout(null);
 			panelNeuerChat.add(getListActiveUser());
 			panelNeuerChat.add(getListChoosenUser());
-			panelNeuerChat.add(getBtnUserHinzufügen());
+			panelNeuerChat.add(getBtnUserHinzufuegen());
 			panelNeuerChat.add(getBtnUserEntfernen());
 			panelNeuerChat.add(getBtnNeuerChat());
 		}
@@ -295,21 +297,21 @@ public class Gui
 		return listChoosenUser;
 	}
 
-	private JButton getBtnUserHinzufügen()
+	private JButton getBtnUserHinzufuegen()
 	{
-		if (btnUserHinzufügen == null)
+		if (btnUserHinzufuegen == null)
 		{
-			btnUserHinzufügen = new JButton("\u25BA");
-			btnUserHinzufügen.setBackground(new Color(255, 255, 255));
-			btnUserHinzufügen.setToolTipText("hinzuf\u00FCgen");
-			btnUserHinzufügen.setBounds(148, 68, 48, 21);
+			btnUserHinzufuegen = new JButton("\u25BA");
+			btnUserHinzufuegen.setBackground(new Color(255, 255, 255));
+			btnUserHinzufuegen.setToolTipText("hinzuf\u00FCgen");
+			btnUserHinzufuegen.setBounds(148, 68, 48, 21);
 		}
-		return btnUserHinzufügen;
+		return btnUserHinzufuegen;
 	}
 
 	public void addAddListner(ActionListener l)
-	{	
-		this.getBtnUserHinzufügen().addActionListener(l);
+	{
+		this.getBtnUserHinzufuegen().addActionListener(l);
 	}
 
 	private JButton getBtnUserEntfernen()
@@ -353,26 +355,36 @@ public class Gui
 		return scrollPaneUserList;
 	}
 
-	public void setBtnRecord(ActionListener l) 
+	public void setBtnRecord(ActionListener l)
 	{
 		this.btnRecord.addActionListener(l);
 	}
-	
+
 	protected JButton getBtnRecord()
 	{
 		if (btnRecord == null)
 		{
 			btnRecord = new JButton("O");
-			btnRecord.addActionListener(new ActionListener()
-			{
-				public void actionPerformed(ActionEvent e)
-				{
-				}
-			});
 			btnRecord.setForeground(new Color(34, 139, 34));
 			btnRecord.setFont(new Font("Times New Roman", Font.BOLD, 16));
-			btnRecord.setBounds(109, 239, 89, 23);
+			btnRecord.setBounds(141, 239, 57, 23);
 		}
 		return btnRecord;
+	}
+
+	public void setBtnAudioStop(ActionListener l)
+	{
+		this.btnAudioStop.addActionListener(l);
+	}
+	
+	protected JButton getBtnAudioStop()
+	{
+		if (btnAudioStop == null)
+		{
+			btnAudioStop = new JButton("||");
+			btnAudioStop.setForeground(Color.RED);
+			btnAudioStop.setBounds(92, 239, 51, 23);
+		}
+		return btnAudioStop;
 	}
 }

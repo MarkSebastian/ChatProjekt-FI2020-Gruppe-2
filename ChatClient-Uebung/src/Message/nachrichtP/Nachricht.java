@@ -13,6 +13,7 @@ public class Nachricht implements Serializable
 	private int absenderId;
 	final private LocalDateTime timestamp = LocalDateTime.now();
 	private String nachricht;
+	
 	private DefaultListModel<String> activeClients = null;
 
 	public String getAbsender()

@@ -334,11 +334,10 @@ public class CouncilOfData
 	
 	public String select_passwort(String bName)//gibt das passwort zum gegebenen nutzernamen zurück
 	{
-		boolean erfolg=true;
 		String passwort =null;
 		sqlBefehl=baukasten.select_passwort();
 		try
-		{
+		{ 
 			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
 			vorbereiteteAussage.setString(1, bName);
 			ResultSet ergebnis = vorbereiteteAussage.executeQuery();	

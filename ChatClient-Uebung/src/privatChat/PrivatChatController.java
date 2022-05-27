@@ -30,7 +30,7 @@ public class PrivatChatController implements Serializable
 	{
 		this.privatChat = privatChat;
 		pgui = new PrivatChatGUI();
-		pgui.getLblChatName().setText(privatChat.getPcs().getChatName());
+		pgui.getLblChatName().setText(privatChat.getPcs().getChatName() + "(" + privatChat.getPcs().getUser() + ")");
 		addListener();
 		setModel();
 		comboBoxAktualisieren();

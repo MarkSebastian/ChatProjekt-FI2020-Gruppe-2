@@ -20,9 +20,7 @@ public class ServerControl
 	private ServerSocket server;
 	protected ServerConnectionThread connect;
 	protected DefaultListModel<Nachricht> messages = new DefaultListModel<Nachricht>();
-//	private ArrayList<Client> clients = new ArrayList<Client>();
 	private DefaultListModel<Client> clientListe = new DefaultListModel<Client>();
-//	private ArrayList<String>empfaenger = new ArrayList<String>();
 
 	public ServerControl()
 	{
@@ -145,7 +143,7 @@ public class ServerControl
 	{
 		connect.getClients().forEach(e -> pcs.getEmpfaenger().forEach(s ->
 		{
-			if (!pcs.getUser().equals(e))
+			if (!pcs.getUser().equals(e.getName()))
 				if (e.getName().equals(s))
 					e.sendMessage(pcs);
 		}));
@@ -155,6 +153,7 @@ public class ServerControl
 	// Nachricht wird auch nur an diese Clients weitergeleitet
 	protected void broadcastPrivatMessage(Nachricht n)
 	{
+		System.out.println(n.getAbsender());
 		connect.getClients().forEach(e -> n.getEmpfaenger().forEach(s ->
 		{
 			if (e.getName().equals(s))

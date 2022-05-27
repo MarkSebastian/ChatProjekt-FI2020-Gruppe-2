@@ -21,11 +21,9 @@ public class PrivatChatSenden implements Serializable
 		this.chatName = chatName;
 		this.user = user;
 		this.empfaenger = empfaenger;
-		System.out.println("Vorher: " + empfaenger);
 		empfaenger.add(user);
 		empfaenger.sort((s1,s2) -> s1.compareTo(s2));
 		hashcode = hashCode();
-		System.out.println("Nacher: " + empfaenger);
 	}
 
 	public String getChatName()

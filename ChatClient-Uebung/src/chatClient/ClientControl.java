@@ -350,7 +350,6 @@ public class ClientControl implements Runnable, Serializable
 		else
 		{
 			PrivatChatSenden pcs = new PrivatChatSenden(temp, user, teilnehmerPrivatChat);
-			System.out.println("Hashcode startender PrivatChat: " + pcs.getHashcode());
 			for (PrivatChat chat : privatChats)
 			{
 				if (chat.getPcs().getHashcode() == pcs.hashCode())

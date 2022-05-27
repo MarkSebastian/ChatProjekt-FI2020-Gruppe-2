@@ -13,7 +13,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class SignInGUIController extends Control
+public class SignInGUIController extends Control implements Runnable
 {
 	@FXML
 	private TextField username;
@@ -25,28 +25,16 @@ public class SignInGUIController extends Control
 	private Button btn_einloggen;
 	@FXML
 	private Hyperlink btn_neuesKonto;
+	
+	private Thread thread;
 
 	@FXML
 	protected void buttonOnClick()
 	{
 		//TO-DO: Fehlerbox Leerer Text
-		if (password.getText().compareTo(password1.getText()) == 0)
-		{
-			super.login(username.getText(), password.getText(), true);
-			if (super.getErfolgreich() == true)
-			{
-				sceneChange();
-				super.setErfolgreich(false);
-			}
-			else if (super.getErfolgreich() == false)
-			{
-					makeAlertWarnig();	
-			}
-		}
-		else
-		{
-			makeAlertInformation("Die Passwörter stimmen nicht überein");
-		}
+		thread = new Thread(this);
+		thread.run();
+		
 	}
 
 	@FXML
@@ -86,5 +74,41 @@ public class SignInGUIController extends Control
 		alert.setHeaderText(null);
 		alert.setContentText(message);
 		alert.show();
+	}
+	
+	@Override
+	public void run()
+	{
+		do
+		{
+			try
+			{
+				Thread.sleep(100);
+			}
+			catch (InterruptedException e)
+			{
+				
+				e.printStackTrace();
+			}
+			if (password.getText().compareTo(password1.getText()) == 0)
+			{
+				super.login(username.getText(), password.getText(), true);
+				if (super.getErfolgreich() == true)
+				{
+					sceneChange();
+					super.setErfolgreich(false);
+				}
+				else if (super.getErfolgreich() == false)
+				{
+						makeAlertWarnig();	
+				}
+			}
+			else
+			{
+				makeAlertInformation("Die Passwörter stimmen nicht überein");
+			}
+			
+		} while(super.isNachrichteingegangen() == false);
+		super.setErfolgreich(false);
 	}
 }

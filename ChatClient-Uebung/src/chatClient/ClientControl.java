@@ -121,7 +121,7 @@ public class ClientControl implements Runnable, Serializable
 		this.gui.addAddListner(l -> addUserToNewChat());
 		this.gui.addEntfListner(l -> entfUserFromNewChat());
 
-		this.gui.setBtnNeuerChatActionListener(l -> neuenChatStarten());
+		this.gui.setBtnNeuerChatActionListener(l -> neuenPrivatChatStarten());
 		gui.setTextFieldGruppenNamenListener(new MouseAdapter()
 		{
 			@Override
@@ -147,37 +147,7 @@ public class ClientControl implements Runnable, Serializable
 		return user;
 	}
 
-	private void neuenChatStarten()
-	{
-		boolean schonVorhanden = false;
-		String temp = gui.getTextFieldGruppenName().getText();
-		if (temp.isEmpty() || gui.getTextFieldGruppenName().getText().equals("Gruppennamen eingeben"))
-		{
-			System.out.println("Bitte Chatraum benennen!");
-		}
-		else if (teilnehmerPrivatChat.size() < 1)
-		{
-			System.out.println("Bitte mindestens einen User hinzufügen");
-		}
-		else
-		{
-			PrivatChatSenden pcs = new PrivatChatSenden(temp, user, teilnehmerPrivatChat);
-			for (PrivatChat chat : privatChats)
-			{
-				if (chat.getPcs().getHashcode() == pcs.hashCode())
-				{
-					schonVorhanden = true;
-					System.out.println("PrivatChat schon vorhanden");
-				}
-			}
-			if (schonVorhanden == false)
-			{
-				PrivatChat pc = new PrivatChat(teilnehmerPrivatChat, temp, user, this);
-				privatChats.add(pc);
-				sendPrivatChat(pc);
-			}
-		}
-	}
+	
 
 	protected boolean checkPort()
 	{
@@ -305,7 +275,6 @@ public class ClientControl implements Runnable, Serializable
 		nachrichtPrivat = false;
 		try
 		{
-			System.out.println("Test, kommen in nachrichtEmpfangen an!");
 			// Liste mit PrivatChats wird durchlaufen, wenn PrivatChat mit richtigem
 			// Hashcode vorhanden, wird die Nachricht im PrivatChat angezeigt
 			privatChats.forEach(pc ->
@@ -355,7 +324,7 @@ public class ClientControl implements Runnable, Serializable
 			}
 			if (schonVorhanden == false)
 			{
-				pc = new PrivatChat(pcs.getEmpfaenger(), pcs.getChatName(), pcs.getUser(), this);
+				pc = new PrivatChat(pcs, this);
 				privatChats.add(pc);
 			}
 			objektIstPrivatChat = true;
@@ -364,6 +333,39 @@ public class ClientControl implements Runnable, Serializable
 		{
 		}
 		return objektIstPrivatChat;
+	}
+	
+	private void neuenPrivatChatStarten()
+	{
+		boolean schonVorhanden = false;
+		String temp = gui.getTextFieldGruppenName().getText();
+		if (temp.isEmpty() || gui.getTextFieldGruppenName().getText().equals("Gruppennamen eingeben"))
+		{
+			System.out.println("Bitte Chatraum benennen!");
+		}
+		else if (teilnehmerPrivatChat.size() < 1)
+		{
+			System.out.println("Bitte mindestens einen User hinzufügen");
+		}
+		else
+		{
+			PrivatChatSenden pcs = new PrivatChatSenden(temp, user, teilnehmerPrivatChat);
+			System.out.println("Hashcode startender PrivatChat: " + pcs.getHashcode());
+			for (PrivatChat chat : privatChats)
+			{
+				if (chat.getPcs().getHashcode() == pcs.hashCode())
+				{
+					schonVorhanden = true;
+					System.out.println("PrivatChat schon vorhanden");
+				}
+			}
+			if (schonVorhanden == false)
+			{
+				PrivatChat pc = new PrivatChat(pcs, this);
+				privatChats.add(pc);
+				sendPrivatChat(pc);
+			}
+		}
 	}
 
 	private void sendPrivatChat(PrivatChat pc)
@@ -539,15 +541,8 @@ public class ClientControl implements Runnable, Serializable
 		try
 		{
 			String selected = (String) gui.getListActiveUser().getSelectedValue();
-			System.out.println("Add: " + selected);
-			System.out.println("Vorher:");
-			System.out.println(teilnehmerPrivatChat);
-			System.out.println(auswahlClientsPC);
 			teilnehmerPrivatChat.add(selected);
 			auswahlClientsPC.remove(selected);
-			System.out.println("Nachher:");
-			System.out.println(teilnehmerPrivatChat);
-			System.out.println(auswahlClientsPC);
 			akPrivatChats();
 		}
 		catch (ArrayIndexOutOfBoundsException e)
@@ -561,7 +556,6 @@ public class ClientControl implements Runnable, Serializable
 		try
 		{
 			String selected = (String) gui.getListChoosenUser().getSelectedValue();
-			System.out.println("Remove : " + selected);
 			teilnehmerPrivatChat.remove(selected);
 			auswahlClientsPC.add(selected);
 			akPrivatChats();
@@ -591,12 +585,7 @@ public class ClientControl implements Runnable, Serializable
 		
 		// DefaultListModels füllen
 		auswahlClientsPC.forEach(s -> clientsPC.addElement(s));
-		System.out.println("ClientsPC:");
-		System.out.println(clientsPC);
-		teilnehmerPrivatChat.forEach(s -> choosenClients.addElement(s));
-		System.out.println("ChoosenClients:");
-		System.out.println(choosenClients);
-		
+		teilnehmerPrivatChat.forEach(s -> choosenClients.addElement(s));		
 	}
 	
 

@@ -50,7 +50,6 @@ public class PrivatChatController implements Serializable
 	private void comboBoxAktualisieren()
 	{
 		teilnehmer.removeAllElements();
-		teilnehmer.addElement(privatChat.getPcs().getUser());
 		privatChat.getPcs().getEmpfaenger().forEach(s -> teilnehmer.addElement(s));
 	}
 

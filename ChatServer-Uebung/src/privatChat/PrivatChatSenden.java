@@ -15,13 +15,17 @@ public class PrivatChatSenden implements Serializable
 	public PrivatChatSenden()
 	{
 	}
-	
+
 	public PrivatChatSenden(String chatName, String user, ArrayList<String> empfaenger)
 	{
 		this.chatName = chatName;
 		this.user = user;
 		this.empfaenger = empfaenger;
+		System.out.println("Vorher: " + empfaenger);
+		empfaenger.add(user);
+		empfaenger.sort((s1,s2) -> s1.compareTo(s2));
 		hashcode = hashCode();
+		System.out.println("Nacher: " + empfaenger);
 	}
 
 	public String getChatName()
@@ -42,6 +46,16 @@ public class PrivatChatSenden implements Serializable
 	public long getHashcode()
 	{
 		return hashcode;
+	}
+	
+	public void setHashcode(long hashcode)
+	{
+		this.hashcode = hashcode;
+	}
+
+	public void setUser(String user)
+	{
+		this.user = user;
 	}
 
 	@Override

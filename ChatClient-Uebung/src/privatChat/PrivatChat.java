@@ -9,7 +9,6 @@ import chatClient.ClientControl;
 public class PrivatChat implements Serializable
 {
 	private static final long serialVersionUID = 1L;
-	private long hashcode;
 	private PrivatChatController controller;
 	private String chatName;
 	private ArrayList<String> empfaenger;
@@ -25,13 +24,19 @@ public class PrivatChat implements Serializable
 		this.cc = cc;
 		starten();
 	}
+	
+	public PrivatChat(PrivatChatSenden pcs, ClientControl cc)
+	{
+		this.cc = cc;
+		this.pcs = pcs;
+		starten();
+	}
 
 	public PrivatChat(ArrayList<String> empfaenger, String chatName, String user, ClientControl cc)
 	{
 		this.cc = cc;
 		this.pcs = new PrivatChatSenden(chatName, user, empfaenger);
 		starten();
-		this.hashcode = pcs.getHashcode();
 	}
 	
 	public void starten()
@@ -52,11 +57,6 @@ public class PrivatChat implements Serializable
 	public ArrayList<String> getEmpfaenger()
 	{
 		return empfaenger;
-	}
-	
-	public long getHashcode()
-	{
-		return hashcode;
 	}
 
 	public ClientControl getCc()

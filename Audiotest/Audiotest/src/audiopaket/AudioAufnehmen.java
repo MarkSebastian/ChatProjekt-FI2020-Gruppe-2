@@ -27,6 +27,7 @@ public class AudioAufnehmen extends Thread
 	@Override
 	public void run()
 	{
+		//Test
 		try
 		{
 			random = (int) (Math.random() * 10000000 + 10000000);

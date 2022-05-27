@@ -540,8 +540,14 @@ public class ClientControl implements Runnable, Serializable
 		{
 			String selected = (String) gui.getListActiveUser().getSelectedValue();
 			System.out.println("Add: " + selected);
-			teilnehmerPrivatChat.remove(selected);
-			auswahlClientsPC.add(selected);
+			System.out.println("Vorher:");
+			System.out.println(teilnehmerPrivatChat);
+			System.out.println(auswahlClientsPC);
+			teilnehmerPrivatChat.add(selected);
+			auswahlClientsPC.remove(selected);
+			System.out.println("Nachher:");
+			System.out.println(teilnehmerPrivatChat);
+			System.out.println(auswahlClientsPC);
 			akPrivatChats();
 		}
 		catch (ArrayIndexOutOfBoundsException e)
@@ -556,8 +562,8 @@ public class ClientControl implements Runnable, Serializable
 		{
 			String selected = (String) gui.getListChoosenUser().getSelectedValue();
 			System.out.println("Remove : " + selected);
-			teilnehmerPrivatChat.add(selected);
-			auswahlClientsPC.remove(selected);
+			teilnehmerPrivatChat.remove(selected);
+			auswahlClientsPC.add(selected);
 			akPrivatChats();
 		}
 		catch (ArrayIndexOutOfBoundsException e)
@@ -569,8 +575,8 @@ public class ClientControl implements Runnable, Serializable
 	private void akPrivatChats()
 	{
 		// DefaulListModels clearen
-		clientsPC = new DefaultListModel<String>();
-		choosenClients = new DefaultListModel<String>();
+		clientsPC.removeAllElements();
+		choosenClients.removeAllElements();
 
 		// ArrayListen sortieren
 		try
@@ -584,8 +590,13 @@ public class ClientControl implements Runnable, Serializable
 		}
 		
 		// DefaultListModels füllen
-		teilnehmerPrivatChat.forEach(s -> clientsPC.addElement(s));
-		auswahlClientsPC.forEach(s -> choosenClients.addElement(s));
+		auswahlClientsPC.forEach(s -> clientsPC.addElement(s));
+		System.out.println("ClientsPC:");
+		System.out.println(clientsPC);
+		teilnehmerPrivatChat.forEach(s -> choosenClients.addElement(s));
+		System.out.println("ChoosenClients:");
+		System.out.println(choosenClients);
+		
 	}
 	
 

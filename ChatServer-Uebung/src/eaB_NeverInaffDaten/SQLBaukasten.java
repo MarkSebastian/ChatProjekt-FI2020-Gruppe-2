@@ -86,10 +86,10 @@ public class SQLBaukasten
 		timestamp_ende="timestamp_ende ";
 		ip="ID ";
 		loginliste_id="loginliste_ID ";
-		benutzername="benutzername ";
-		chatroomname="chatroomname ";
+		benutzername="Benutzername ";
+		chatroomname="Chatroomname ";
 		istPrivat="istPrivat ";
-		passwort="passwort ";
+		passwort="Passwort ";
 		accountname="accountname ";
 		max="max ";
 		hashcode="hashcode ";

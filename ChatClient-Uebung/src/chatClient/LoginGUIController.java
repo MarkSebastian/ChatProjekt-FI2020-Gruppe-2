@@ -11,7 +11,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-public class LoginGUIController extends Control
+public class LoginGUIController extends Control implements Runnable
 {
 	@FXML
 	private ImageView profile_picture;
@@ -24,27 +24,15 @@ public class LoginGUIController extends Control
 	@FXML
 	private Hyperlink btn_neuesKonto;
 	
+	private Thread thread;
+	
 	@FXML
 	protected void buttonOnClick()
 	{
 		super.login(username.getText(), password.getText(), false);
-		if (super.getErfolgreich() == true)
-		{
-			try
-			{
-				erfolgreicherLogin();
-				super.setErfolgreich(false);
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-			
-		}
-		else 
-		{
-			makeAlertWarnig(getFehlerMeldungString());
-		}
+		thread = new Thread(this);
+		thread.run();
+		
 	}
 
 	@FXML
@@ -100,5 +88,41 @@ public class LoginGUIController extends Control
 		alert.setHeaderText(null);
 		alert.setContentText(messang);
 		alert.show();
+	}
+
+	@Override
+	public void run()
+	{
+		do
+		{
+			try
+			{
+				Thread.sleep(100);
+			}
+			catch (InterruptedException e)
+			{
+				
+				e.printStackTrace();
+			}
+			if (super.getErfolgreich() == true)
+			{
+				try
+				{
+					erfolgreicherLogin();
+					super.setErfolgreich(false);
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+			
+			}
+			else if(super.getErfolgreich() == false)
+			{
+				makeAlertWarnig(getFehlerMeldungString());
+			}
+			
+		} while(super.isNachrichteingegangen() == false);
+		super.setErfolgreich(false);
 	}
 }

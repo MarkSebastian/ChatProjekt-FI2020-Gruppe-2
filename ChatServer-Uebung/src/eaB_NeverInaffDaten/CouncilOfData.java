@@ -339,13 +339,16 @@ public class CouncilOfData
 		sqlBefehl=baukasten.select_passwort();
 		try
 		{
-			PreparedStatement vorbereiteteAussage = verbindungDatenKrake.prepareStatement(sqlBefehl);
+			PreparedStatement vorbereiteteAussage = verbindungLogin.prepareStatement(sqlBefehl);
 			vorbereiteteAussage.setString(1, bName);
-			ResultSet ergebnis = vorbereiteteAussage.executeQuery();	
-			passwort=ergebnis.getNString(1);
+			ResultSet ergebnis = vorbereiteteAussage.executeQuery();
+			ergebnis.isLast();
+			System.out.println(ergebnis.getRow());
+			passwort=ergebnis.getNString(2);
 		}
 		catch (SQLException e)
 		{
+			e.printStackTrace();
 			return passwort;//datenbankfehler
 		}
 		return passwort; 

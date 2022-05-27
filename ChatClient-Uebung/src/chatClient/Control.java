@@ -35,6 +35,7 @@ public class Control
 	protected DefaultListModel<String> clients = new DefaultListModel<String>();
 	protected DefaultListModel<String> choosenClients = new DefaultListModel<String>();
 	private boolean erfolgreich;
+	private boolean nachrichteingegangen;
 
 	//protected ObjectInputStream ois;
 	protected ObjectOutputStream out;
@@ -68,6 +69,7 @@ public class Control
 	public FehlerNachricht getFehlerMessage()
 	{
 		return fehlerMessage;
+		
 	}
 
 
@@ -133,7 +135,7 @@ public class Control
 
 	protected void login(String benutzer, String pass, boolean anmeldung)
 	{
-		System.out.print(benutzer + " " + pass);
+		System.out.println(benutzer + " " + pass);
 		try
 		{
 			client.start();
@@ -164,8 +166,10 @@ public class Control
 				{
 					try
 					{
+						nachrichteingegangen = true;
 						client.update(1);
 						fehlerMessage = (FehlerNachricht) object;
+						System.out.println("Nachricht:" + fehlerMessage);
 						System.out.println("Verbindung hergestellt mit Kryo");
 						connection.sendTCP(new String("Hat geklappt vom Client"));
 						if (fehlerMessage.isDatenbankFehler())
@@ -195,7 +199,7 @@ public class Control
 						{
 							erfolgreich = true;
 						}
-						Thread.sleep(1000);
+						Thread.sleep(1);
 					}
 					catch (IOException e)
 					{
@@ -246,6 +250,16 @@ public class Control
 	public void setErfolgreich(boolean erfolgreich)
 	{
 		this.erfolgreich = erfolgreich;
+	}
+
+	public boolean isNachrichteingegangen()
+	{
+		return nachrichteingegangen;
+	}
+
+	public void setNachrichteingegangen(boolean nachrichteingegangen)
+	{
+		this.nachrichteingegangen = nachrichteingegangen;
 	}
 	
 }

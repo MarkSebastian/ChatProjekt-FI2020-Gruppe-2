@@ -4,8 +4,13 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.io.BufferedReader;
 import java.io.EOFException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import Message.nachrichtP.Nachricht;
 import java.io.ObjectOutputStream;
@@ -14,6 +19,9 @@ import java.net.SocketException;
 import java.security.PublicKey;
 
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.DefaultListModel;
 
 public class Control implements Runnable
@@ -30,10 +38,9 @@ public class Control implements Runnable
 	protected AudioAufnehmen audioAufnehmen;
 	protected Thread read;
 	private ClientConnectionThread start;
-
+	private String audioPfad = "Juhuu";
 	protected ObjectInputStream ois;
 	protected ObjectOutputStream out;
-
 	private boolean startWindow = false;
 
 	private Color rot = new Color(255, 102, 102);
@@ -156,7 +163,11 @@ public class Control implements Runnable
 
 	protected void sendAudio()
 	{
-		try
+		
+		File file = new File(audioPfad);
+		AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
+		AudioFormat format = getFormat();
+		/*try
 		{
 			AudioFormat format = setzeSoundEinstellungen();
 			audioAufnehmen = new AudioAufnehmen();
@@ -170,16 +181,16 @@ public class Control implements Runnable
 		catch (Exception e )
 		{
 			System.out.println("Ich war kacken!");
-		}
+		}*/
 
 		
-		/*try
+		try
 		{
 			Nachricht message;
 			if (first)
 			{
 				// Konstruktor in Nachricht Ã¤ndern
-				message = new Nachricht(startGui.getTextFieldUsername().getText(), false);
+				message = new Nachricht(clip, false);
 				out.writeObject(message);
 				first = false;
 			}
@@ -200,7 +211,7 @@ public class Control implements Runnable
 			System.out.println(e + "\n in sendMessage");
 		}
 		this.gui.getTextFieldEingabe().setText("");
-*/
+
 	}
 	
 
@@ -398,7 +409,7 @@ public class Control implements Runnable
 		}
 		catch (ArrayIndexOutOfBoundsException e )
 		{
-			System.out.println("nichts ausgewï¿½hlt");
+			System.out.println("nichts ausgewählt");
 		}
 	}
 
@@ -416,6 +427,12 @@ public class Control implements Runnable
 		{
 			System.out.println("nichts ausgewï¿½hlt");
 		}
+	}
+	
+	private void getFormat()
+	{
+		AudioFormat.Encoding encoding = AudioFormat.Encoding.PCM_SIGNED;
+		float rate = 44
 	}
 
 	@Override

@@ -16,7 +16,7 @@ public class AudioPlay extends Thread
 	private ControllerM controllerM;
 	private AudioInputStream audioStream;
 	private AudioFormat audioFormat;
-	private String temp = "Test.wav";
+	private String temp = "Juhuu.wav";
 	//hier test mit ChinGong.wav
 	//private String temp = "ChinGong.wav";
 
@@ -46,11 +46,11 @@ public class AudioPlay extends Thread
 			System.out.println(clip.getFormat());
 		
 			clip.open(audioStream);
-			System.out.println("Hier nicht 33");
+//			System.out.println("Hier nicht 33");
 			clip.start();
-			System.out.println("Aktueller Thread "+this.currentThread());
+/*			System.out.println("Aktueller Thread "+this.currentThread());
 			System.out.println("Aktueller Thread Name "+this.currentThread().getName());
-		
+		*/
 		}
 		catch(IllegalArgumentException e)
 		{

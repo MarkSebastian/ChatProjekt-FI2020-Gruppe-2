@@ -3,6 +3,7 @@ package Message.nachrichtP;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import javax.sound.sampled.Clip;
 import javax.swing.DefaultListModel;
 
 public class Nachricht implements Serializable
@@ -12,6 +13,7 @@ public class Nachricht implements Serializable
 	private String absender;
 	private int absenderId;
 	final private LocalDateTime timestamp = LocalDateTime.now();
+	private Clip clip;
 	private String nachricht;
 	
 	private DefaultListModel<String> activeClients = null;
@@ -52,7 +54,28 @@ public class Nachricht implements Serializable
 		return activeClients;
 	}
 
-	
+	public Nachricht(Clip datei, boolean isServer)
+	{
+		
+		if (isServer == true)
+		{
+			this.absender = "Server";
+		}
+		else
+		{
+			this.absender = "Ich";
+		}
+		this.absenderId = 0;
+		this.clip = clip;
+	}
+
+	public Nachricht(Clip clip, DefaultListModel<String> clientListe)
+	{
+		this.absender = "";
+		this.absenderId = 0;
+		this.clip = clip;
+		this.activeClients = clientListe;
+	}	
 	
 	public Nachricht(String nachricht, boolean isServer)
 	{

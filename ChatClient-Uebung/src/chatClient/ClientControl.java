@@ -205,7 +205,8 @@ public class ClientControl implements Runnable, Serializable
 			}
 			else
 			{
-				message = new Nachricht(this.gui.getTextFieldEingabe().getText(), false);
+				message = new Nachricht(this.gui.getTextFieldEingabe().getText(), aktiveClients, false);
+				System.out.println(message.getEmpfaenger());
 				out.writeObject(message);
 				messagesArray.add(message);
 				akNachrichtenGlobal();
@@ -292,7 +293,7 @@ public class ClientControl implements Runnable, Serializable
 				if (n.getEmpfaenger() != null)
 				{
 					aktiveClients = new ArrayList<String>();
-					n.getEmpfaenger().forEach(e -> aktiveClients.add(e));
+					aktiveClients = n.getEmpfaenger();
 					akClients();
 				}
 				getNewMessages(n);
@@ -423,6 +424,7 @@ public class ClientControl implements Runnable, Serializable
 				auswahlClientsPC.add(e);
 			}
 		});
+		System.out.println("Mögliche PC User" + auswahlClientsPC);
 		// DefaultListModel User PC füllen
 		auswahlClientsPC.forEach(e -> clientsPC.addElement(e));
 

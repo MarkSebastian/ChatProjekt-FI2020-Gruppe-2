@@ -106,9 +106,10 @@ public class Client implements Runnable
 				else
 				{
 					message.setAbsender(name);
-					message.setAbsenderId(id);								
+					message.setAbsenderId(id);	
+					
 					// Wenn ArrayList empfaenger von message leer ist, wird die Nachricht an den Globalen Chat versendet
-					if(message.getEmpfaenger().isEmpty())
+					if(message.getHashcode() == 0)
 					{
 						control.getNewMessages(message);
 						control.broadcastMessage(message, this);						

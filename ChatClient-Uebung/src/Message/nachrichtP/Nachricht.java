@@ -15,7 +15,6 @@ public class Nachricht implements Serializable
 	private int absenderId;
 	final private LocalDateTime timestamp = LocalDateTime.now();
 	private String nachricht;
-	private DefaultListModel<String> activeClients = null;
 	private ArrayList<String> empfaenger = new ArrayList<String>();
 
 	public Nachricht(String nachricht, boolean isServer)
@@ -30,6 +29,23 @@ public class Nachricht implements Serializable
 		}
 		this.absenderId = 0;
 		this.nachricht = nachricht;
+		this.hashcode = 0;
+	}
+	
+	public Nachricht(String nachricht, ArrayList<String> empfaenger, boolean isServer)
+	{
+		if(isServer == true)
+		{
+		this.absender = "Server";
+		}
+		else
+		{
+			this.absender = "Ich";
+		}
+		this.absenderId = 0;
+		this.nachricht = nachricht;
+		this.empfaenger = empfaenger;
+		this.hashcode = 0;
 	}
 	
 	public Nachricht(String absender, String nachricht, ArrayList<String> empfaenger, long hashcode)
@@ -40,31 +56,15 @@ public class Nachricht implements Serializable
 		empfaenger.remove(absender);
 		this.hashcode = hashcode;
 	}
-	
-	public Nachricht(String nachricht, ArrayList<String> empfaenger, long hashcode)
-	{
-		this.absender="";
-		this.empfaenger = empfaenger;
-		this.nachricht = nachricht;
-		this.hashcode = hashcode;
-	}
-	
+		
 	public Nachricht(String nachricht, ArrayList<String> empfaenger)
 	{
 		this.absender = "";
 		this.nachricht = nachricht;
 		this.empfaenger = empfaenger;
+		this.hashcode = 0;
 	}
 	
-	public Nachricht(String nachricht, DefaultListModel<String> clientListe ,ArrayList<String> empfaenger)
-	{
-		this.absender = "";
-		this.absenderId = 0;
-		this.nachricht = nachricht;
-		this.activeClients = clientListe;
-		this.empfaenger = empfaenger;
-	}
-
 	public ArrayList<String> getEmpfaenger()
 	{
 		return empfaenger;
@@ -98,11 +98,6 @@ public class Nachricht implements Serializable
 	public String getNachricht()
 	{
 		return nachricht;
-	}
-	
-	public DefaultListModel<String> getListClients()
-	{
-		return activeClients;
 	}
 
 	public long getHashcode()

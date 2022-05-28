@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringBufferInputStream;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
@@ -18,13 +19,11 @@ import javax.sound.sampled.AudioFileFormat.Type;
 
 public class AudioAufnehmen2 extends Thread
 {
-	private Controller controller;
 	private ControllerM controllerM;
 	private int random;
 	private File file;
 	private AudioFormat format;
 	private Type fileFormat;
-	private AudioFormat audioFormat;
 	protected TargetDataLine tdl;
 	private AudioInputStream ais;
 	private int frameSizeInBytes;
@@ -33,12 +32,11 @@ public class AudioAufnehmen2 extends Thread
 	private ByteArrayInputStream bais;
 	private Thread thread;
 	private AudioInputStream audioStream;
-	//das ist das übergebene
-	private AudioFormat format2;
 	private AudioAufnehmen2 audioAufnehmen2;
-	
+	private GUIAudio guiAudio;
+	private double dauer;
 
-	//gui und GuiAudio sind auch threads
+	// gui und GuiAudio sind auch threads
 	public AudioInputStream getAis()
 	{
 		return ais;
@@ -59,6 +57,12 @@ public class AudioAufnehmen2 extends Thread
 		// TODO Auto-generated constructor stub
 	}
 
+	public AudioAufnehmen2(GUIAudio guiAudio)
+	{
+		this.guiAudio = guiAudio;
+		// guiAudio.setVisible(true);
+	}
+
 	public TargetDataLine getTdl()
 	{
 		return tdl;
@@ -69,109 +73,101 @@ public class AudioAufnehmen2 extends Thread
 		this.tdl = tdl;
 	}
 
-	/*public void starteRun()
+	public void aufzeichneThread()
 	{
 		thread = new Thread(this);
 		thread.setName("Aufzeichnen");
-		thread.start();
-	}*/
-	
-	public void aufzeichneThread(AudioAufnehmen2 audioAufnehmen2)
-	{
-		thread = new Thread(this);
-		thread.setName("Aufzeichnen");
-		System.out.println("In AudioAufnehmen2 Thread Name "+thread.getName());
 		thread.start();
 	}
-	
-	public void stopThread()
+
+	public void stoppeThread()
 	{
+		// Aufzeichnen Thread
+		// hier wird Aufzeihcnen beendet
 		thread = null;
 	}
 
-	//threads in einzelnen methoden
-	
-	@Override
 	public void run()
 	{
 		try (final ByteArrayOutputStream out = new ByteArrayOutputStream();
 				final TargetDataLine tdl = getTargetDataLineForRecord();)
 		{
-			System.out.println(audioFormat+" is das auch thread ?");
-			int frameSizeInBytes = audioFormat.getFrameSize();
+			int frameSizeInBytes = format.getFrameSize();
 			int bufferLengthInFrames = tdl.getBufferSize() / 8;
-
-			System.out.println("Hi");
 			final int bufferLengthInBytes = bufferLengthInFrames * frameSizeInBytes;
 			schreibeOutputStream(out, tdl, frameSizeInBytes, bufferLengthInBytes);
+
 			this.ais = new AudioInputStream(tdl);
 			setAis(convertToAudioIStream(out, frameSizeInBytes));
-			// ob wir die line hier brauchen wissen wir nicht
-			ais.reset();
+
+			WavSpeichern wavspeichern = new WavSpeichern();
+
+			wavspeichern.speichereInWav(getAis());
+
 		}
+		
 		catch (Exception e )
 		{
+			System.out.println(e);
 			e.printStackTrace();
 		}
-
 	}
-	
+
 	public AudioFormat build(AudioFormat format)
 	{
 		this.format = format;
-		System.out.println("das is in build "+format);
-		System.out.println(this.format + "Das ist this");
 		return this.format;
 	}
 
-	public void schreibeOutputStream(final ByteArrayOutputStream out, final TargetDataLine line, int frameSizeInBytes,
+	public void schreibeOutputStream(final ByteArrayOutputStream out, final TargetDataLine tdl, int frameSizeInBytes,
 			final int bufferLengthInBytes) throws IOException
-	{
+	{// Aufzeichnen Thread
 		final byte[] data = new byte[bufferLengthInBytes];
 		int numBytesRead;
-
-		System.out.println("1");
 		tdl.start();// start capturing
-		System.out.println("2");
-		// hier könnte das problem liegen
-		// while (this.currentThread() != null)
 		while (thread != null)
 		{
-			if ((numBytesRead = line.read(data, 0, bufferLengthInBytes)) == -1)
+			if ((numBytesRead = tdl.read(data, 0, bufferLengthInBytes)) == -1)
 			{
 				break;
 			}
+			// schreibt daten in byteArrayOutputStream in numBytesRead
 			out.write(data, 0, numBytesRead);
-			System.out.println("1010");
+			System.out.println(out.size());
 		}
-		System.out.println("Nach while");
+		finish(tdl);
 	}
 
 	public AudioInputStream convertToAudioIStream(final ByteArrayOutputStream out, int frameSizeInBytes)
 	{
+
 		byte audioBytes[] = out.toByteArray();
 		bais = new ByteArrayInputStream(audioBytes);
-		AudioInputStream audioStream = new AudioInputStream(bais, audioFormat, audioBytes.length / frameSizeInBytes);
-		long milliseconds = (long) ((ais.getFrameLength() * 1000) / audioFormat.getFrameRate());
-		// brauchen wir vllt
-		// duration = milliseconds / 1000.0;
+
+		AudioInputStream audioStream = new AudioInputStream(bais, format, audioBytes.length / frameSizeInBytes);
+		long milliseconds = (long) ((ais.getFrameLength() * 1000) / format.getFrameRate());
+/*		dauer = milliseconds / 1000.0;
+
+		System.out.println("Dauer der Aufnahme in Sekunden: " + dauer);
+*/
 		return audioStream;
+
 	}
 
 	/**
 	 * Closes the target data line to finish capturing and recording
+	 * 
+	 * @param tdl
 	 */
-	public void finish()
+	public void finish(TargetDataLine tdl)
 	{
 		tdl.stop();
 		tdl.close();
-		System.out.println("Finished");
 	}
 
-	// Methode von Git
 	public TargetDataLine getTargetDataLineForRecord()
 	{
-		TargetDataLine line;
+		TargetDataLine tdl;
 		DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
 		if (!AudioSystem.isLineSupported(info))
 		{
@@ -179,15 +175,16 @@ public class AudioAufnehmen2 extends Thread
 		}
 		try
 		{
-			line = (TargetDataLine) AudioSystem.getLine(info);
-			line.open(format, line.getBufferSize());
+
+			tdl = (TargetDataLine) AudioSystem.getLine(info);
+			tdl.open(format, tdl.getBufferSize());
 		}
 		catch (final Exception ex )
 		{
 			return null;
 		}
-		System.out.println(line);
-		return line;
+		return tdl;
+
 	}
 
 }

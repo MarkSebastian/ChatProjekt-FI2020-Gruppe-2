@@ -2,6 +2,7 @@ package audiopaket;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -31,6 +32,12 @@ public class GUIAudio extends JFrame
 		contentPane.add(getBtnStop());
 	}
 
+	public void setBtnStop(ActionListener l)
+	{
+		this.btnStop.addActionListener(l);
+	}
+	
+	//hier endet der thread
 	protected JButton getBtnStop()
 	{
 		if (btnStop == null)

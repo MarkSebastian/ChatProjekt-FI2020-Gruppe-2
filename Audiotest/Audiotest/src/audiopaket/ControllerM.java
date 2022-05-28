@@ -24,58 +24,71 @@ public class ControllerM
 		guiAudio= new GUIAudio();
 		setButtons();
 	}
+	
 
 	private void setButtons()
 	{
-		this.gui.setBtnAufnehmen(e -> audioRecord());
+		this.gui.setBtnAufnehmen(e -> uebergabeAnGuiAudio());
+		//this.gui.setBtnAufnehmen(e -> audioRecord());
 		this.gui.setBtnAbspielen(e -> audioPlay());
+		this.guiAudio.setBtnStop(e -> stoppeAufnahmeGUIAudio());
 	}
 
+	
+	public void stoppeAufnahmeGUIAudio()
+	{
+		//AudioHauptThread
+		audioAufnehmen2.stoppeThread();
+		System.out.println("Beendet");
+	}
+
+	public void uebergabeAnGuiAudio()
+	{
+		guiAudio.setVisible(true);
+		audioRecord();
+		//erst wenn kleine gui offen ist audioAufnehmen erstellen
+	}
+	
 	public void audioRecord()
 	{
 		try
 		{
 			AudioFormat format = setzeSoundEinstellungen();
-			audioAufnehmen2 = new AudioAufnehmen2();
+			audioAufnehmen2 = new AudioAufnehmen2(guiAudio);
 
 			audioAufnehmen2.build(format);
-			System.out.println("Das ist das audioFormat" +audioAufnehmen2);
 			System.out.println("recording");
-			audioAufnehmen2.setName("AudioHauptThread");
-			//thread audioAufnehmen
-			System.out.println("In Controllert Thread Name "+audioAufnehmen2.getName());
-			audioAufnehmen2.aufzeichneThread(audioAufnehmen2);
-			
-			Thread.sleep(20000);
-		    audioAufnehmen2.interrupt();
-
-		    wavspeichern =new WavSpeichern();
-			//schreibt wav 
-		    wavspeichern.speichereInWav(audioAufnehmen2.getAis());
-			System.out.println("Hier nicht 6");
-			//hier fehler
-			guiAudio.setVisible(true);
-			
-			//audioAufnehmen.interrupt();
+			audioAufnehmen2.setName("AudioHauptThreadAWT");
+			//audioHauptThread Thread
+			audioAufnehmen2.aufzeichneThread();
+		
 		}
-
 		catch (Exception e )
 		{
 			System.out.println(e);
 		}
 	}
 
-	
 	public void audioPlay()
 	{
 		//thread
 		audioPlayThread = new AudioPlay(this);
-		System.out.println("In ControllerM Aktueller Thread Name "+audioPlayThread.getName());
+		//System.out.println("In ControllerM Aktueller Thread Name "+audioPlayThread.getName());
+		System.out.println("Play...");
 		audioPlayThread.start();
-		//thread beenden hier ? oder bei run ?
+		try
+		{
+			Thread.sleep(2000);
+			audioPlayThread.interrupt();
+		}
+		catch (InterruptedException e )
+		{
+			e.printStackTrace();
+		}
 	}
 
-	public static AudioFormat setzeSoundEinstellungen() {
+	public static AudioFormat setzeSoundEinstellungen() 
+	{
         SoundEinstellungen settings = new SoundEinstellungen();
         AudioFormat.Encoding encoding = settings.ENCODING;
         float rate = settings.RATE;
@@ -85,7 +98,4 @@ public class ControllerM
 
         return new AudioFormat(encoding, rate, sampleSize, channels, (sampleSize / 8) * channels, rate, bigEndian);
     }
-	
-	
-	 
 }

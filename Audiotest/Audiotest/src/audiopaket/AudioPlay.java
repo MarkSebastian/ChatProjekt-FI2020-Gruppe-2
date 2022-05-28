@@ -16,7 +16,8 @@ public class AudioPlay extends Thread
 	private ControllerM controllerM;
 	private AudioInputStream audioStream;
 	private AudioFormat audioFormat;
-	private String temp = "Juhuu.wav";
+	private Thread thread;
+	private String temp = "Test.wav";
 	//hier test mit ChinGong.wav
 	//private String temp = "ChinGong.wav";
 
@@ -25,6 +26,22 @@ public class AudioPlay extends Thread
 		this.controllerM = controllerM;
 	}
 
+	//threads in einzelnen methoden
+	//brauche ich hier die parameter 
+	public void playThread(AudioAufnehmen2 audioAufnehmen2)
+	{
+		thread = new Thread(this);
+		thread.setName("PlayAudio");
+		//System.out.println("In AudioAufnehmen2 Thread Name "+thread.getName());
+		thread.start();
+	}
+	
+	public void stoppeThread()
+	{
+		thread = null;
+	}
+	
+	
 	@Override
 	public void run()
 	{
@@ -34,23 +51,13 @@ public class AudioPlay extends Thread
 			File file = new File(temp);
 			audioStream = AudioSystem.getAudioInputStream(file);
 			audioFormat  = new AudioFormat(44100, 16, 2, true, true);
-			//audioFormat = audioStream.getFormat();
-			System.out.println(audioStream.getFormat());
 			DataLine.Info info = new DataLine.Info(Clip.class, audioFormat);
 			
-			System.out.println("Hier nicht 1");
 			Clip clip = (Clip) AudioSystem.getLine(info);
-			System.out.println("Hier nicht 2");
-			/////
-			//was braucht der für ein audioformat
-			System.out.println(clip.getFormat());
 		
 			clip.open(audioStream);
-//			System.out.println("Hier nicht 33");
 			clip.start();
-/*			System.out.println("Aktueller Thread "+this.currentThread());
-			System.out.println("Aktueller Thread Name "+this.currentThread().getName());
-		*/
+		
 		}
 		catch(IllegalArgumentException e)
 		{
@@ -59,7 +66,7 @@ public class AudioPlay extends Thread
 		}
 		catch (UnsupportedAudioFileException e )
 		{
-			System.out.println("AudioFormat nicht unterstützt" + e);
+			System.out.println("AudioFormat nicht unterstÃ¼tzt" + e);
 		}
 		catch (IOException e )
 		{

@@ -115,6 +115,12 @@ public class PrivatChatGUI extends JFrame
 		}
 		return textFieldNachricht;
 	}
+	
+	public void setBtnVerlassenListener(ActionListener al)
+	{
+		this.btnVerlassen.addActionListener(al);
+	}
+	
 	private JButton getBtnVerlassen() {
 		if (btnVerlassen == null) {
 			btnVerlassen = new JButton("Chat verlassen");

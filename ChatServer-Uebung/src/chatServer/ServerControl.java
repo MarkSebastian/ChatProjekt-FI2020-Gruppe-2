@@ -120,7 +120,7 @@ public class ServerControl
 	{
 		messages.addElement(n);
 	}
-		
+
 	protected void broadcastMessage(Nachricht n)
 	{
 		messages.addElement(n);
@@ -153,13 +153,12 @@ public class ServerControl
 	// Nachricht wird auch nur an diese Clients weitergeleitet
 	protected void broadcastPrivatMessage(Nachricht n)
 	{
-		System.out.println(n.getAbsender());
 		connect.getClients().forEach(e -> n.getEmpfaenger().forEach(s ->
 		{
 			if (e.getName().compareTo(s) == 0)
 			{
-				if(!(e.getName().compareTo(n.getAbsender()) == 0))
-				e.sendMessage(n);				
+				if (!(e.getName().compareTo(n.getAbsender()) == 0))
+					e.sendMessage(n);
 			}
 		}));
 	}
@@ -205,8 +204,6 @@ public class ServerControl
 		}
 
 	}
-
-
 
 	protected ArrayList<String> listeFuellen()
 	{

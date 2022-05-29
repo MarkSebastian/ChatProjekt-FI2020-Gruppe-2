@@ -147,7 +147,10 @@ public class ClientControl implements Runnable, Serializable
 		return user;
 	}
 
-	
+	public Set<PrivatChat> getPrivatChats()
+	{
+		return privatChats;
+	}
 
 	protected boolean checkPort()
 	{
@@ -226,10 +229,10 @@ public class ClientControl implements Runnable, Serializable
 	private void readMessage()
 	{
 		boolean privatChatObjekt = false;
-		
+
 		Object o = new Object();
-		
-		if(login)
+
+		if (login)
 		{
 			try
 			{
@@ -258,37 +261,37 @@ public class ClientControl implements Runnable, Serializable
 				{
 					try
 					{
-						Nachricht n = (Nachricht)o;
+						Nachricht n = (Nachricht) o;
 						nachrichtEmpfangen(n);
 					}
 					catch (ClassCastException e)
 					{
-						//System.out.println(e + "\n in readMessage");
+						System.out.println("");
 					}
 				}
 			}
-		}		
+		}
 	}
-		
 
 	private void nachrichtEmpfangen(Nachricht n)
 	{
-		nachrichtPrivat = false;
 		try
 		{
 			// Liste mit PrivatChats wird durchlaufen, wenn PrivatChat mit richtigem
 			// Hashcode vorhanden, wird die Nachricht im PrivatChat angezeigt
-			privatChats.forEach(pc ->
+			if (!(n.getHashcode() == 0))
 			{
-				if (n.getHashcode() == pc.getPcs().getHashcode())
+				privatChats.forEach(pc ->
 				{
-					pc.getController().receiveMessage(n);
-					nachrichtPrivat = true;
-				}
-			});
+					if (n.getHashcode() == pc.getPcs().getHashcode())
+					{
+						pc.getController().receiveMessage(n);
+					}
+				});
+			}
 
 			// Ansonsten wird die Nachricht im GlobalenChat angezeigt
-			if (nachrichtPrivat == false)
+			else
 			{
 				if (n.getEmpfaenger() != null)
 				{
@@ -335,7 +338,7 @@ public class ClientControl implements Runnable, Serializable
 		}
 		return objektIstPrivatChat;
 	}
-	
+
 	private void neuenPrivatChatStarten()
 	{
 		boolean schonVorhanden = false;
@@ -366,9 +369,16 @@ public class ClientControl implements Runnable, Serializable
 				sendPrivatChat(pc);
 				teilnehmerPrivatChat.addAll(auswahlClientsPC);
 				auswahlClientsPC.clear();
-				akClients();				
+				akClients();
+				gui.getTextFieldGruppenName().setText("Gruppennamen eingeben");
 			}
 		}
+	}
+
+	public void privatChatEntfernen(PrivatChat entf)
+	{
+		privatChats.remove(entf);
+		entf.getController().getPgui().setVisible(false);
 	}
 
 	private void sendPrivatChat(PrivatChat pc)
@@ -415,13 +425,13 @@ public class ClientControl implements Runnable, Serializable
 		auswahlClientsPC.clear();
 		clientsPC.removeAllElements();
 		choosenClients.removeAllElements();
-		
+
 		// aktiveClients sortieren
 		aktiveClients.sort((s1, s2) -> s1.compareTo(s2));
 
 		// DefaultListModel User globaler Chat füllen
 		aktiveClients.forEach(e -> clients.addElement(e));
-				
+
 		// Alle Elemente ungleich man selbst werden auswahlClientsPC hinzugefügt
 		aktiveClients.forEach(e ->
 		{
@@ -430,7 +440,7 @@ public class ClientControl implements Runnable, Serializable
 				auswahlClientsPC.add(e);
 			}
 		});
-		
+
 		// DefaultListModel User PC füllen
 		auswahlClientsPC.forEach(e -> clientsPC.addElement(e));
 
@@ -461,7 +471,7 @@ public class ClientControl implements Runnable, Serializable
 		read.interrupt();
 		start.interrupt();
 		gui.changeStatus("verbindung getrennt");
-		
+
 		switchGui();
 	}
 
@@ -585,16 +595,15 @@ public class ClientControl implements Runnable, Serializable
 			auswahlClientsPC.sort((s1, s2) -> s1.compareTo(s2));
 			teilnehmerPrivatChat.sort((s1, s2) -> s1.compareTo(s2));
 		}
-		catch(NullPointerException e)
+		catch (NullPointerException e)
 		{
 			System.out.println(e + "\n in akPrivatChats");
 		}
-		
+
 		// DefaultListModels füllen
 		auswahlClientsPC.forEach(s -> clientsPC.addElement(s));
-		teilnehmerPrivatChat.forEach(s -> choosenClients.addElement(s));		
+		teilnehmerPrivatChat.forEach(s -> choosenClients.addElement(s));
 	}
-	
 
 	@Override
 	public void run()

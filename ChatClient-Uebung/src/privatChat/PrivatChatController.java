@@ -38,14 +38,20 @@ public class PrivatChatController implements Serializable
 
 	private void addListener()
 	{
-		this.pgui.setTextFieldNachrichtListener(l -> sendMessage());		
+		this.pgui.setTextFieldNachrichtListener(l -> sendMessage());
+		this.pgui.setBtnVerlassenListener(l -> chatVerlassen());
 	}
-	
+
 	private void setModel()
 	{
 		pgui.getListChat().setModel(nachrichten);
 		pgui.getListUser().setModel(teilnehmer);
 	}	
+
+	public PrivatChatGUI getPgui()
+	{
+		return pgui;
+	}
 
 	private void comboBoxAktualisieren()
 	{
@@ -61,6 +67,12 @@ public class PrivatChatController implements Serializable
 		nachrichten.addElement(n);
 		this.pgui.getTextFieldNachricht().setText("");
 	}	
+	
+	private void chatVerlassen()
+	{
+		privatChat.getCc().privatChatEntfernen(privatChat);
+	}
+
 	
 	public void receiveMessage(Nachricht n)
 	{

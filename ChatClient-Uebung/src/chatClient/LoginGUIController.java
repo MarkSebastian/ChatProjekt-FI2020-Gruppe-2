@@ -23,9 +23,9 @@ public class LoginGUIController extends Control implements Runnable
 	private Button btn_einloggen;
 	@FXML
 	private Hyperlink btn_neuesKonto;
-	
+
 	private Thread thread;
-	
+
 	@FXML
 	protected void buttonOnClick()
 	{
@@ -56,23 +56,13 @@ public class LoginGUIController extends Control implements Runnable
 			{
 				e.printStackTrace();
 			}
-		}
-		else
-		{
-			try
-			{
-				System.out.println("Klappt");
-				// stageEventChangeStage.setScene(super.erfolgreicherLogin());
-				// stageEventChangeStage.setTitle("Debug");
-				// stageEventChangeStage.show();
-			}
 			catch (Exception e)
 			{
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	private void mainChatGUISceneChange()
 	{
 		Stage stageEventChangeStage = (Stage) btn_neuesKonto.getScene().getWindow();
@@ -95,7 +85,7 @@ public class LoginGUIController extends Control implements Runnable
 		alert.setContentText(messang);
 		alert.show();
 	}
-	
+
 	private void makeAlertWarnig(String messang)
 	{
 		Alert alert = new Alert(AlertType.WARNING);
@@ -111,30 +101,29 @@ public class LoginGUIController extends Control implements Runnable
 		{
 			try
 			{
-				Thread.sleep(100);
+				Thread.sleep(500);
+				if (username.getText().compareTo("admin") == 0 || password.getText().compareTo("admin") == 0)
+				{
+					mainChatGUISceneChange();
+				}
+				else if (super.getErfolgreich() == true)
+				{
+					mainChatGUISceneChange();
+					super.setErfolgreich(false);
+					Thread.interrupted();
+				}
+				else if (super.getErfolgreich() == false)
+				{
+					System.out.println(getErfolgreich()+ " In Login");
+					makeAlertWarnig(getFehlerMeldungString());
+				}
 			}
 			catch (InterruptedException e)
 			{
-				
+				Thread.interrupted();
 				e.printStackTrace();
 			}
-			if (username.getText().compareTo("admin") == 0 || password.getText().compareTo("admin") == 0)
-			{
-				mainChatGUISceneChange();
-			}
-			else if (super.getErfolgreich() == true)
-			{
-
-				mainChatGUISceneChange();
-				super.setErfolgreich(false);
-
-			}
-			else if(super.getErfolgreich() == false)
-			{
-				makeAlertWarnig(getFehlerMeldungString());
-			}
-			
-		} while(super.isNachrichtEingegangen() == false);
+		} while (super.isNachrichtEingegangen() == false);
 		super.setErfolgreich(false);
 	}
 }

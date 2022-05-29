@@ -23,7 +23,7 @@ import com.esotericsoftware.kryonet.Server;
 
 public class Control
 {
-	private CouncilOfData controlDB();
+	private CouncilOfData controlDB;
 	private static Server server;
 	private Connection[] connections;
 	
@@ -33,7 +33,7 @@ public class Control
 		{
 			controlDB = new CouncilOfData();
 			server = new Server();
-			Register.register(server.getKryo);
+			Register.register(server.getKryo());
 			server.bind(8008);
 			server.start();
 			addListenerToServer();
@@ -60,6 +60,7 @@ public class Control
 			{
 				if(object instanceof Nachricht)
 				{
+					System.out.println("Hab ne Nachricht bekommen <3");
 						try
 						{
 							Nachricht message = (Nachricht)object;

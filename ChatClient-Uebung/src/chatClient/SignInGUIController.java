@@ -25,7 +25,7 @@ public class SignInGUIController extends Control implements Runnable
 	private Button btn_einloggen;
 	@FXML
 	private Hyperlink btn_neuesKonto;
-	
+
 	private Thread thread;
 
 	@FXML
@@ -55,7 +55,7 @@ public class SignInGUIController extends Control implements Runnable
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void makeAlertInformation(String message)
 	{
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -71,7 +71,7 @@ public class SignInGUIController extends Control implements Runnable
 		alert.setContentText(message);
 		alert.show();
 	}
-	
+
 	@Override
 	public void run()
 	{
@@ -80,31 +80,32 @@ public class SignInGUIController extends Control implements Runnable
 			try
 			{
 				Thread.sleep(100);
+				if (password.getText().compareTo(password1.getText()) == 0)
+				{
+					super.login(username.getText(), password.getText(), true);
+					if (super.getErfolgreich() == true)
+					{
+						sceneChange();
+						super.setErfolgreich(false);
+						thread.interrupt();
+					}
+					else if (super.getErfolgreich() == false)
+					{
+						System.out.println(getErfolgreich() + "In Sign Up");
+						makeAlertWarnig(getFehlerMeldungString());
+					}
+				}
+				else
+				{
+					makeAlertInformation("Die Passwörter stimmen nicht überein");
+				}
 			}
 			catch (InterruptedException e)
 			{
-				
+				Thread.interrupted();
 				e.printStackTrace();
 			}
-			if (password.getText().compareTo(password1.getText()) == 0)
-			{
-				super.login(username.getText(), password.getText(), true);
-				if (super.getErfolgreich() == true)
-				{
-					sceneChange();
-					super.setErfolgreich(false);
-				}
-				else if (super.getErfolgreich() == false)
-				{
-						makeAlertWarnig(getFehlerMeldungString());	
-				}
-			}
-			else
-			{
-				makeAlertInformation("Die Passwörter stimmen nicht überein");
-			}
-			
-		} while(super.isNachrichtEingegangen() == false);
+		} while (super.isNachrichtEingegangen() == false);
 		super.setErfolgreich(false);
 	}
 }

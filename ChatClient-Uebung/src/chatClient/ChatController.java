@@ -23,12 +23,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ChatController extends Control implements Initializable, Runnable
+public class ChatController extends Control implements Initializable
 {
 
 	@FXML
@@ -47,13 +49,20 @@ public class ChatController extends Control implements Initializable, Runnable
 	private AnchorPane menu_bg_pane;
 	@FXML
 	private AnchorPane transparent_pane;
+	@FXML
+	private Button button_neu;
 	private Thread thread;
+	private GetNachrichten gNachrichten;
+
+	public ChatController()
+	{
+		gNachrichten = new GetNachrichten(this);
+	}
 
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle)
 	{
-		thread = new Thread(this);
-		thread.run();
+
 		menu_bg_pane.setVisible(false);
 		transparent_pane.setVisible(false);
 
@@ -64,8 +73,7 @@ public class ChatController extends Control implements Initializable, Runnable
 			{
 				if (event.getCode().equals(KeyCode.ENTER))
 				{
-					//send();
-					sendToServer();
+					send();
 				}
 			}
 		});
@@ -111,12 +119,27 @@ public class ChatController extends Control implements Initializable, Runnable
 			transparent_pane.setVisible(false);
 		});
 
-	}
+		button_send.setOnAction(event ->
+		{
+			send();
+			gNachrichten.run();
+		});
 
-	protected void sendToServer()
-	{
-		 super.sendServer(textField_messages.getText());
-		
+		button_neu.setOnAction(endmysuffering ->
+		{
+			Stage stageEventChangeStage = (Stage) textField_messages.getScene().getWindow();
+			try
+			{
+				stageEventChangeStage.setScene(fabisGui());
+				stageEventChangeStage.setTitle("Neue Chat");
+				stageEventChangeStage.show();
+			}
+			catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 	}
 
 	public void send()
@@ -125,7 +148,6 @@ public class ChatController extends Control implements Initializable, Runnable
 		if (!textToSend.isEmpty())
 		{
 			sendMessage(textToSend);
-
 			HBox hBox = new HBox();
 			hBox.setAlignment(Pos.CENTER_RIGHT);
 			hBox.setPadding(new Insets(5, 5, 5, 10));
@@ -143,7 +165,6 @@ public class ChatController extends Control implements Initializable, Runnable
 			hBox.getChildren().add(textFlow);
 			vbox_messages.getChildren().add(hBox);
 			vbox_messages.setMinHeight(vbox_messages.getPrefHeight() + textFlow.getHeight());
-
 			textField_messages.clear();
 		}
 	}
@@ -165,17 +186,4 @@ public class ChatController extends Control implements Initializable, Runnable
 
 		vbox_messages.getChildren().add(hBox);
 	}
-
-	@Override
-	public void run()
-	{
-		while(! thread.isInterrupted())
-		{
-			if(isChatNachrichtEingegangen())
-			{
-				bekommeNachricht(getEmpfangeneNachrichString());
-			}
-		}
-	}
-
 }

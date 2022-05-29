@@ -41,6 +41,7 @@ public class Control
 	
 	public Control()
 	{
+		chatNachrichtEmpfangen = false;
 		client = new Client();
 		addListenerToClient();
 		Register.register(client.getKryo());
@@ -67,7 +68,7 @@ public class Control
 		try
 		{
 			client.start();
-			client.connect(5000, "localhost", 5555, 8008);
+			client.connect(5000, "localhost", 5555);
 			client.sendTCP(new LogInNachricht(benutzer, pass, anmeldung));
 			clientNameString = benutzer;
 		}
@@ -168,8 +169,17 @@ public class Control
 
 	protected Scene erfolgreicherLogin() throws IOException
 	{
+		client.stop();
+		client.start();
+		client.connect(2000, "localhost", 8008);
 		Parent debugParent = FXMLLoader.load(getClass().getResource("Chat.fxml"));
 		return new Scene(debugParent);
+	}
+	
+	protected Scene backToZero() throws IOException
+	{
+		Parent zeroParent = FXMLLoader.load(getClass().getResource("Chat.fxml"));
+		return new Scene(zeroParent);
 	}
 
 	protected boolean getErfolgreich()
@@ -201,10 +211,10 @@ public class Control
 	{
 		return this.empfangeneNachrichString;
 	}
-
-	public void sendServer(String nachricht)
+	
+	protected Scene fabisGui() throws IOException
 	{
-		client.sendTCP(new Nachricht(clientNameString, nachricht));
-		
+		Parent fabiParent = FXMLLoader.load(getClass().getResource("NeuerChatGUI.fxml"));
+		return new Scene(fabiParent);
 	}
 }

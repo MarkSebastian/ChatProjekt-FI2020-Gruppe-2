@@ -263,7 +263,7 @@ public class ClientControl implements Runnable, Serializable
 					}
 					catch (ClassCastException e)
 					{
-						System.out.println(e + "\n in readMessage");
+						//System.out.println(e + "\n in readMessage");
 					}
 				}
 			}
@@ -364,6 +364,9 @@ public class ClientControl implements Runnable, Serializable
 				PrivatChat pc = new PrivatChat(pcs, this);
 				privatChats.add(pc);
 				sendPrivatChat(pc);
+				teilnehmerPrivatChat.addAll(auswahlClientsPC);
+				auswahlClientsPC.clear();
+				akClients();				
 			}
 		}
 	}
@@ -406,25 +409,28 @@ public class ClientControl implements Runnable, Serializable
 
 	private void akClients()
 	{
+		// Alle Listen clearen
 		clients.removeAllElements();
+		teilnehmerPrivatChat.clear();
+		auswahlClientsPC.clear();
 		clientsPC.removeAllElements();
 		choosenClients.removeAllElements();
-
+		
 		// aktiveClients sortieren
 		aktiveClients.sort((s1, s2) -> s1.compareTo(s2));
 
 		// DefaultListModel User globaler Chat füllen
 		aktiveClients.forEach(e -> clients.addElement(e));
-
+				
 		// Alle Elemente ungleich man selbst werden auswahlClientsPC hinzugefügt
 		aktiveClients.forEach(e ->
 		{
-			if (!e.equals(user))
+			if (!(e.compareTo(user) == 0))
 			{
 				auswahlClientsPC.add(e);
 			}
 		});
-		System.out.println("Mögliche PC User" + auswahlClientsPC);
+		
 		// DefaultListModel User PC füllen
 		auswahlClientsPC.forEach(e -> clientsPC.addElement(e));
 

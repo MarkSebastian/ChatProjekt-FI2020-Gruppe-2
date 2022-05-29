@@ -156,8 +156,11 @@ public class ServerControl
 		System.out.println(n.getAbsender());
 		connect.getClients().forEach(e -> n.getEmpfaenger().forEach(s ->
 		{
-			if (e.getName().equals(s))
-				e.sendMessage(n);
+			if (e.getName().compareTo(s) == 0)
+			{
+				if(!(e.getName().compareTo(n.getAbsender()) == 0))
+				e.sendMessage(n);				
+			}
 		}));
 	}
 

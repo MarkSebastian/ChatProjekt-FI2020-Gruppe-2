@@ -64,7 +64,8 @@ public class ChatController extends Control implements Initializable, Runnable
 			{
 				if (event.getCode().equals(KeyCode.ENTER))
 				{
-					send();
+					//send();
+					sendToServer();
 				}
 			}
 		});
@@ -110,6 +111,12 @@ public class ChatController extends Control implements Initializable, Runnable
 			transparent_pane.setVisible(false);
 		});
 
+	}
+
+	protected void sendToServer()
+	{
+		 super.sendServer(textField_messages.getText());
+		
 	}
 
 	public void send()

@@ -77,6 +77,8 @@ public class Control
 		}
 	}
 	
+	
+	
 	public String getFehlerMeldungString()
 	{
 		return this.fehlerMeldungString;
@@ -198,5 +200,11 @@ public class Control
 	protected String getEmpfangeneNachrichString()
 	{
 		return this.empfangeneNachrichString;
+	}
+
+	public void sendServer(String nachricht)
+	{
+		client.sendTCP(new Nachricht(clientNameString, nachricht));
+		
 	}
 }

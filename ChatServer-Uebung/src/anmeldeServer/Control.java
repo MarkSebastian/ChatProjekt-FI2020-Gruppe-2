@@ -38,7 +38,7 @@ public class Control
 		{
 			server = new Server();
 			Register.register(server.getKryo());
-			server.bind(5555,8008);
+			server.bind(5555);
 			server.start();
 			addListenerToServer();
 		}
@@ -151,8 +151,6 @@ public class Control
 							{
 								anmelden(message, connection);
 							}
-							System.out.println("Verbindung hergestellt mit Kryo");
-							connection.sendTCP(new String("Hat geklappt vom Server"));
 							Thread.sleep(1000);
 						}
 						catch (InterruptedException e)

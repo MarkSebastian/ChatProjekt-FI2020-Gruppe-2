@@ -3,12 +3,15 @@ package chatServer;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.io.File;
 import java.io.IOException;
 import Message.nachrichtP.Nachricht;
 
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
@@ -56,8 +59,6 @@ public class Control
 		});
 	}
 
-	//wo ich den socket starte weiß ich noch nicht
-	
 	
 	private void printAddress()
 	{
@@ -73,6 +74,7 @@ public class Control
 		}
 	}
 
+	//hier starten wir datagramsocket
 	private void starten()
 	{
 		clearLists();
@@ -89,8 +91,36 @@ public class Control
 		System.out.println("Server gestartet!");
 		connect = new ServerConnectionThread(server, clients, this);
 		connect.start();
+		setzeDatagramSocket();
 	}
 
+	//unseres
+	public void setzeDatagramSocket()
+	{
+		try
+		{
+			DatagramSocket ds = new DatagramSocket();
+			//ds = new DatagramSocket(4160);
+			byte[] buf = new byte[265];
+			DatagramPacket packet = new DatagramPacket(buf, buf.length);
+			//ds.receive(packet);
+			//File response = packet.getData();
+			//String response = new String(packet.getData());
+			//System.out.println("Reponse Data: "+response);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	//unseres 
+	public void stoppeDatagramSocket() 
+	{
+		ds.close();
+	}
+	
 	private void clearLists()
 	{
 		clients.clear();
@@ -154,6 +184,8 @@ public class Control
 		connect.interrupt();
 		try
 		{
+			//datagramSocket closen
+			stoppeDatagramSocket();
 			server.close();
 		} catch (IOException e)
 		{

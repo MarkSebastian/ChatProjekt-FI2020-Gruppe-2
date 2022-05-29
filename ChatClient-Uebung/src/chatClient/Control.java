@@ -50,6 +50,8 @@ public class Control implements Runnable
 	protected ObjectOutputStream out;
 	private boolean startWindow = false;
 	private AudioAufnehmen2 audioAufnehmen2;
+	private DatagramSocket ds;
+	private AudioPlay audioPlayThread;
 	private Color rot = new Color(255, 102, 102);
 	private Color weiss = new Color(255, 255, 255, 255);
 
@@ -119,33 +121,12 @@ public class Control implements Runnable
 		sendAudio();
 	}
 
-	//Unseres das kommt in Client
-	/*DatagramSocket ds = new DatagramSocket();
-		InetAddress add = InetAddress.getByName("localhost");
-		String str = "Hello World";
-		byte[] buf = str.getBytes();
-		DatagramPacket p = new DatagramPacket(buf, buf.length, add, 4160);
-		ds.send(p);
-		ds.close();
-	 */
 	
 	//Unseres, nimmt audio auf 
 	private void audioRecord()
 	{
 		try
-		{//ds vor dem erstellen von audioformat und dem starten der audio
-			//DatagramSocket ds = new DatagramSocket();
-			//soll eigentlich in server xD
-			DatagramSocket ds = new DatagramSocket(4160);
-			byte[] buf = new byte[265];
-			System.out.println("buf bytes Zahl"+buf.length);
-			DatagramPacket packet = new DatagramPacket(buf, buf.length);
-			ds.receive(packet);
-			String response = new String(packet.getData());
-			System.out.println("Reponse Data: "+response);
-			ds.close();
-			//-- in Server
-			
+		{	
 			AudioFormat format = setzeSoundEinstellungen();
 			//audioAufnehmen2 = new AudioAufnehmen2(guiAudio);
 			audioAufnehmen2 = new AudioAufnehmen2(gui);
@@ -163,70 +144,20 @@ public class Control implements Runnable
 		}
 	}
 	
-	//Unsere wang tanga
+	//Unsere 
 	protected void sendAudio()
 	{
-		try
-		{
-			Nachricht message;
-			if (first)
-			{
-				message = new Nachricht(startGui.getTextFieldUsername().getText(), false);
-				out.writeObject(message);
-				first = false;
-			}
-			else
-			{
-				message = new Nachricht(this.gui.getTextFieldEingabe().getText(), false);
-				out.writeObject(message);
-				messages.addElement(message);
-				akList();
-			}
-		}
-		catch (NullPointerException e )
-		{
-			gui.changeStatus("Noch nicht mit Server Verbunden!");
-		}
-		catch (Exception e )
-		{
-			System.out.println(e + "\n in sendMessage");
-		}
-		this.gui.getTextFieldEingabe().setText("");
+		//hier fehlt noch Implementation
 	}
 	
 	//unserer
 	private void readAudio()
 	{
-		try
-		{
-
-			Nachricht message = (Nachricht) ois.readObject();
-
-			System.out.println(message.toString());
-			if (message.getListClients() != null)
-			{
-				this.clients = message.getListClients();
-				akClientList();
-			}
-			getNewMessages(message);
-
-		}
-		catch (SocketException e1 )
-		{
-			stopClient();
-		}
-		catch (EOFException e2 )
-		{
-			stopClient();
-		}
-		catch (Exception e )
-		{
-			System.out.println(e + "\n in readMessage");
-		}
+		//hier fehlt noch Implementation
 	}
 
 	//unseres
-	/*public void audioPlay()
+	public void audioPlay()
 	{
 		//thread
 		audioPlayThread = new AudioPlay(this);
@@ -242,7 +173,7 @@ public class Control implements Runnable
 		{
 			e.printStackTrace();
 		}
-	}*/
+	}
 	
 	
 	protected boolean checkPort()
@@ -257,6 +188,7 @@ public class Control implements Runnable
 				port = tempPort;
 				korrekt = true;
 				this.gui.changeStatus("korrekter Port");
+				setzeDatagramSocket();
 			}
 			else
 			{
@@ -273,6 +205,33 @@ public class Control implements Runnable
 		return korrekt;
 	}
 
+	//unsere
+	public void setzeDatagramSocket()
+	{
+		try
+		{
+			System.out.println("ds in client");
+			DatagramSocket ds;
+			ds = new DatagramSocket();
+			InetAddress add = InetAddress.getByName("localhost");
+			String str = "Audio Packet";
+			byte[] buf = str.getBytes();
+			DatagramPacket p = new DatagramPacket(buf, buf.length, add, 4160);
+			ds.send(p);
+			
+		}
+		catch (Exception e )
+		{
+			e.printStackTrace();
+		}
+	}
+
+	//unserers
+	public void stoppeDatagramSocket()
+	{
+		ds.close();
+	}
+	
 	protected void sendMessage()
 	{
 		try
@@ -362,6 +321,7 @@ public class Control implements Runnable
 			first = true;
 			ois.close();
 			out.close();
+			stoppeDatagramSocket();
 			socket.close();
 		}
 		catch (IOException e )

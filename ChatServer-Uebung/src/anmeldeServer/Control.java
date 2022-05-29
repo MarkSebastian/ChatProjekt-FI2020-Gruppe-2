@@ -110,7 +110,7 @@ public class Control
 		}
 		else if(flag[1] == true)
 		{
-			String passwort;
+			String passwort = "a";
 			passwort = controlDB.select_passwort(message.getBenutzerName());
 			
 			System.out.println(passwort);

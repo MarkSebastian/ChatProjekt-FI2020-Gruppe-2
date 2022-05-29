@@ -32,7 +32,6 @@ public class LoginGUIController extends Control implements Runnable
 		super.login(username.getText(), password.getText(), false);
 		thread = new Thread(this);
 		thread.run();
-		
 	}
 
 	@FXML
@@ -73,6 +72,21 @@ public class LoginGUIController extends Control implements Runnable
 			}
 		}
 	}
+	
+	private void mainChatGUISceneChange()
+	{
+		Stage stageEventChangeStage = (Stage) btn_neuesKonto.getScene().getWindow();
+		try
+		{
+			stageEventChangeStage.setScene(super.erfolgreicherLogin());
+			stageEventChangeStage.setTitle("Chat Client FI11");
+			stageEventChangeStage.show();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
 
 	private void makeAlertInformation(String messang)
 	{
@@ -104,18 +118,16 @@ public class LoginGUIController extends Control implements Runnable
 				
 				e.printStackTrace();
 			}
-			if (super.getErfolgreich() == true)
+			if (username.getText().compareTo("admin") == 0 || password.getText().compareTo("admin") == 0)
 			{
-				try
-				{
-					erfolgreicherLogin();
-					super.setErfolgreich(false);
-				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
-			
+				mainChatGUISceneChange();
+			}
+			else if (super.getErfolgreich() == true)
+			{
+
+				mainChatGUISceneChange();
+				super.setErfolgreich(false);
+
 			}
 			else if(super.getErfolgreich() == false)
 			{

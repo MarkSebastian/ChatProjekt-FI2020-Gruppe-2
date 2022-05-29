@@ -31,10 +31,8 @@ public class SignInGUIController extends Control implements Runnable
 	@FXML
 	protected void buttonOnClick()
 	{
-		//TO-DO: Fehlerbox Leerer Text
 		thread = new Thread(this);
 		thread.run();
-		
 	}
 
 	@FXML
@@ -57,19 +55,17 @@ public class SignInGUIController extends Control implements Runnable
 			e.printStackTrace();
 		}
 	}
-
-	private void makeAlertInformation(String messang)
+	
+	private void makeAlertInformation(String message)
 	{
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setHeaderText(null);
-		alert.setContentText(messang);
+		alert.setContentText(message);
 		alert.show();
 	}
 
-	private void makeAlertWarnig()
+	private void makeAlertWarnig(String message)
 	{
-		String message = "Fehler bei der Registrierung";
-		
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setHeaderText(null);
 		alert.setContentText(message);
@@ -100,7 +96,7 @@ public class SignInGUIController extends Control implements Runnable
 				}
 				else if (super.getErfolgreich() == false)
 				{
-						makeAlertWarnig();	
+						makeAlertWarnig(getFehlerMeldungString());	
 				}
 			}
 			else

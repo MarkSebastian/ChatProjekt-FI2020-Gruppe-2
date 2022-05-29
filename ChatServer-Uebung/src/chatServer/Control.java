@@ -5,6 +5,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
 import Message.nachrichtP.Nachricht;
+
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
@@ -17,6 +19,7 @@ public class Control
 
 	private Gui gui;
 	private ServerSocket server;
+	private DatagramSocket ds;
 	protected ServerConnectionThread connect;
 	protected DefaultListModel<Nachricht> messages = new DefaultListModel<Nachricht>();
 	private ArrayList<Client> clients = new ArrayList<Client>();
@@ -53,6 +56,9 @@ public class Control
 		});
 	}
 
+	//wo ich den socket starte weiß ich noch nicht
+	
+	
 	private void printAddress()
 	{
 		try

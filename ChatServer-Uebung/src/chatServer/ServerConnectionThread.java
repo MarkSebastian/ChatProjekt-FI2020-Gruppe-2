@@ -1,5 +1,6 @@
 package chatServer;
 
+import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -13,6 +14,8 @@ public class ServerConnectionThread extends Thread
 	private Control control;
 	private ServerSocket server;
 	private Socket socket;
+	//oder leerer socket für datagramm
+	private DatagramSocket ds;
 	private ArrayList<Client> clients;
 	private int clientCount = 1;
 
@@ -23,7 +26,18 @@ public class ServerConnectionThread extends Thread
 		this.control = control;
 
 	}
+	
+	public ServerConnectionThread(DatagramSocket ds,ServerSocket server, ArrayList<Client> clients, Control control)
+	{
+		this.ds = ds;
+		this.server = server;
+		this.clients = clients;
+		this.control = control;
 
+	}
+
+	//datagram socket erstellen da wo audio erstellt wird
+	
 	@Override
 	public void run()
 	{

@@ -54,28 +54,6 @@ public class Nachricht implements Serializable
 		return activeClients;
 	}
 
-	public Nachricht(Clip datei, boolean isServer)
-	{
-		
-		if (isServer == true)
-		{
-			this.absender = "Server";
-		}
-		else
-		{
-			this.absender = "Ich";
-		}
-		this.absenderId = 0;
-		this.clip = clip;
-	}
-
-	public Nachricht(Clip clip, DefaultListModel<String> clientListe)
-	{
-		this.absender = "";
-		this.absenderId = 0;
-		this.clip = clip;
-		this.activeClients = clientListe;
-	}	
 	
 	public Nachricht(String nachricht, boolean isServer)
 	{

@@ -1,4 +1,4 @@
-package audiopaket;
+package chatClient;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -19,7 +19,7 @@ import javax.sound.sampled.AudioFileFormat.Type;
 
 public class AudioAufnehmen2 extends Thread
 {
-	private ControllerM controllerM;
+	private Control control;
 	private int random;
 	private File file;
 	private AudioFormat format;
@@ -33,7 +33,8 @@ public class AudioAufnehmen2 extends Thread
 	private Thread thread;
 	private AudioInputStream audioStream;
 	private AudioAufnehmen2 audioAufnehmen2;
-	private GUIAudio guiAudio;
+	//private GUIAudio guiAudio;
+	private Gui gui;
 	private double dauer;
 
 	// gui und GuiAudio sind auch threads
@@ -47,9 +48,9 @@ public class AudioAufnehmen2 extends Thread
 		this.ais = ais;
 	}
 
-	public AudioAufnehmen2(ControllerM controllerM)
+	public AudioAufnehmen2(Control control)
 	{
-		this.controllerM = controllerM;
+		this.control = control;
 	}
 
 	public AudioAufnehmen2()
@@ -57,10 +58,11 @@ public class AudioAufnehmen2 extends Thread
 		// TODO Auto-generated constructor stub
 	}
 
-	public AudioAufnehmen2(GUIAudio guiAudio)
+	
+
+	public AudioAufnehmen2(Gui gui)
 	{
-		this.guiAudio = guiAudio;
-		// guiAudio.setVisible(true);
+		this.gui = gui;
 	}
 
 	public TargetDataLine getTdl()
@@ -145,12 +147,13 @@ public class AudioAufnehmen2 extends Thread
 		bais = new ByteArrayInputStream(audioBytes);
 
 		AudioInputStream audioStream = new AudioInputStream(bais, format, audioBytes.length / frameSizeInBytes);
-		/*long milliseconds = (long) ((ais.getFrameLength() * 1000) / format.getFrameRate());
-		dauer = milliseconds / 1000.0;
+		long milliseconds = (long) ((ais.getFrameLength() * 1000) / format.getFrameRate());
+/*		dauer = milliseconds / 1000.0;
 
 		System.out.println("Dauer der Aufnahme in Sekunden: " + dauer);
-		 */
+*/
 		return audioStream;
+
 	}
 
 	/**

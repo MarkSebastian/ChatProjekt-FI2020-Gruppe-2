@@ -13,7 +13,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import Message.nachrichtP.Nachricht;
+import chatClient.AudioPlay;
+import chatClient.AudioAufnehmen2;
+import chatClient.SoundEinstellungen;
+
 import java.io.ObjectOutputStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.security.PublicKey;
@@ -29,20 +37,19 @@ public class Control implements Runnable
 
 	protected Gui gui;
 	protected VerbindungsGUI startGui;
-	protected GUIAudio guiAudio;
 	protected int port;
 	protected Socket socket;
 	protected DefaultListModel<Nachricht> messages = new DefaultListModel<Nachricht>();
 	protected DefaultListModel<String> clients = new DefaultListModel<String>();
 	protected DefaultListModel<String> choosenClients = new DefaultListModel<String>();
-	protected AudioAufnehmen audioAufnehmen;
+	//protected AudioAufnehmen audioAufnehmen;
 	protected Thread read;
 	private ClientConnectionThread start;
 	private String audioPfad = "Juhuu";
 	protected ObjectInputStream ois;
 	protected ObjectOutputStream out;
 	private boolean startWindow = false;
-
+	private AudioAufnehmen2 audioAufnehmen2;
 	private Color rot = new Color(255, 102, 102);
 	private Color weiss = new Color(255, 255, 255, 255);
 
@@ -80,9 +87,10 @@ public class Control implements Runnable
 	{
 		this.gui.addEingabeListener(l -> sendMessage());
 		this.gui.addBtnStopListener(l -> stopClient());
-		// neuer Button f�r audioRecord
-		this.gui.setBtnRecord(l -> sendAudio());
-		this.gui.setBtnAudioStop(l -> stopAudio());
+		// neuer Button für audioRecord, von uns
+		this.gui.setBtnRecord(l -> audioRecord());
+		this.gui.setBtnAudioStop(l -> stoppeAudio());
+		//btnAudioStop soll nachricht als .wav schicken
 
 		this.startGui.addBtnVerbindenListener(l ->
 		{
@@ -102,6 +110,141 @@ public class Control implements Runnable
 		this.gui.addEntfListner(l -> entfUserFromNewChat());
 	}
 
+	//Vong uns
+	private void stoppeAudio()
+	{
+		//AudioHauptThread
+		audioAufnehmen2.stoppeThread();
+		System.out.println("Beendet");
+		sendAudio();
+	}
+
+	//Unseres das kommt in Client
+	/*DatagramSocket ds = new DatagramSocket();
+		InetAddress add = InetAddress.getByName("localhost");
+		String str = "Hello World";
+		byte[] buf = str.getBytes();
+		DatagramPacket p = new DatagramPacket(buf, buf.length, add, 4160);
+		ds.send(p);
+		ds.close();
+	 */
+	
+	//Unseres, nimmt audio auf 
+	private void audioRecord()
+	{
+		try
+		{//ds vor dem erstellen von audioformat und dem starten der audio
+			//DatagramSocket ds = new DatagramSocket();
+			//soll eigentlich in server xD
+			DatagramSocket ds = new DatagramSocket(4160);
+			byte[] buf = new byte[265];
+			System.out.println("buf bytes Zahl"+buf.length);
+			DatagramPacket packet = new DatagramPacket(buf, buf.length);
+			ds.receive(packet);
+			String response = new String(packet.getData());
+			System.out.println("Reponse Data: "+response);
+			ds.close();
+			//-- in Server
+			
+			AudioFormat format = setzeSoundEinstellungen();
+			//audioAufnehmen2 = new AudioAufnehmen2(guiAudio);
+			audioAufnehmen2 = new AudioAufnehmen2(gui);
+			
+			audioAufnehmen2.build(format);
+			System.out.println("recording");
+			audioAufnehmen2.setName("AudioHauptThreadAWT");
+			//audioHauptThread Thread
+			audioAufnehmen2.aufzeichneThread();
+		
+		}
+		catch (Exception e )
+		{
+			System.out.println(e);
+		}
+	}
+	
+	//Unsere wang tanga
+	protected void sendAudio()
+	{
+		try
+		{
+			Nachricht message;
+			if (first)
+			{
+				message = new Nachricht(startGui.getTextFieldUsername().getText(), false);
+				out.writeObject(message);
+				first = false;
+			}
+			else
+			{
+				message = new Nachricht(this.gui.getTextFieldEingabe().getText(), false);
+				out.writeObject(message);
+				messages.addElement(message);
+				akList();
+			}
+		}
+		catch (NullPointerException e )
+		{
+			gui.changeStatus("Noch nicht mit Server Verbunden!");
+		}
+		catch (Exception e )
+		{
+			System.out.println(e + "\n in sendMessage");
+		}
+		this.gui.getTextFieldEingabe().setText("");
+	}
+	
+	//unserer
+	private void readAudio()
+	{
+		try
+		{
+
+			Nachricht message = (Nachricht) ois.readObject();
+
+			System.out.println(message.toString());
+			if (message.getListClients() != null)
+			{
+				this.clients = message.getListClients();
+				akClientList();
+			}
+			getNewMessages(message);
+
+		}
+		catch (SocketException e1 )
+		{
+			stopClient();
+		}
+		catch (EOFException e2 )
+		{
+			stopClient();
+		}
+		catch (Exception e )
+		{
+			System.out.println(e + "\n in readMessage");
+		}
+	}
+
+	//unseres
+	/*public void audioPlay()
+	{
+		//thread
+		audioPlayThread = new AudioPlay(this);
+		//System.out.println("In ControllerM Aktueller Thread Name "+audioPlayThread.getName());
+		System.out.println("Play...");
+		audioPlayThread.start();
+		try
+		{
+			Thread.sleep(2000);
+			audioPlayThread.interrupt();
+		}
+		catch (InterruptedException e )
+		{
+			e.printStackTrace();
+		}
+	}*/
+	
+	
 	protected boolean checkPort()
 	{
 		boolean korrekt = false;
@@ -161,78 +304,8 @@ public class Control implements Runnable
 
 	}
 
-	protected void sendAudio()
-	{
-		
-		File file = new File(audioPfad);
-		AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
-		AudioFormat format = getFormat();
-		/*try
-		{
-			AudioFormat format = setzeSoundEinstellungen();
-			audioAufnehmen = new AudioAufnehmen();
-			audioAufnehmen.build(format);
-			
-			audioAufnehmen.aufzeichneThread(audioAufnehmen);
-			System.out.println("Hier vor speichern");
-			WavSpeichern audioDateiSpeichern = new WavSpeichern();
-			audioDateiSpeichern.speichereInWav(audioAufnehmen.getAis());
-		}
-		catch (Exception e )
-		{
-			System.out.println("Ich war kacken!");
-		}*/
 
-		
-		try
-		{
-			Nachricht message;
-			if (first)
-			{
-				// Konstruktor in Nachricht ändern
-				message = new Nachricht(clip, false);
-				out.writeObject(message);
-				first = false;
-			}
-			else
-			{
-				message = new Nachricht(this.gui.getTextFieldEingabe().getText(), false);
-				out.writeObject(message);
-				messages.addElement(message);
-				akList();
-			}
-		}
-		catch (NullPointerException e )
-		{
-			gui.changeStatus("Noch nicht mit Server Verbunden!");
-		}
-		catch (Exception e )
-		{
-			System.out.println(e + "\n in sendMessage");
-		}
-		this.gui.getTextFieldEingabe().setText("");
-
-	}
 	
-
-	protected void stopAudio()
-	{
-		audioAufnehmen.stopThread();
-		audioAufnehmen.interrupt();
-		
-	}
-
-	public static AudioFormat setzeSoundEinstellungen()
-	{
-		SoundEinstellungen settings = new SoundEinstellungen();
-		AudioFormat.Encoding encoding = settings.ENCODING;
-		float rate = settings.RATE;
-		int channels = settings.CHANNELS;
-		int sampleSize = settings.SAMPLE_SIZE;
-		boolean bigEndian = settings.BIG_ENDIAN;
-
-		return new AudioFormat(encoding, rate, sampleSize, channels, (sampleSize / 8) * channels, rate, bigEndian);
-	}
 
 	private void readMessage()
 	{
@@ -409,7 +482,7 @@ public class Control implements Runnable
 		}
 		catch (ArrayIndexOutOfBoundsException e )
 		{
-			System.out.println("nichts ausgew�hlt");
+			System.out.println("nichts ausgew�hlt");
 		}
 	}
 
@@ -428,13 +501,20 @@ public class Control implements Runnable
 			System.out.println("nichts ausgew�hlt");
 		}
 	}
-	
-	private void getFormat()
-	{
-		AudioFormat.Encoding encoding = AudioFormat.Encoding.PCM_SIGNED;
-		float rate = 44
-	}
 
+	//von uns
+	public static AudioFormat setzeSoundEinstellungen() 
+	{
+        SoundEinstellungen settings = new SoundEinstellungen();
+        AudioFormat.Encoding encoding = settings.ENCODING;
+        float rate = settings.RATE;
+        int channels = settings.CHANNELS;
+        int sampleSize = settings.SAMPLE_SIZE;
+        boolean bigEndian = settings.BIG_ENDIAN;
+
+        return new AudioFormat(encoding, rate, sampleSize, channels, (sampleSize / 8) * channels, rate, bigEndian);
+    }
+	
 	@Override
 	public void run()
 	{

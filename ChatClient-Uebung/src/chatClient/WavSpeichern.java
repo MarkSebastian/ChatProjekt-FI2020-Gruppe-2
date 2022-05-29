@@ -26,6 +26,7 @@ public class WavSpeichern
 		fileFormat = AudioFileFormat.Type.WAVE;
 		try
 		{
+			System.out.println("Datei " + random + ".wav wurde gespeichert.");
 			ais.reset();
 		}
 		catch (Exception e )

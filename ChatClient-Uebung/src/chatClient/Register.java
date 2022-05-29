@@ -1,7 +1,6 @@
-package anmeldeServer;
+package chatClient;
 
 import com.esotericsoftware.kryo.Kryo;
-
 import Message.nachrichtP.FehlerNachricht;
 import Message.nachrichtP.LogInNachricht;
 import Message.nachrichtP.Nachricht;

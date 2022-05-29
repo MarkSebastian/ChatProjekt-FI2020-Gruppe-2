@@ -1,19 +1,26 @@
 package Message.nachrichtP;
 
-
-import java.io.Serializable;
 import java.time.LocalDateTime;
-
 import javax.swing.DefaultListModel;
 
-public class Nachricht implements Serializable
+public class Nachricht
 {	
-	private static final long serialVersionUID = 1L;
 	private String absender;
 	private int absenderId;
 	final private LocalDateTime timestamp = LocalDateTime.now();
 	private String nachricht;
 	private DefaultListModel<String> activeClients = null;
+
+	public Nachricht()
+	{
+		
+	}
+	
+	public Nachricht(String absender, String nachricht)
+	{
+		this.absender = absender;
+		this.nachricht = nachricht;
+	}
 
 	public String getAbsender()
 	{

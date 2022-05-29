@@ -134,7 +134,7 @@ public class LoginGUIController extends Control implements Runnable
 				makeAlertWarnig(getFehlerMeldungString());
 			}
 			
-		} while(super.isNachrichteingegangen() == false);
+		} while(super.isNachrichtEingegangen() == false);
 		super.setErfolgreich(false);
 	}
 }

@@ -104,7 +104,7 @@ public class SignInGUIController extends Control implements Runnable
 				makeAlertInformation("Die Passwörter stimmen nicht überein");
 			}
 			
-		} while(super.isNachrichteingegangen() == false);
+		} while(super.isNachrichtEingegangen() == false);
 		super.setErfolgreich(false);
 	}
 }

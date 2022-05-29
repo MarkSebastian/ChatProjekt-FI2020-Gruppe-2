@@ -2,6 +2,7 @@ package chatClient;
 
 import java.io.IOException;
 import Message.nachrichtP.Nachricht;
+import chatClient.Register;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,6 +22,7 @@ import java.net.Socket;
 import Message.nachrichtP.FehlerNachricht;
 import Message.nachrichtP.LogInNachricht;
 import javax.swing.DefaultListModel;
+import org.objenesis.instantiator.basic.NewInstanceInstantiator;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -28,108 +30,34 @@ import com.esotericsoftware.kryonet.Listener;
 
 public class Control
 {
-	protected int port;
-	protected Socket socket;
-	// List Modells
-	protected DefaultListModel<Nachricht> messages = new DefaultListModel<Nachricht>();
-	protected DefaultListModel<String> clients = new DefaultListModel<String>();
-	protected DefaultListModel<String> choosenClients = new DefaultListModel<String>();
 	private boolean erfolgreich;
-	private boolean nachrichteingegangen;
-
-	//protected ObjectInputStream ois;
-	protected ObjectOutputStream out;
-
-	private boolean startWindow = false;
-
-	private boolean first = true;
+	private boolean nachrichteingegangen;	
 	private static Client client;
 	private String fehlerMeldungString;
 	private FehlerNachricht fehlerMessage;
-
-	// FX
-	@FXML
-	private Button button_send;
-	@FXML
-	private TextField textField_nachricht;
-	@FXML
-	private VBox vbox_messages;
-	@FXML
-	private ScrollPane scrollpane_messages;
-
+	private String clientNameString;
+	private String empfangeneNachrichString;
+	private Boolean chatNachrichtEmpfangen;
+	
 	public Control()
 	{
 		client = new Client();
 		addListenerToClient();
-		Kryo kryo = client.getKryo();
-		kryo.register(LogInNachricht.class);
-		kryo.register(FehlerNachricht.class);
+		Register.register(client.getKryo());
 	}
 
-	public FehlerNachricht getFehlerMessage()
+	protected FehlerNachricht getFehlerMessage()
 	{
 		return fehlerMessage;
-		
 	}
 
-
-	@FXML
-	protected void sendMessage()
+	protected void sendMessage(String nachricht)
 	{
-		try
-		{
-			Nachricht message;
-			/*
-			 * if(first) { message = new
-			 * Nachricht(startGui.getTextFieldUsername().getText(), false);
-			 * out.writeObject(message); first = false; } else {
-			 */
-			String textToSend = textField_nachricht.getText();
-			if (!textToSend.isEmpty())
-			{
-
-				HBox hBox = new HBox();
-				hBox.setAlignment(Pos.CENTER_RIGHT);
-				hBox.setPadding(new Insets(5, 5, 5, 10));
-
-				Text text = new Text(textToSend);
-				TextFlow textFlow = new TextFlow(text);
-
-				textFlow.setStyle("-fx-color: rgb(239,242,255" + "-fx-background-color: rgb(15,125,242)"
-						+ "-fx-background-radius: 20px");
-
-				textFlow.setPadding(new Insets(5, 10, 5, 10));
-				text.setFill(Color.color(0.934, 0.945, 0.996));
-
-				hBox.getChildren().add(textFlow);
-				vbox_messages.getChildren().add(hBox);
-
-				/*
-				 * message = new Nachricht(textToSend, false); out.writeObject(message);
-				 * messages.addElement(message); textField_nachricht.clear();
-				 */
-			}
-
-			// akList();
-			// }
-		}
-		catch (NullPointerException e)
-		{
-			// gui.changeStatus("Noch nicht mit Server Verbunden!");
-		}
-		catch (Exception e)
-		{
-			System.out.println(e + "\n in sendMessage");
-		}
-		// this.gui.getTextFieldEingabe().setText("");
-
+		client.sendTCP(new Nachricht(this.clientNameString, nachricht));
 	}
-
-
 
 	protected void getNewMessages(Nachricht n)
 	{
-		messages.addElement(n);
 
 	}
 
@@ -141,12 +69,10 @@ public class Control
 			client.start();
 			client.connect(5000, "localhost", 5555, 8008);
 			client.sendTCP(new LogInNachricht(benutzer, pass, anmeldung));
-			System.out.println("Erfolgreich gesendet");
-			System.out.println(client.getRemoteAddressTCP());
+			clientNameString = benutzer;
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -169,31 +95,31 @@ public class Control
 						nachrichteingegangen = true;
 						client.update(1);
 						fehlerMessage = (FehlerNachricht) object;
-						System.out.println("Nachricht:" + fehlerMessage);
-						System.out.println("Verbindung hergestellt mit Kryo");
 						connection.sendTCP(new String("Hat geklappt vom Client"));
 						if (fehlerMessage.isDatenbankFehler())
 						{
 							fehlerMeldungString = "Die Verbindung ist fehlgeschlagen";
 							erfolgreich = false;
+							clientNameString = null;
 						}
 						else if (fehlerMessage.isNutzernameVergebenFehler())
 						{
-							System.out.println("Vor alert");
 							fehlerMeldungString = "Der Nutzername ist bereits vergeben";
 							erfolgreich = false;
-							System.out.println("Nach alert");
+							clientNameString = null;
 						}
 						else if (fehlerMessage.isNutzernameFehler())
 						{
 							fehlerMeldungString = "Der Nutzername ist falsch";
 							erfolgreich = false;
+							clientNameString = null;
 						}
 						else if (fehlerMessage.isPasswortFehler())
 						{
 							System.out.println("Passwort ist falsch du honk");
 							fehlerMeldungString = "Das Passwort ist falsch";
 							erfolgreich = false;
+							clientNameString = null;
 						}
 						else
 						{
@@ -203,12 +129,10 @@ public class Control
 					}
 					catch (IOException e)
 					{
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					catch (InterruptedException e)
 					{
-						// TODO Auto-generated catch block
 						client.stop();
 						e.printStackTrace();
 					}
@@ -216,6 +140,11 @@ public class Control
 				else if(object instanceof String)
 				{
 					System.out.println((String)object);
+				}
+				else if(object instanceof Nachricht)
+				{
+					empfangeneNachrichString = ((Nachricht)object).getNachricht();
+					chatNachrichtEmpfangen = true;
 				}
 			}
 		});
@@ -237,29 +166,37 @@ public class Control
 
 	protected Scene erfolgreicherLogin() throws IOException
 	{
-		// to do
 		Parent debugParent = FXMLLoader.load(getClass().getResource("Chat.fxml"));
 		return new Scene(debugParent);
 	}
 
-	public boolean getErfolgreich()
+	protected boolean getErfolgreich()
 	{
 		return this.erfolgreich;
 	}
 	
-	public void setErfolgreich(boolean erfolgreich)
+	protected void setErfolgreich(boolean erfolgreich)
 	{
 		this.erfolgreich = erfolgreich;
 	}
 
-	public boolean isNachrichteingegangen()
+	protected boolean isNachrichtEingegangen()
 	{
 		return nachrichteingegangen;
 	}
 
-	public void setNachrichteingegangen(boolean nachrichteingegangen)
+	protected void setNachrichteingegangen(boolean nachrichteingegangen)
 	{
 		this.nachrichteingegangen = nachrichteingegangen;
 	}
 	
+	protected boolean isChatNachrichtEingegangen()
+	{
+		return this.chatNachrichtEmpfangen;
+	}
+	
+	protected String getEmpfangeneNachrichString()
+	{
+		return this.empfangeneNachrichString;
+	}
 }

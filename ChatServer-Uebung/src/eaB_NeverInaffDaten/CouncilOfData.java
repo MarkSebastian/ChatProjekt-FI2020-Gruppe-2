@@ -38,17 +38,6 @@ public class CouncilOfData
 		verbindungLogin.close();
 		verbindungDatenKrake.close();
 	}
-	
-	public void schliesenOffnenDATENBANK() throws SQLException//<----------Methode zum schliesen der DB-Connection
-	{
-		verbindungLogin.close();
-		verbindungDatenKrake.close();
-		verbindungslinkLoginserver="jdbc:ucanaccess://src/Login_DB.accdb";//link zur Loginserver DB
-		verbindungslinkDatenbank="jdbc:ucanaccess://src/Datenkrake.accdb";//link zur Haupt Datenbank
-
-			verbindungLogin = DriverManager.getConnection(verbindungslinkLoginserver,"","");//Verbindungsaufbau LoginserverDB
-			verbindungDatenKrake = DriverManager.getConnection(verbindungslinkDatenbank,"","");//Verbindungsaufbau HaupDB
-	}
 	//=================================================================================================================Start Delete befehle
 	public boolean delete_loginDaten(String bName)//löscht die Logindaten o7
 	{
@@ -351,7 +340,6 @@ public class CouncilOfData
 		sqlBefehl=baukasten.select_passwort();
 		try
 		{
-			schliesenOffnenDATENBANK();
 			PreparedStatement vorbereiteteAussage = verbindungLogin.prepareStatement(sqlBefehl);
 			vorbereiteteAussage.setString(1, bName);
 			ResultSet ergebnis = vorbereiteteAussage.executeQuery();

@@ -137,22 +137,22 @@ public class ServerControl
 		});
 	}
 
-	// PrivatChatObjekt hat ArrayList mit Empfängern, nur an diese Liste wird der
-	// PrivatChat geschickt
 	protected void broadcastPrivatChat(PrivatChatSenden pcs)
 	{
+		// PrivatChatObjekt hat ArrayList mit Empfängern, nur an diese Liste wird der
+		// PrivatChat geschickt
 		connect.getClients().forEach(e -> pcs.getEmpfaenger().forEach(s ->
 		{
-			if (!pcs.getUser().equals(e.getName()))
-				if (e.getName().equals(s))
+			if(!(e.getName().compareTo(pcs.getUser()) == 0))
+				if(e.getName().compareTo(s) == 0)
 					e.sendMessage(pcs);
-		}));
+	}));
 	}
 
-	// Nachricht hat eine ArrayList mit den empfaengern des privatChats, die
-	// Nachricht wird auch nur an diese Clients weitergeleitet
 	protected void broadcastPrivatMessage(Nachricht n)
 	{
+		// Nachricht hat eine ArrayList mit den empfaengern des privatChats, die
+		// Nachricht wird auch nur an diese Clients weitergeleitet
 		connect.getClients().forEach(e -> n.getEmpfaenger().forEach(s ->
 		{
 			if (e.getName().compareTo(s) == 0)

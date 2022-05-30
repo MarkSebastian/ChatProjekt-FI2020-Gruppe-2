@@ -367,8 +367,8 @@ public class ClientControl implements Runnable, Serializable
 				PrivatChat pc = new PrivatChat(pcs, this);
 				privatChats.add(pc);
 				sendPrivatChat(pc);
-				teilnehmerPrivatChat.addAll(auswahlClientsPC);
-				auswahlClientsPC.clear();
+				auswahlClientsPC.addAll(teilnehmerPrivatChat);
+				teilnehmerPrivatChat.clear();
 				akClients();
 				gui.getTextFieldGruppenName().setText("Gruppennamen eingeben");
 			}

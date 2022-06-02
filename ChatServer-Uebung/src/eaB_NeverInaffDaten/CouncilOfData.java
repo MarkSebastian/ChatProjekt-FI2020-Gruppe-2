@@ -16,7 +16,7 @@ public class CouncilOfData
 	private Connection verbindungDatenKrake;
 	private SQLBaukasten baukasten;
 	
-	public CouncilOfData()
+	public CouncilOfData() 
 	{
 		baukasten =new SQLBaukasten();
 		verbindungslinkLoginserver="jdbc:ucanaccess://src/Login_DB.accdb";//link zur Loginserver DB
